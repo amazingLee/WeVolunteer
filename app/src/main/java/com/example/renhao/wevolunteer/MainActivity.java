@@ -172,6 +172,9 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
             case 6:
 
                 break;
+            case 7:
+
+                break;
         }
     }
 
