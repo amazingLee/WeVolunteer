@@ -6,6 +6,9 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerCreateDto;
+import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerQueryDto;
 
 import java.util.List;
 
@@ -23,6 +26,9 @@ public interface Api {
     public static final String ACTIVITY_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/create";
     public static final String ACTIVITY_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/query";
 
+    //志愿者
+    public static final String VOLUNTEER_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/create";
+    public static final String VOLUNTEER_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/query";
     /**
      * 获取accessToken
      *
@@ -47,4 +53,9 @@ public interface Api {
     public ApiResponse<List<String>> activityCreate(List<ActivityCreateBO> creates, String assessToken);
 
     public ApiResponse<ActivityBO> activityQuery(ActivityQueryBO query, String accessToken);
+
+    public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String accessToken);
+
+    public ApiResponse<VolunteerDto> volunteerQuery(VolunteerQueryDto query,String accessToken);
+
 }

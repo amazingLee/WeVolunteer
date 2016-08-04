@@ -7,6 +7,9 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerCreateDto;
+import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerQueryDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -115,5 +118,34 @@ public class ApiImpl implements Api {
             e.printStackTrace();
         }
         return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String assessToken){
+        Gson gson = new Gson();
+        String params = gson.toJson(creates);
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, VOLUNTEER_CREATE, typeOfT, assessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<VolunteerDto> volunteerQuery(VolunteerQueryDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<VolunteerDto>>(){
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, VOLUNTEER_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ApiResponse<>(false,"未知错误");
     }
 }

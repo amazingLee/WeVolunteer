@@ -7,6 +7,9 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerCreateDto;
+import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerQueryDto;
 
 import java.util.List;
 
@@ -33,4 +36,11 @@ public interface AppAction {
     public void activityCreate(List<ActivityCreateBO> activityCreateBOs, ActionCallbackListener<List<String>> listener);
 
     public void activityQuery(ActivityQueryBO activityQueryBO, ActionCallbackListener<ActivityBO> listener);
+
+    //志愿者（新增）
+    public void volunteerCreate(List<VolunteerCreateDto> volunteerCreateBOs,ActionCallbackListener<List<String>> listener);
+
+    //志愿者（查询）
+    public void volunteerQuery(VolunteerQueryDto volunteerQueryBO, ActionCallbackListener<VolunteerDto> listener);
+
 }

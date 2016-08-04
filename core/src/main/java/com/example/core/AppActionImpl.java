@@ -16,6 +16,9 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerCreateDto;
+import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerQueryDto;
 
 import java.util.List;
 
@@ -164,6 +167,58 @@ public class AppActionImpl implements AppAction {
             }
         }.execute();
     }
+
+    //志愿者（新增）
+    @Override
+    public void volunteerCreate(final List<VolunteerCreateDto> volunteerCreateBOs, final ActionCallbackListener<List<String>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token","");
+        new AsyncTask<Void, Void, ApiResponse<List<String>>>() {
+            @Override
+            protected ApiResponse<List<String>> doInBackground(Void... params) {
+                return api.volunteerCreate(volunteerCreateBOs, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<List<String>> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
+    //志愿者（查询）
+    @Override
+    public void volunteerQuery(final VolunteerQueryDto volunteerQueryBO, final ActionCallbackListener<VolunteerDto> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<VolunteerDto>>() {
+            @Override
+            protected ApiResponse<VolunteerDto> doInBackground(Void... params) {
+                return api.volunteerQuery(volunteerQueryBO, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<VolunteerDto> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
 
     private void saveAccessToken(AccessTokenBO accessTokenBO) {
         LocalDate.getInstance(context).setLocalDate("access_token", accessTokenBO.getAccess_token());

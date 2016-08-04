@@ -17,6 +17,9 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerCreateDto;
+import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerQueryDto;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
@@ -43,7 +46,9 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 "activity query",
                 "activity create",
                 "user login",
-                "user create"
+                "user create",
+                "volunteer create",
+                "volunteer query"
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -169,6 +174,50 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     }
                 });
                 break;
+            case 6:
+                VolunteerCreateDto vl_create = new VolunteerCreateDto();
+                vl_create.setLoginUserName("AndroidUser");
+                vl_create.setReUserPassword("8NDVQX");
+                vl_create.setAreaCode("鄞州区");
+                vl_create.setTrueName("刘欣");
+                vl_create.setUserPassword("8NDVQX");
+                vl_create.setIdNumber("332502199407143994");
+                vl_create.setMobile("15728006854");
+                vl_create.setOrgId("浙江万里");
+                Logger.v(TAG, new Gson().toJson(vl_create));
+                List<VolunteerCreateDto> vl_creates = new ArrayList<>();
+                vl_creates.add(vl_create);
+                mAction.volunteerCreate(vl_creates, new ActionCallbackListener<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
+                break;
+            case 7:
+                VolunteerQueryDto vl_query = new VolunteerQueryDto();
+                vl_query.setPageIndex(0);
+                vl_query.setPageSize(1);
+                Logger.v(TAG,new Gson().toJson(vl_query));
+                mAction.volunteerQuery(vl_query, new ActionCallbackListener<VolunteerDto>() {
+                    @Override
+                    public void onSuccess(VolunteerDto data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
+                break;
+
+
         }
     }
 
