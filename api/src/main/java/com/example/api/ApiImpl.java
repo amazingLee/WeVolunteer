@@ -10,6 +10,7 @@ import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
+import com.example.model.volunteer.VolunteerViewDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -146,6 +147,20 @@ public class ApiImpl implements Api {
             e.printStackTrace();
         }
 
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<VolunteerViewDto> volunteerDetail(String id, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(id);
+        Type typeOft = new TypeToken<ApiResponse<VolunteerViewDto>>(){
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, VOLUNTEER_DETAIL, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return new ApiResponse<>(false,"未知错误");
     }
 }

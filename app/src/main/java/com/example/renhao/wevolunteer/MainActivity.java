@@ -20,6 +20,7 @@ import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
+import com.example.model.volunteer.VolunteerViewDto;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
@@ -48,7 +49,8 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 "user login",
                 "user create",
                 "volunteer create",
-                "volunteer query"
+                "volunteer query",
+                "volunteer detail"
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -216,6 +218,18 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     }
                 });
                 break;
+            case 8:
+                mAction.volunteerDetail("4d8583ef-c5fe-4782-b808-9f34defc2383", new ActionCallbackListener<VolunteerViewDto>() {
+                    @Override
+                    public void onSuccess(VolunteerViewDto data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
 
 
         }

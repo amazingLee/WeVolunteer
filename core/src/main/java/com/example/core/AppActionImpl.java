@@ -19,6 +19,7 @@ import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
+import com.example.model.volunteer.VolunteerViewDto;
 
 import java.util.List;
 
@@ -218,6 +219,34 @@ public class AppActionImpl implements AppAction {
             }
         }.execute();
     }
+
+    //志愿者（详情信息）
+    @Override
+    public void volunteerDetail(final String id, final ActionCallbackListener<VolunteerViewDto> listener) {
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<VolunteerViewDto>>() {
+            @Override
+            protected ApiResponse<VolunteerViewDto> doInBackground(Void... params) {
+                return api.volunteerDetail(id,accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<VolunteerViewDto> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+
+
 
 
     private void saveAccessToken(AccessTokenBO accessTokenBO) {
