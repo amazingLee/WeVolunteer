@@ -165,7 +165,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
 
                     @Override
                     public void onFailure(String errorEvent, String message) {
-                        showToast("fail");
+                        showToast("ff");
                     }
                 });
                 break;
