@@ -51,6 +51,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 "volunteer create",
                 "volunteer query",
                 "volunteer detail"
+
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -230,7 +231,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                         showToast("fail");
                     }
                 });
-
+                break;
 
         }
     }

@@ -8,6 +8,7 @@ import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 
@@ -31,7 +32,7 @@ public interface Api {
     public static final String VOLUNTEER_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/create";
     public static final String VOLUNTEER_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/query";
     public static final String VOLUNTEER_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/Volunteer/details";
-
+    public static final String VOLUNTEER_UPDATE ="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/Volunteer/update";
 
     /**
      * 获取accessToken
@@ -64,4 +65,5 @@ public interface Api {
 
     public ApiResponse<VolunteerViewDto> volunteerDetail(String id,String accessToken);
 
+    public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update,String accessToken);
 }

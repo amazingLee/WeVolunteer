@@ -9,6 +9,7 @@ import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 
@@ -46,4 +47,7 @@ public interface AppAction {
 
     //志愿者详情信息
     public void volunteerDetail(String id,ActionCallbackListener<VolunteerViewDto> listener);
+
+    //志愿者（修改）
+    public void volunteerEdit(List<VolunteerEditDto> volunteerEditDto,ActionCallbackListener<List<String>> listener);
 }

@@ -18,6 +18,7 @@ import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 
@@ -227,7 +228,7 @@ public class AppActionImpl implements AppAction {
         new AsyncTask<Void, Void, ApiResponse<VolunteerViewDto>>() {
             @Override
             protected ApiResponse<VolunteerViewDto> doInBackground(Void... params) {
-                return api.volunteerDetail(id,accessToken);
+                return api.volunteerDetail(id, accessToken);
             }
 
             @Override
@@ -245,7 +246,31 @@ public class AppActionImpl implements AppAction {
         }.execute();
     }
 
+    @Override
+    public void volunteerEdit(final List<VolunteerEditDto> volunteerEditDto,final ActionCallbackListener<List<String>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token","");
+        new AsyncTask<Void, Void, ApiResponse<List<String>>>() {
+            @Override
+            protected ApiResponse<List<String>> doInBackground(Void... params) {
+                return api.volunteerEdit(volunteerEditDto,accessToken);
+            }
 
+            @Override
+            protected void onPostExecute(ApiResponse<List<String>> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+
+    }
 
 
 
