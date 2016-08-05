@@ -2,6 +2,9 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
+import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -50,4 +53,10 @@ public interface AppAction {
 
     //志愿者（修改）
     public void volunteerEdit(List<VolunteerEditDto> volunteerEditDto,ActionCallbackListener<List<String>> listener);
+
+    //company POST 查询
+    public void companyQuery(CompanyQueryOptionDto companyQueryOptionDto, ActionCallbackListener<CompanyDto> listener);
+
+    //company get 查询
+    public void companyGet(String id, ActionCallbackListener<CompanyRowsDto>listener);
 }

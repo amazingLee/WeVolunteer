@@ -1,6 +1,9 @@
 package com.example.api;
 
 import com.example.model.AccessTokenBO;
+import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -34,6 +37,10 @@ public interface Api {
     public static final String VOLUNTEER_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/Volunteer/details";
     public static final String VOLUNTEER_UPDATE ="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/Volunteer/update";
 
+    //
+    //组织
+    public static final String COMPANY_QUERY="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/query";
+    public static final String COMPANY_GET="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
     /**
      * 获取accessToken
      *
@@ -66,4 +73,8 @@ public interface Api {
     public ApiResponse<VolunteerViewDto> volunteerDetail(String id,String accessToken);
 
     public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update,String accessToken);
+
+    public ApiResponse<CompanyDto>companyQuery(CompanyQueryOptionDto query, String accessToken);
+
+    public ApiResponse<CompanyRowsDto>companyGet(String id,String acessToken);
 }

@@ -22,6 +22,7 @@ import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.google.gson.Gson;
@@ -54,8 +55,9 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 "volunteer create",//6
                 "volunteer query",//7
                 "volunteer detail",//8
-                "Company query",//9
-                "Company details get"//10
+                "volunteer update",//9
+                "Company query",//10
+                "Company details get"//11
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -237,7 +239,32 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     }
                 });
                 break;
+
             case 9:
+                VolunteerEditDto vl_update = new VolunteerEditDto();
+                vl_update.setId("4d8583ef-c5fe-4782-b808-9f34defc2383");
+                vl_update.setAreaCode("鄞州");//区域必选
+                vl_update.setTrueName("刘欣");//姓名必填！
+                vl_update.setOrganizationId("浙江万里");//所属机构必选
+                vl_update.setIdNumber("332502199407143994");//证件号码必填
+                vl_update.setMobile("15728006854");//移动电话必填
+                List<VolunteerEditDto> vl_updates = new ArrayList<>();
+                vl_updates.add(vl_update);
+                mAction.volunteerEdit(vl_updates, new ActionCallbackListener<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
+                break;
+
+
+            case 10:
                 CompanyQueryOptionDto Company_query = new CompanyQueryOptionDto();
                 Company_query.setPageIndex(0);
                 Company_query.setPageSize(3);
@@ -256,7 +283,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     }
                 });
                 break;
-            case 10:
+            case 11:
                 mAction.companyGet("cf17245e-e6a5-4f97-9d33-c55ce89ba9e3", new ActionCallbackListener<CompanyRowsDto>() {
                     @Override
                     public void onSuccess(CompanyRowsDto data) {
@@ -269,6 +296,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     }
                 });
                 break;
+
 
         }
     }
