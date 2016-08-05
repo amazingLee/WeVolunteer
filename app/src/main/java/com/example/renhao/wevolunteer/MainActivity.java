@@ -210,7 +210,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 VolunteerQueryDto vl_query = new VolunteerQueryDto();
                 vl_query.setPageIndex(0);
                 vl_query.setPageSize(2);
-                Logger.v(TAG,new Gson().toJson(vl_query));
+                Logger.v(TAG, new Gson().toJson(vl_query));
                 mAction.volunteerQuery(vl_query, new ActionCallbackListener<VolunteerDto>() {
                     @Override
                     public void onSuccess(VolunteerDto data) {
@@ -225,6 +225,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 break;
             case 8:
                 mAction.volunteerDetail("4d8583ef-c5fe-4782-b808-9f34defc2383", new ActionCallbackListener<VolunteerViewDto>() {
+
                     @Override
                     public void onSuccess(VolunteerViewDto data) {
                         showToast("success");
@@ -235,12 +236,13 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                         showToast("fail");
                     }
                 });
+                break;
             case 9:
                 CompanyQueryOptionDto Company_query = new CompanyQueryOptionDto();
                 Company_query.setPageIndex(0);
-                Company_query.setPageSize(5);
+                Company_query.setPageSize(3);
                 Company_query.setIsAuth(0);//查询不到已经通过审核的组织
-                Logger.v(TAG,new Gson().toJson(Company_query));
+                Logger.v(TAG, new Gson().toJson(Company_query));
                 mAction.companyQuery(Company_query, new ActionCallbackListener<CompanyDto>() {
 
                     @Override
