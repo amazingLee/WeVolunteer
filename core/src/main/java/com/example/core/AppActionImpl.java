@@ -11,6 +11,9 @@ import com.example.core.listener.AccessTokenListener;
 import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
+import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -245,8 +248,55 @@ public class AppActionImpl implements AppAction {
         }.execute();
     }
 
+    //组织查询POST
+    @Override
+    public void companyQuery(final CompanyQueryOptionDto companyQueryOptionDto, final ActionCallbackListener<CompanyDto> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<CompanyDto>>() {
+            @Override
+            protected ApiResponse<CompanyDto> doInBackground(Void... params) {
+                return api.companyQuery(companyQueryOptionDto, accessToken);
+            }
 
+            @Override
+            protected void onPostExecute(ApiResponse<CompanyDto> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
 
+    @Override
+    public void companyGet(final String id, final ActionCallbackListener<CompanyRowsDto> listener) {
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<CompanyRowsDto>>() {
+            @Override
+            protected ApiResponse<CompanyRowsDto> doInBackground(Void... params) {
+                return api.companyGet(id,accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<CompanyRowsDto> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
 
 
     private void saveAccessToken(AccessTokenBO accessTokenBO) {

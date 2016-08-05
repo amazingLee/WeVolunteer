@@ -2,6 +2,9 @@ package com.example.api;
 
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
+import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -158,6 +161,35 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, VOLUNTEER_DETAIL, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<CompanyDto> companyQuery(CompanyQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<CompanyDto>>(){
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, COMPANY_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<CompanyRowsDto> companyGet(String id, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(id);
+        Type typeOft = new TypeToken<ApiResponse<CompanyRowsDto>>(){
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, COMPANY_GET, typeOft, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
