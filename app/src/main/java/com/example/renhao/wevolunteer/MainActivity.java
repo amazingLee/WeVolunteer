@@ -12,6 +12,9 @@ import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
+import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -42,15 +45,17 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
         mAction = new AppActionImpl(this);
 
         String[] s = new String[]{
-                "获取应用接口AccessToken",
-                "获取用户接口AccessToken",
-                "activity query",
-                "activity create",
-                "user login",
-                "user create",
-                "volunteer create",
-                "volunteer query",
-                "volunteer detail"
+                "获取应用接口AccessToken",//0
+                "获取用户接口AccessToken",//1
+                "activity query",//2
+                "activity create",//3
+                "user login",//4
+                "user create",//5
+                "volunteer create",//6
+                "volunteer query",//7
+                "volunteer detail",//8
+                "Company query",//9
+                "Company details get"//10
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -204,7 +209,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
             case 7:
                 VolunteerQueryDto vl_query = new VolunteerQueryDto();
                 vl_query.setPageIndex(0);
-                vl_query.setPageSize(1);
+                vl_query.setPageSize(2);
                 Logger.v(TAG,new Gson().toJson(vl_query));
                 mAction.volunteerQuery(vl_query, new ActionCallbackListener<VolunteerDto>() {
                     @Override
@@ -230,7 +235,38 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                         showToast("fail");
                     }
                 });
+            case 9:
+                CompanyQueryOptionDto Company_query = new CompanyQueryOptionDto();
+                Company_query.setPageIndex(0);
+                Company_query.setPageSize(5);
+                Company_query.setIsAuth(0);//查询不到已经通过审核的组织
+                Logger.v(TAG,new Gson().toJson(Company_query));
+                mAction.companyQuery(Company_query, new ActionCallbackListener<CompanyDto>() {
 
+                    @Override
+                    public void onSuccess(CompanyDto data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
+                break;
+            case 10:
+                mAction.companyGet("cf17245e-e6a5-4f97-9d33-c55ce89ba9e3", new ActionCallbackListener<CompanyRowsDto>() {
+                    @Override
+                    public void onSuccess(CompanyRowsDto data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
+                break;
 
         }
     }
