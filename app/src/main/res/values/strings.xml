@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">WeVolunteer</string>
+    <string name="app_name">WE志愿</string>
+    <string name="tv_scan">扫一扫</string>
+    <string name="tv_appName">WE志愿</string>
+    <string name="changeTv_homepage">主页</string>
+    <string name="changeTv_find">发现</string>
+    <string name="changeTv_signin">签到</string>
+    <string name="changeTv_myself">我的</string>
 </resources>
