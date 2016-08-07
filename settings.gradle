@@ -1,1 +1,1 @@
-include ':app', ':api', ':model', ':core'
+include ':app', ':api', ':model', ':core', ':PullToRefresh'

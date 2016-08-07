@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'WeVolunteer'
             keyPassword '15728006904'
-            storeFile file('Z:/E-signature/WeVolunteer.jks')
+            storeFile file('F:/Android/key/WeVolunteer.jks')
             storePassword '15728006904'
         }
     }
@@ -34,6 +34,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.jakewharton:butterknife:7.0.0'
+    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
     compile project(':core')
     compile project(':model')
+    compile project(':PullToRefresh')
 }
