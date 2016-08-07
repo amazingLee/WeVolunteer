@@ -12,6 +12,7 @@ import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.google.gson.Gson;
@@ -161,6 +162,20 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, VOLUNTEER_DETAIL, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(update);
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, VOLUNTEER_UPDATE, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

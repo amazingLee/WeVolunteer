@@ -12,6 +12,7 @@ import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
+import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 
@@ -42,13 +43,16 @@ public interface AppAction {
     public void activityQuery(ActivityQueryBO activityQueryBO, ActionCallbackListener<ActivityBO> listener);
 
     //志愿者（新增）
-    public void volunteerCreate(List<VolunteerCreateDto> volunteerCreateBOs, ActionCallbackListener<List<String>> listener);
+    public void volunteerCreate(List<VolunteerCreateDto> volunteerCreateBOs,ActionCallbackListener<List<String>> listener);
 
     //志愿者（查询）
     public void volunteerQuery(VolunteerQueryDto volunteerQueryBO, ActionCallbackListener<VolunteerDto> listener);
 
     //志愿者详情信息
-    public void volunteerDetail(String id, ActionCallbackListener<VolunteerViewDto> listener);
+    public void volunteerDetail(String id,ActionCallbackListener<VolunteerViewDto> listener);
+
+    //志愿者（修改）
+    public void volunteerEdit(List<VolunteerEditDto> volunteerEditDto,ActionCallbackListener<List<String>> listener);
 
     //company POST 查询
     public void companyQuery(CompanyQueryOptionDto companyQueryOptionDto, ActionCallbackListener<CompanyDto> listener);
