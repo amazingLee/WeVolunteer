@@ -6,29 +6,11 @@
     <!--index activity-->
     <dimen name="actionbar_homepage_height">60dp</dimen>
     <dimen name="textview_homepage_titlesize">20sp</dimen>
+    <dimen name="textview_right_titlesize">16sp</dimen>
     <dimen name="imageview_homepage_scanSize">16dp</dimen>
     <dimen name="textview_homepage_scanSize">10sp</dimen>
     <dimen name="imageview_homepage_magnifierSize">20dp</dimen>
     <dimen name="actionbar_homepage_margin">16dp</dimen>
     <dimen name="bottombar_indexactivity_height">50dp</dimen>
     <dimen name="changeTv_indexactivity_size">12sp</dimen>
-
-    <!--homepage fragment-->
-    <dimen name="imageslider_homepage_height">160dp</dimen>
-    <dimen name="listitem_homepage_height">200dp</dimen>
-    <dimen name="listitem_homepage_margin">8dp</dimen>
-    <dimen name="textview_listview_textsizeBig">22sp</dimen>
-    <dimen name="textview_listview_margin">8dp</dimen>
-    <dimen name="textview_listview_textsize">14sp</dimen>
-    <dimen name="textview_listview_textsizeSmall">10sp</dimen>
-    <dimen name="textview_listview_paddingBig">5dp</dimen>
-    <dimen name="textview_listview_paddingSmall">3dp</dimen>
-    <dimen name="textview_listview_size">58dp</dimen>
-    <dimen name="relative_gridebutton_height">200dp</dimen>
-    <dimen name="imageview_gridebutton_size">60dp</dimen>
-    <dimen name="imageview_gridebutton_margintop">16dp</dimen>
-    <dimen name="textview_gridebutton_margintop">5dp</dimen>
-    <dimen name="tevtview_gridebutton_textsize">22sp</dimen>
-    <dimen name="tevtview_gridebutton_textsizeSmall">14sp</dimen>
-    <dimen name="textview_gridbutton_marginbottom">16dp</dimen>
 </resources>
