@@ -7,7 +7,7 @@ package com.example.model.Company;
 
 import java.util.List;
 
-public class CompanyDto {
+public class PagedListEntityDto {
     private int PageIndex;  // (integer, optional): 当前页码
     private int PageSize;   // (integer, optional): 每页条数
     private int TotalCount; // (integer, optional): 总共记录数
@@ -16,7 +16,7 @@ public class CompanyDto {
     private int EndPosition;    // (integer, optional): 记录结束位置
     private boolean HasPreviousPage;    // (boolean, optional): 是否有上一页
     private boolean HasNextPage;    // (boolean, optional): 是否有下一页
-    private List<CompanyRowsDto> Rows;
+    private List<CompanyListDto> Rows;
 
 
     public int getPageIndex() {

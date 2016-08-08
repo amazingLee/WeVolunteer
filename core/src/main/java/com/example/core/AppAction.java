@@ -2,9 +2,9 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
-import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyListDto;
+import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -43,20 +43,26 @@ public interface AppAction {
     public void activityQuery(ActivityQueryBO activityQueryBO, ActionCallbackListener<ActivityBO> listener);
 
     //志愿者（新增）
-    public void volunteerCreate(List<VolunteerCreateDto> volunteerCreateBOs,ActionCallbackListener<List<String>> listener);
+    public void volunteerCreate(List<VolunteerCreateDto> volunteerCreateBOs, ActionCallbackListener<List<String>> listener);
 
     //志愿者（查询）
     public void volunteerQuery(VolunteerQueryDto volunteerQueryBO, ActionCallbackListener<VolunteerDto> listener);
 
     //志愿者详情信息
-    public void volunteerDetail(String id,ActionCallbackListener<VolunteerViewDto> listener);
+    public void volunteerDetail(String id, ActionCallbackListener<VolunteerViewDto> listener);
 
     //志愿者（修改）
-    public void volunteerEdit(List<VolunteerEditDto> volunteerEditDto,ActionCallbackListener<List<String>> listener);
+    public void volunteerEdit(List<VolunteerEditDto> volunteerEditDto, ActionCallbackListener<List<String>> listener);
 
     //company POST 查询
-    public void companyQuery(CompanyQueryOptionDto companyQueryOptionDto, ActionCallbackListener<CompanyDto> listener);
+    public void companyQuery(CompanyQueryOptionDto companyQueryOptionDto, ActionCallbackListener<PagedListEntityDto> listener);
 
     //company get 查询
-    public void companyGet(String id, ActionCallbackListener<CompanyRowsDto>listener);
+    public void companyGet(String id, ActionCallbackListener<CompanyListDto> listener);
+
+    //company post创建
+    public void companyCreat(List<CompanyListDto> companyListDtos, ActionCallbackListener<List<String>> listener);
+
+    //company 更新
+    public void companyUpdate(List<CompanyListDto> companyListDtos, ActionCallbackListener<List<String>> listener);
 }
