@@ -5,7 +5,7 @@ package com.example.model.Company;
  *
  */
 
-public class CompanyRowsDto {
+public class CompanyListDto {
     private String AreaName;// 区域名称
     private String AreaId;//区域标识
     private String Id;//企业单位标识
@@ -51,7 +51,7 @@ public class CompanyRowsDto {
 
     @Override
     public String toString() {
-        return "CompanyRowsDto{" +
+        return "CompanyListDto{" +
                 "AreaName='" + AreaName + '\'' +
                 ", AreaId='" + AreaId + '\'' +
                 ", Id='" + Id + '\'' +

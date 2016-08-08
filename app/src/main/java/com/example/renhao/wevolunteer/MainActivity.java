@@ -12,9 +12,9 @@ import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
-import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyListDto;
+import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -57,7 +57,10 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 "volunteer detail",//8
                 "volunteer update",//9
                 "Company query",//10
-                "Company details get"//11
+                "Company details get",//11
+                "Company Creat",//12
+                "Company update",//13
+                "Company nextsortindex"//14获取下一个排序
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -211,7 +214,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
             case 7:
                 VolunteerQueryDto vl_query = new VolunteerQueryDto();
                 vl_query.setPageIndex(0);
-                vl_query.setPageSize(2);
+                vl_query.setPageSize(3);
                 Logger.v(TAG, new Gson().toJson(vl_query));
                 mAction.volunteerQuery(vl_query, new ActionCallbackListener<VolunteerDto>() {
                     @Override
@@ -270,10 +273,10 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 Company_query.setPageSize(3);
                 Company_query.setIsAuth(0);//查询不到已经通过审核的组织
                 Logger.v(TAG, new Gson().toJson(Company_query));
-                mAction.companyQuery(Company_query, new ActionCallbackListener<CompanyDto>() {
+                mAction.companyQuery(Company_query, new ActionCallbackListener<PagedListEntityDto>() {
 
                     @Override
-                    public void onSuccess(CompanyDto data) {
+                    public void onSuccess(PagedListEntityDto data) {
                         showToast("success");
                     }
 
@@ -284,9 +287,46 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 });
                 break;
             case 11:
-                mAction.companyGet("cf17245e-e6a5-4f97-9d33-c55ce89ba9e3", new ActionCallbackListener<CompanyRowsDto>() {
+                mAction.companyGet("cf17245e-e6a5-4f97-9d33-c55ce89ba9e3", new ActionCallbackListener<CompanyListDto>() {
                     @Override
-                    public void onSuccess(CompanyRowsDto data) {
+                    public void onSuccess(CompanyListDto data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
+                break;
+            case 12:
+                CompanyListDto cp_create = new CompanyListDto();
+
+                cp_create.setUserName("AndroidUser");
+
+                Logger.v(TAG, new Gson().toJson(cp_create));
+                List<CompanyListDto> cp_creates = new ArrayList<>();
+                cp_creates.add(cp_create);
+                mAction.companyCreat(cp_creates, new ActionCallbackListener<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> data) {
+                        showToast("success");
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("fail");
+                    }
+                });
+                break;
+            case 13:
+                CompanyListDto cp_update = new CompanyListDto();
+
+                List<CompanyListDto> cp_updates = new ArrayList<>();
+                cp_updates.add(cp_update);
+                mAction.companyUpdate(cp_updates, new ActionCallbackListener<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> data) {
                         showToast("success");
                     }
 

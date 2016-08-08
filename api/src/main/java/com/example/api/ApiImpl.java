@@ -2,9 +2,9 @@ package com.example.api;
 
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
-import com.example.model.Company.CompanyDto;
+import com.example.model.Company.CompanyListDto;
+import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.Company.CompanyRowsDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -126,13 +126,13 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String assessToken){
+    public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String accessToken){
         Gson gson = new Gson();
         String params = gson.toJson(creates);
         Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
         }.getType();
         try {
-            return httpEngine.postApiHandler(params, VOLUNTEER_CREATE, typeOfT, assessToken);
+            return httpEngine.postApiHandler(params, VOLUNTEER_CREATE, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -183,10 +183,10 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<CompanyDto> companyQuery(CompanyQueryOptionDto query, String accessToken) {
+    public ApiResponse<PagedListEntityDto> companyQuery(CompanyQueryOptionDto query, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(query);
-        Type typeOfT = new TypeToken<ApiResponse<CompanyDto>>(){
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto>>(){
         }.getType();
         try {
             return httpEngine.postApiHandler(params, COMPANY_QUERY, typeOfT, accessToken);
@@ -198,13 +198,41 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<CompanyRowsDto> companyGet(String id, String accessToken) {
+    public ApiResponse<CompanyListDto> companyGet(String id, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(id);
-        Type typeOft = new TypeToken<ApiResponse<CompanyRowsDto>>(){
+        Type typeOft = new TypeToken<ApiResponse<CompanyListDto>>(){
         }.getType();
         try {
             return httpEngine.getApiHandler(params, COMPANY_GET, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> companyCreat(List<CompanyListDto> creates, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(creates);
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, COMPANY_CREAT, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> companyUpdate(List<CompanyListDto> update, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(update);
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, COMPANY_UPDATE, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
