@@ -6,6 +6,7 @@
     <!--index activity-->
     <dimen name="actionbar_homepage_height">60dp</dimen>
     <dimen name="textview_homepage_titlesize">20sp</dimen>
+    <dimen name="textview_right_titlesize">16sp</dimen>
     <dimen name="imageview_homepage_scanSize">16dp</dimen>
     <dimen name="textview_homepage_scanSize">10sp</dimen>
     <dimen name="imageview_homepage_magnifierSize">20dp</dimen>
@@ -31,4 +32,11 @@
     <dimen name="tevtview_gridebutton_textsize">22sp</dimen>
     <dimen name="tevtview_gridebutton_textsizeSmall">14sp</dimen>
     <dimen name="textview_gridbutton_marginbottom">16dp</dimen>
+    
+    <dimen name="imageview_organizationitem_width">130dp</dimen>
+    <dimen name="imageview_organizationitem_marginTB">16dp</dimen>
+    <dimen name="imageview_organizationitem_marginLR">18dp</dimen>
+    <dimen name="relative_organizationitem_height">150dp</dimen>
+    <dimen name="tv_organizationitem_BigSize">18sp</dimen>
+    <dimen name="tv_organizationitem_SmallSize">12sp</dimen>
 </resources>

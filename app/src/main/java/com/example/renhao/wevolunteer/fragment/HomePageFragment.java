@@ -3,6 +3,7 @@ package com.example.renhao.wevolunteer.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
+import com.example.renhao.wevolunteer.OrganizationActivity;
 import com.example.renhao.wevolunteer.ProjectActivity;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
@@ -45,6 +47,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private static final String TAG = "HpmePageFragment";
 
     public static final int PROJECT = 0;
+    public static final int ORGANIZATION = 1;
 
     private PullToRefreshListView mPtrListviewHomapageList;
     private SliderLayout mSliderHomepageImgslider;
@@ -81,7 +84,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         mPtrListviewHomapageList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-
+                new FinishRefresh().execute();
             }
         });
         mPtrListviewHomapageList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);//设置头部下拉刷新
@@ -136,7 +139,8 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                         break;
                     case 2:
                         Logger.v(TAG, "组织");
-
+                        intent.setClass(getActivity(), OrganizationActivity.class);
+                        startActivityForResult(intent, ORGANIZATION);
                         break;
                     case 3:
                         Logger.v(TAG, "岗位");
@@ -226,5 +230,23 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //使用EventBus向IndexActivity传值
         EventBus.getDefault().post(new FragmentResultEvent(requestCode, resultCode, data));
+    }
+
+    //测试用方法
+    private class FinishRefresh extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+//          adapter.notifyDataSetChanged();
+            mPtrListviewHomapageList.onRefreshComplete();
+        }
     }
 }

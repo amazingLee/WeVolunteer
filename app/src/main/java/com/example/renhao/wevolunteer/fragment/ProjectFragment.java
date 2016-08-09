@@ -72,7 +72,7 @@ public class ProjectFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_jobs, container, false);
+        View view = inflater.inflate(R.layout.fragment_project, container, false);
         ButterKnife.bind(this, view);
         initDropDownMenu();
 
