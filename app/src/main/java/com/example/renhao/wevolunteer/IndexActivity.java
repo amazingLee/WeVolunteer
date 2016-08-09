@@ -14,12 +14,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.fragment.FindPageFragment;
 import com.example.renhao.wevolunteer.fragment.HomePageFragment;
 import com.example.renhao.wevolunteer.fragment.MySelfFragment;
 import com.example.renhao.wevolunteer.fragment.SigninPageFragment;
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,16 +63,17 @@ public class IndexActivity extends AppCompatActivity {
     private SigninPageFragment mSigninPageFragment;
     private MySelfFragment mMySelfFragment;
 
-    private int fragmentPosition = HOME;
+    private int fragmentPosition = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
         initActionBar();
-        setFragment(0);
+        setFragment(HOME);
     }
 
     /**
@@ -110,6 +115,8 @@ public class IndexActivity extends AppCompatActivity {
      * @param position
      */
     public void setFragment(int position) {
+        if (fragmentPosition == position)
+            return;
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
 
@@ -125,6 +132,7 @@ public class IndexActivity extends AppCompatActivity {
                 }
                 setFractionTranslate(transaction, HOME);
                 transaction.replace(R.id.framelayout_index_content, mHomePageFragment);
+                fragmentPosition = HOME;
                 break;
             case FIND:
                 mChangrTvIndexFind.setIconColor(getResources().getColor(R.color.colorCyan));
@@ -133,6 +141,7 @@ public class IndexActivity extends AppCompatActivity {
                 }
                 setFractionTranslate(transaction, FIND);
                 transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
+                fragmentPosition = FIND;
                 break;
             case SIGNIN:
                 mChangrTvIndexSignin.setIconColor(getResources().getColor(R.color.colorCyan));
@@ -141,6 +150,7 @@ public class IndexActivity extends AppCompatActivity {
                 }
                 setFractionTranslate(transaction, SIGNIN);
                 transaction.replace(R.id.framelayout_index_content, mSigninPageFragment);
+                fragmentPosition = SIGNIN;
                 break;
             case MYSELF:
                 mChangrTvIndexMyself.setIconColor(getResources().getColor(R.color.colorCyan));
@@ -149,6 +159,7 @@ public class IndexActivity extends AppCompatActivity {
                 }
                 setFractionTranslate(transaction, MYSELF);
                 transaction.replace(R.id.framelayout_index_content, mMySelfFragment);
+                fragmentPosition = MYSELF;
                 break;
 
         }
@@ -179,29 +190,41 @@ public class IndexActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.changrTv_index_homepage:
-                if (fragmentPosition != HOME) {
-                    setFragment(HOME);
-                    fragmentPosition = HOME;
-                }
+                setFragment(HOME);
                 break;
             case R.id.changrTv_index_find:
-                if (fragmentPosition != FIND) {
-                    setFragment(FIND);
-                    fragmentPosition = FIND;
-                }
+                setFragment(FIND);
                 break;
             case R.id.changrTv_index_signin:
-                if (fragmentPosition != SIGNIN) {
-                    setFragment(SIGNIN);
-                    fragmentPosition = SIGNIN;
-                }
+                setFragment(SIGNIN);
                 break;
             case R.id.changrTv_index_myself:
-                if (fragmentPosition != MYSELF) {
-                    setFragment(MYSELF);
-                    fragmentPosition = MYSELF;
-                }
+                setFragment(MYSELF);
                 break;
         }
+    }
+
+    @Subscribe
+    public void onEventMainThread(FragmentResultEvent resultEvent) {
+        switch (resultEvent.getResultCode()) {
+            case HOME:
+                setFragment(HOME);
+                break;
+            case FIND:
+                setFragment(FIND);
+                break;
+            case SIGNIN:
+                setFragment(SIGNIN);
+                break;
+            case MYSELF:
+                setFragment(MYSELF);
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

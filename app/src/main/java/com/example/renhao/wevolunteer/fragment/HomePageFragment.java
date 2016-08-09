@@ -2,6 +2,7 @@ package com.example.renhao.wevolunteer.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -16,14 +17,18 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
+import com.example.renhao.wevolunteer.ProjectActivity;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
+import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.view.NoScrollGridView;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +43,8 @@ import java.util.List;
  */
 public class HomePageFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
     private static final String TAG = "HpmePageFragment";
+
+    public static final int PROJECT = 0;
 
     private PullToRefreshListView mPtrListviewHomapageList;
     private SliderLayout mSliderHomepageImgslider;
@@ -113,6 +120,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
      * 初始化按钮，并为按钮绑定监听
      */
     private void initGridButton() {
+        final Intent intent = new Intent();
         gridView = new NoScrollGridView(getActivity());
         //gridView.setBackgroundResource(R.drawable.border_shallowblack);
         gridView.setNumColumns(3);
@@ -128,12 +136,19 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                         break;
                     case 2:
                         Logger.v(TAG, "组织");
+
                         break;
                     case 3:
                         Logger.v(TAG, "岗位");
+                        intent.setClass(getActivity(), ProjectActivity.class);
+                        intent.putExtra("page", ProjectActivity.JOBS);
+                        startActivityForResult(intent, PROJECT);
                         break;
                     case 4:
                         Logger.v(TAG, "活动");
+                        intent.setClass(getActivity(), ProjectActivity.class);
+                        intent.putExtra("page", ProjectActivity.ACTIVITY);
+                        startActivityForResult(intent, PROJECT);
                         break;
                     case 5:
                         Logger.v(TAG, "积分商城");
@@ -205,5 +220,11 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Logger.v(TAG, "image click  " + slider.getBundle().getString("extra"));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //使用EventBus向IndexActivity传值
+        EventBus.getDefault().post(new FragmentResultEvent(requestCode, resultCode, data));
     }
 }
