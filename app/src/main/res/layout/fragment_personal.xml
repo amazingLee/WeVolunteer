@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/personal_bg"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/top_height"
+            android:background="@drawable/personal_top_bg">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_personal_portrait"
+                android:layout_width="@dimen/circleImageView_portrait_width"
+                android:layout_height="@dimen/circleImageView_portrait_height"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/top_item_margeintop"
+                android:src="@drawable/personal_no_portrait" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_personal_portrait"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_personal_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/image_personal_portrait"
+                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:gravity="center"
+                    android:text="@string/personal_name"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/textview_personal_name_size" />
+
+                <TextView
+                    android:id="@+id/tv_personal_specialty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:gravity="center"
+                    android:text="@string/personal_specialty"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/textview_personal_specialty_size" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/personal_integral"
+                        android:textColor="#fff"
+                        android:textSize="@dimen/textview_personal_integral_size" />
+
+                    <TextView
+                        android:id="@+id/tv_personal_integral"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="1000分"
+                        android:textColor="#fff"
+                        android:textSize="@dimen/textview_personal_integral_size" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/image_personal_stars"
+                    android:layout_width="@dimen/imageview_stars_width"
+                    android:layout_height="@dimen/imageview_stars_height"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:src="@drawable/star" />
+            </LinearLayout>
+
+        </RelativeLayout>
+        <!--middle item-->
+        <include layout="@layout/personal_middle_item" />
+        <!--bottom item-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <include layout="@layout/personal_bottom_item" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

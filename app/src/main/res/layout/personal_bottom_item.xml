@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_Professional"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:divider="#000"
+        android:dividerPadding="3dp"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/tv_personal_ifProfessional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_ifProfessional_FALSE"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <TextView
+            android:id="@+id/tv_personal_major"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/textview_bottom_right_marginright"
+            android:gravity="left"
+            android:text="法律援助"
+            android:textColor="#999"
+            android:textSize="@dimen/textview_bottom_right_size"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_job"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_myJob"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_attention"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_myAttention"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_ORG"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_myORG"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_rank"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_myRank"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <TextView
+            android:id="@+id/tv_personal_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/textview_bottom_right_marginright"
+            android:gravity="left"
+            android:text="10000+"
+            android:textColor="#999"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_information"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_myInformation"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <!--底部item中的底部部分-->
+    <LinearLayout
+        android:id="@+id/item_aboutUS"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:layout_marginTop="@dimen/layout_bottom_bottom_margintop"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_aboutUS"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_WIPE_CACHE"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_WIPE_CACHE"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_REPORT_PROBLEM"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_REPORT_PROBLEM"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_FAQ"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_FAQ"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+</LinearLayout>

@@ -14,7 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.renhao.wevolunteer.fragment.HomePageFragment;
+import com.example.renhao.wevolunteer.Fragment.HomePageFragment;
+import com.example.renhao.wevolunteer.Fragment.PersonalFragment;
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
 import com.orhanobut.logger.Logger;
 
@@ -46,6 +47,7 @@ public class IndexActivity extends AppCompatActivity {
 
     private View mCustomView;//actionbar的自定义视图
     private HomePageFragment mHomePageFragment;
+    private PersonalFragment mPersonalFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,6 +112,13 @@ public class IndexActivity extends AppCompatActivity {
                 }
                 transaction.replace(R.id.framelayout_index_content, mHomePageFragment);
                 break;
+            case 4:
+                mChangrTvIndexHomepage.setIconColor(getResources().getColor(R.color.colorCyan));
+                if (mPersonalFragment == null) {
+                    mPersonalFragment = new PersonalFragment();
+                }
+                transaction.replace(R.id.framelayout_index_content, mPersonalFragment);
+                break;
         }
         transaction.commit();
     }
@@ -124,6 +133,7 @@ public class IndexActivity extends AppCompatActivity {
             case R.id.changrTv_index_signin:
                 break;
             case R.id.changrTv_index_myself:
+                setFragment(4);
                 break;
         }
     }

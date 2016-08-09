@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="personal_name">Name</string>
+    <string name="personal_specialty">Specialty</string>
+    <string name="personal_integral">积分:</string>
+    <string name="service_time_all">66258</string>
+    <string name="service_time_all_hint">总时长</string>
+    <string name="service_time_school">55226</string>
+    <string name="service_time_school_hint">在校服务时长</string>
+    <string name="service_time_InJob">1253</string>
+    <string name="service_time_InJob_hint">在职服务时长</string>
+    <string name="service_time_retire">0</string>
+    <string name="service_time_retire_hint">退休服务时长</string>
+    <string name="personal_ifProfessional_TRUE">我的专业</string>
+    <string name="personal_ifProfessional_FALSE">申请专业志愿者</string>
+    <string name="personal_myJob">我的活动/岗位</string>
+    <string name="personal_myAttention">我的关注</string>
+    <string name="personal_myORG">所属机构</string>
+    <string name="personal_myRank">我的排名</string>
+    <string name="personal_myInformation">我的资料</string>
+    <string name="personal_aboutUS">关于我们</string>
+    <string name="personal_WIPE_CACHE">清空缓存</string>
+    <string name="personal_REPORT_PROBLEM">问题反馈</string>
+    <string name="personal_FAQ">常见问题</string>
+
+</resources>

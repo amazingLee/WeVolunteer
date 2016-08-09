@@ -31,4 +31,33 @@
     <dimen name="tevtview_gridebutton_textsize">22sp</dimen>
     <dimen name="tevtview_gridebutton_textsizeSmall">14sp</dimen>
     <dimen name="textview_gridbutton_marginbottom">16dp</dimen>
+
+    <!--PersonalFragment-->
+    <dimen name="top_height">180dp</dimen>
+    <dimen name="textview_personal_name_size">24sp</dimen>
+    <dimen name="textview_personal_specialty_size">12sp</dimen>
+    <dimen name="textview_personal_integral_size">12sp</dimen>
+    <dimen name="top_item_margeintop">8dp</dimen>
+    <dimen name="circleImageView_portrait_height">48dp</dimen>
+    <dimen name="circleImageView_portrait_width">48dp</dimen>
+    <dimen name="circleImageView_portrait_margintop">15dp</dimen>
+    <dimen name="imageview_stars_height">12dp</dimen>
+    <dimen name="imageview_stars_width">12dp</dimen>
+    <dimen name="textview_personal_middle_main">18sp</dimen>
+    <dimen name="textview_personal_middle_hint">10sp</dimen>
+    <dimen name="textview_middle_main_margintop">20dp</dimen>
+    <dimen name="textview_middle_hint_margintop">5dp</dimen>
+    <dimen name="middle_circle_width">80dp</dimen>
+    <dimen name="middle_circle_height">80dp</dimen>
+    <dimen name="middle_circle_marginleft">8dp</dimen>
+    <dimen name="middle_circle_margintop">12dp</dimen>
+    <dimen name="middle_circle_marginbottom">12dp</dimen>
+    <dimen name="bottom_item_height">48dp</dimen>
+    <dimen name="textview_bottom_left_size">18sp</dimen>
+    <dimen name="textview_bottom_left_marginleft">4dp</dimen>
+    <dimen name="textview_bottom_right_size">16sp</dimen>
+    <dimen name="textview_bottom_right_marginright">8dp</dimen>
+    <dimen name="layout_bottom_bottom_margintop">20dp</dimen>
+    <dimen name="imageview_bottom_mark_marginright">5dp</dimen>
+    <dimen name="imageview_bottom_mark_size">25dp</dimen>
 </resources>
