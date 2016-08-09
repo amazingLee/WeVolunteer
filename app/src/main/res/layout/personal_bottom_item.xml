@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="#fff"
-        android:divider="#000"
-        android:dividerPadding="3dp"
+        android:divider="@drawable/underline"
         android:orientation="horizontal"
         android:showDividers="middle">
 

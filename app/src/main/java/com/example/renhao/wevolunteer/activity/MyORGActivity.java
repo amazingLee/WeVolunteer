@@ -26,7 +26,7 @@ public class MyORGActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_myORG);
+        setContentView(R.layout.activity_myorg);
         listView = (ListView) findViewById(R.id.listView_myORG);
         String[] s = new String[]{
                 "海曙区志愿协会",
@@ -43,7 +43,7 @@ public class MyORGActivity extends AppCompatActivity {
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.myORG_item,R.id.tv_Institution,actions);
+                this,R.layout.myorg_item,R.id.tv_Institution,actions);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

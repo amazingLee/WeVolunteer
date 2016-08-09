@@ -24,7 +24,7 @@ public class FAQActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_FAQ);
+        setContentView(R.layout.activity_faq);
         listView = (ListView) findViewById(R.id.listView_FAQ);
         String[] s = new String[]{
                 "如何注册志愿者账号？",
@@ -42,7 +42,7 @@ public class FAQActivity extends AppCompatActivity {
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.FAQ_item,R.id.common_problem_item,actions);
+                this,R.layout.faq_item,R.id.common_problem_item,actions);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
