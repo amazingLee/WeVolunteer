@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.renhao.wevolunteer.R;
 
@@ -13,10 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 常见问题界面
+ * 所属机构界面
  */
-public class CommonProblemActivity extends AppCompatActivity {
-    private static final String TAG = "CommonProblemActivity";
+public class MyORGActivity extends AppCompatActivity {
+    private static final String TAG = "MyORGActivity";
 
     private List<String> actions;
     private ListView listView;
@@ -24,32 +26,30 @@ public class CommonProblemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common_problem);
-        listView = (ListView) findViewById(R.id.listView_common_problem);
+        setContentView(R.layout.activity_myORG);
+        listView = (ListView) findViewById(R.id.listView_myORG);
         String[] s = new String[]{
-                "如何注册志愿者账号？",
-                "如何注册专业志愿者？",
-                "志愿者流程",
-                "如何购买下单？",
-                "如何查找想要的商品？",
-                "可以拨打客服热线订购商品吗？",
-                "如何填写收货地址？",
-                "如何查看购物车中的商品？",
-                "浏览器COOKIE功能如何开启？",
-                "购物车常见问题和购物技巧",
-                "谨防假借京东名义的诈骗",
-
+                "海曙区志愿协会",
+                "江东区志愿协会",
+                "江北区志愿协会",
+                "鄞州区志愿协会",
+                "镇海区志愿协会",
+                "北仑区志愿协会",
+                "慈溪市志愿协会",
+                "余姚市志愿协会",
+                "奉化市志愿协会",
+                "宁海县志愿协会",
+                "象山县志愿协会",
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.common_problem_item,R.id.common_problem_item,actions);
+                this,R.layout.myORG_item,R.id.tv_Institution,actions);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }
