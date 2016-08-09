@@ -64,7 +64,7 @@
             android:name=".activity.ReportProblemActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activity.CommonProblemActivity"
+            android:name=".activity.FAQActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.MajorSelectionActivity"
@@ -91,7 +91,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>
-        <activity android:name=".activity.AffiliatedInstitutionActivity"
+        <activity android:name=".activity.MyORGActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>

@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:divider="@drawable/underline"
+    android:showDividers="middle"
     android:orientation="vertical">
 
     <LinearLayout
@@ -9,9 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="#fff"
-        android:divider="@drawable/underline"
-        android:orientation="horizontal"
-        android:showDividers="middle">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_personal_ifProfessional"
