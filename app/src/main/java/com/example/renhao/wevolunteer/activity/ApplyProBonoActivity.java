@@ -9,7 +9,7 @@ import com.example.renhao.wevolunteer.R;
  * 申请专业志愿者界面 （属于我的界面里）
  */
 public class ApplyProBonoActivity extends AppCompatActivity {
-
+    private static final String TAG = "ApplyProBonoActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

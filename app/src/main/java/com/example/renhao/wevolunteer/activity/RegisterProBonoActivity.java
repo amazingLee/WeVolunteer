@@ -10,6 +10,7 @@ import com.example.renhao.wevolunteer.R;
  */
 public class RegisterProBonoActivity extends AppCompatActivity {
     private static final String TAG = "RegisterProBonoActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

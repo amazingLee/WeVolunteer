@@ -94,7 +94,6 @@
     <string name="tv_intention_time">意向时间</string>
     <string name="tv_intention_type">意向类别</string>
     <string name="tv_professional_ability">专业能力</string>
-
     <!--activity apply pro bono-->
     <string name="title_apply_pro_bono">申请专业志愿者</string>
     <string name="btn_apply">申 请</string>

@@ -10,6 +10,7 @@ import com.example.renhao.wevolunteer.R;
  */
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
