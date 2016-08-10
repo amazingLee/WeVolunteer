@@ -33,7 +33,7 @@
     <dimen name="tevtview_gridebutton_textsizeSmall">14sp</dimen>
     <dimen name="textview_gridbutton_marginbottom">16dp</dimen>
 
-    <!--PersonalFragment-->
+    <!--PersonalFragment 一些margin在我的资料中有共用-->
     <dimen name="top_height">180dp</dimen>
     <dimen name="textview_personal_name_size">24sp</dimen>
     <dimen name="textview_personal_specialty_size">12sp</dimen>
@@ -58,9 +58,16 @@
     <dimen name="textview_bottom_left_marginleft">4dp</dimen>
     <dimen name="textview_bottom_right_size">16sp</dimen>
     <dimen name="textview_bottom_right_marginright">8dp</dimen>
-    <dimen name="layout_bottom_bottom_margintop">20dp</dimen>
+    <dimen name="layout_bottom_aboutUS_margintop">20dp</dimen>
+    <dimen name="layout_bottom_bottom_marginbottom">10dp</dimen>
     <dimen name="imageview_bottom_mark_marginright">5dp</dimen>
     <dimen name="imageview_bottom_mark_size">25dp</dimen>
+
     <!--activity for personal-->
     <dimen name="textview_submit_titlesize">16sp</dimen>
+    <dimen name="imageview_item_Portrait_size">35dp</dimen>
+    <dimen name="item_myPortrait_margintop">10dp</dimen>
+    <dimen name="item_myUser_margintop">20dp</dimen>
+    <dimen name="btn_personalData_quitLogin_margin">20dp</dimen>
+    <dimen name="btn_personalData_quitLogin_marginTop">10dp</dimen>
 </resources>

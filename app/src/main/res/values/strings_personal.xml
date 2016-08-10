@@ -61,5 +61,23 @@
     <string name="tv_afternoon">下午</string>
     <string name="tv_night">晚上</string>
     <string name="title_affiliated_institution">所属机构</string>
+    <!--personalData-->
+    <string name="myPortrait_item_text">我的头像</string>
+    <string name="myNickName_item_text">我的昵称</string>
+    <string name="changePassword_item_text">修改密码</string>
+    <string name="myPhone_item_text">我的手机</string>
+    <string name="myUserName_item_text">用户名</string>
+    <string name="myTrueName_item_text">姓名</string>
+    <string name="myIDNumber_item_text">身份证号</string>
+    <string name="myAttribute_item_text">个人属性</string>
+    <string name="myPoliticsStatus_item_text">政治面貌</string>
+    <string name="myArea_item_text">所在区域</string>
+    <string name="myORG_item_text">所属机构</string>
+    <string name="myMajor_item_text">专业特长</string>
+    <string name="myNowCompany_item_text">现工作单位</string>
+    <string name="myHomeAddress_item_text">现家庭住址</string>
+    <string name="myImageTime_item_text">意向时间</string>
+    <string name="myImageType_item_text">意向类别</string>
+    <string name="btn_quit_text">退出登陆</string>
 
 </resources>

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:divider="@drawable/underline"
-    android:showDividers="middle"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:showDividers="middle">
 
     <LinearLayout
         android:id="@+id/item_Professional"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -48,7 +50,8 @@
         android:id="@+id/item_job"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -73,7 +76,8 @@
         android:id="@+id/item_attention"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -98,7 +102,8 @@
         android:id="@+id/item_ORG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -124,7 +129,8 @@
         android:id="@+id/item_rank"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -160,7 +166,8 @@
         android:id="@+id/item_information"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -186,8 +193,9 @@
         android:id="@+id/item_aboutUS"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:layout_marginTop="@dimen/layout_bottom_bottom_margintop"
-        android:background="#fff"
+        android:layout_marginTop="@dimen/layout_bottom_aboutUS_margintop"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -212,7 +220,8 @@
         android:id="@+id/item_WIPE_CACHE"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -237,7 +246,8 @@
         android:id="@+id/item_REPORT_PROBLEM"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -262,7 +272,9 @@
         android:id="@+id/item_FAQ"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
-        android:background="#fff"
+        android:layout_marginBottom="@dimen/layout_bottom_bottom_marginbottom"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
