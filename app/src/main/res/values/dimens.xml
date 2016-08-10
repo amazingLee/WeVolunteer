@@ -6,13 +6,13 @@
     <!--index activity-->
     <dimen name="actionbar_homepage_height">60dp</dimen>
     <dimen name="textview_homepage_titlesize">20sp</dimen>
+    <dimen name="textview_right_titlesize">16sp</dimen>
     <dimen name="imageview_homepage_scanSize">16dp</dimen>
     <dimen name="textview_homepage_scanSize">10sp</dimen>
     <dimen name="imageview_homepage_magnifierSize">20dp</dimen>
     <dimen name="actionbar_homepage_margin">16dp</dimen>
     <dimen name="bottombar_indexactivity_height">50dp</dimen>
     <dimen name="changeTv_indexactivity_size">12sp</dimen>
-
 
     <!--homepage fragment-->
     <dimen name="imageslider_homepage_height">160dp</dimen>
