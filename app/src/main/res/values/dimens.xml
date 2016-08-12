@@ -39,4 +39,8 @@
     <dimen name="relative_organizationitem_height">150dp</dimen>
     <dimen name="tv_organizationitem_BigSize">18sp</dimen>
     <dimen name="tv_organizationitem_SmallSize">12sp</dimen>
+
+    <!--project detail-->
+    <dimen name="project_detail_marginLR">20dp</dimen>
+    <dimen name="project_detail_marginTB">16dp</dimen>
 </resources>

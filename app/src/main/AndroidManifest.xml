@@ -79,6 +79,8 @@
         </activity>
         <activity android:name=".ProjectActivity"/>
         <activity android:name=".OrganizationActivity"/>
+        <activity android:name=".ProjectDetailActivity"/>
+        <activity android:name=".OrganizationDetailActivity"/>
     </application>
 
 </manifest>

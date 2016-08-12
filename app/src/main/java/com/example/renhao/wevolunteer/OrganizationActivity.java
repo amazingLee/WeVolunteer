@@ -1,5 +1,6 @@
 package com.example.renhao.wevolunteer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -183,6 +184,13 @@ public class OrganizationActivity extends AppCompatActivity {
                 , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
         adapter = new OrganizationAdapter(this, list);
         mPtr.setAdapter(adapter);
+        mPtr.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(OrganizationActivity.this, OrganizationDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initDropDownMenu() {

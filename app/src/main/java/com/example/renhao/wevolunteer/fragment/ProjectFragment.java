@@ -149,7 +149,7 @@ public class ProjectFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 typeAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[1] : type[position]);
+                mDropDownMenu.setTabText(position == 0 ? headers[0] : type[position]);
                 mDropDownMenu.closeMenu();
             }
         });
@@ -175,7 +175,7 @@ public class ProjectFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 areaAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[1] : area[position]);
+                mDropDownMenu.setTabText(position == 0 ? headers[2] : area[position]);
                 mDropDownMenu.closeMenu();
             }
         });
@@ -188,7 +188,7 @@ public class ProjectFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 smartAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[1] : smart[position]);
+                mDropDownMenu.setTabText(position == 0 ? headers[3] : smart[position]);
                 mDropDownMenu.closeMenu();
             }
         });

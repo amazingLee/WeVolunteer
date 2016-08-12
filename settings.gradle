@@ -1,1 +1,1 @@
-include ':app', ':api', ':model', ':core', ':PullToRefresh'
+include ':app', ':api', ':model', ':core', ':PullToRefresh', ':dropdownmenu', ':dialogplus', ':calendar'

@@ -45,4 +45,6 @@ dependencies {
     compile project(':model')
     compile project(':PullToRefresh')
     compile project(':dropdownmenu')
+    compile project(':dialogplus')
+    compile project(':calendar')
 }

@@ -20,6 +20,7 @@ import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.OrganizationActivity;
 import com.example.renhao.wevolunteer.ProjectActivity;
+import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
@@ -117,6 +118,13 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                 "http://img5.imgtn.bdimg.com/it/u=3896921233,133782688&fm=21&gp=0.jpg"));
         adapter = new HomePageAdapter(getActivity(), list);
         mPtrListviewHomapageList.setAdapter(adapter);
+        mPtrListviewHomapageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**

@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\dialog_list.xml",
+        "source": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog_list.xml"
+    },
+    {
+        "merged": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\dialog_grid.xml",
+        "source": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog_grid.xml"
+    },
+    {
+        "merged": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\dialog_list.xml",
+        "source": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog_list.xml"
+    },
+    {
+        "merged": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\dialog_grid.xml",
+        "source": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog_grid.xml"
+    },
+    {
+        "merged": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\dialog_view.xml",
+        "source": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog_view.xml"
+    },
+    {
+        "merged": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\base_container.xml",
+        "source": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\base_container.xml"
+    },
+    {
+        "merged": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\dialog_view.xml",
+        "source": "F:\\AndroidProject\\WeVolunteer\\WeVolunteer\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog_view.xml"
+    },
+    {
+        "merged": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\base_container.xml",
+        "source": "F:\\Android\\code\\dialogplus-master\\dialogplus\\build\\intermediates\\bundles\\debug\\res\\layout\\base_container.xml"
+    }
+]
