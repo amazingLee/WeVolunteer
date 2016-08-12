@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.renhao.wevolunteer.R;
@@ -26,6 +27,16 @@ public class FAQActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
         listView = (ListView) findViewById(R.id.listView_FAQ);
+
+        //回退按钮
+        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FAQActivity.this.finish();
+            }
+        });
+
         String[] s = new String[]{
                 "如何注册志愿者账号？",
                 "如何注册专业志愿者？",
@@ -42,7 +53,7 @@ public class FAQActivity extends AppCompatActivity {
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.faq_item,R.id.common_problem_item,actions);
+                this, R.layout.faq_item, R.id.common_problem_item, actions);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

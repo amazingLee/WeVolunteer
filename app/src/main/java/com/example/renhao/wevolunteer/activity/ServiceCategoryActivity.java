@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,16 @@ public class ServiceCategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_category);
         listView = (ListView) findViewById(R.id.listView_service_category);
+
+        //回退按钮
+        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceCategoryActivity.this.finish();
+            }
+        });
+
         String[] s = new String[]{
                 "赛会服务",
                 "助老助残",

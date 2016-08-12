@@ -22,6 +22,7 @@
     <string name="personal_WIPE_CACHE">清空缓存</string>
     <string name="personal_REPORT_PROBLEM">问题反馈</string>
     <string name="personal_FAQ">常见问题</string>
+
     <!--activity for personal-->
     <string name="title_nickname">昵称</string>
     <string name="tv_submit">提交</string>
@@ -33,7 +34,7 @@
     <string name="hint_original_password">请输入原密码</string>
     <string name="hint_new_password">请输入新密码</string>
     <string name="hint_confirm_password">再次输入密码</string>
-    <string name="title_set_password">设置密码</string>
+    <string name="title_set_password">修改密码</string>
     <string name="title_mobile_phone">手机号码</string>
     <string name="tv_verification_code">验证码</string>
     <string name="btn_verification_code">获取验证码</string>
@@ -46,12 +47,12 @@
     <string name="hint_report_problem">请输入反馈问题</string>
     <string name="title_report_problem">反馈问题</string>
     <string name="title_common_problem">常见问题</string>
-    <string name="title_major_selection">专业选择</string>
+    <string name="title_professional_selection">专业选择</string>
     <string name="title_residence">现居住地址</string>
     <string name="hint_residence">请输入现居住地址</string>
     <string name="tv_certificate_uoload">证书上传</string>
-    <string name="title_professional_ability">专业能力</string>
-    <string name="hint_professional_ability">请输入专业能力</string>
+    <string name="title_major_ability">专业能力</string>
+    <string name="hint_major_ability">请输入专业能力</string>
     <string name="title_service_category">意向志愿服务类别</string>
     <string name="title_area_selection">区域选择</string>
     <string name="title_forgot_password">找回密码</string>
@@ -61,7 +62,10 @@
     <string name="tv_afternoon">下午</string>
     <string name="tv_night">晚上</string>
     <string name="title_affiliated_institution">所属机构</string>
+    <string name="title_service_time">意向志愿服务时间</string>
+
     <!--personalData-->
+    <string name="title_personal_data">个人资料</string>
     <string name="myPortrait_item_text">我的头像</string>
     <string name="myNickName_item_text">我的昵称</string>
     <string name="changePassword_item_text">修改密码</string>
@@ -100,7 +104,7 @@
     <string name="hint_retire">退休</string>
     <string name="btn_existing_login">已有账号　点击登录</string>
     <string name="tv_register_agree">注册表示您同意《宁波市注册志愿者管理办法》</string>
-    
+
     <!--activity register pro bono-->
     <string name="title_register_pro_bono">注册专业志愿者</string>
     <string name="tv_area">所在区域</string>
@@ -115,5 +119,9 @@
     <!--activity apply pro bono-->
     <string name="title_apply_pro_bono">申请专业志愿者</string>
     <string name="btn_apply">申 请</string>
+    <!--POP for PersonalData-->
+    <string name="btn_pickPIC">从相册选择</string>
+    <string name="btn_takePIC">拍照</string>
+    <string name="btn_cancel">取消</string>
 
 </resources>

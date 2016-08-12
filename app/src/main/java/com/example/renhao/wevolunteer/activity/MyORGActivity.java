@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,16 @@ public class MyORGActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myorg);
         listView = (ListView) findViewById(R.id.listView_myORG);
+
+        //回退按钮
+        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyORGActivity.this.finish();
+            }
+        });
+
         String[] s = new String[]{
                 "海曙区志愿协会",
                 "江东区志愿协会",
@@ -43,7 +54,7 @@ public class MyORGActivity extends AppCompatActivity {
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.myorg_item,R.id.tv_Institution,actions);
+                this, R.layout.myorg_item, R.id.tv_Institution, actions);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

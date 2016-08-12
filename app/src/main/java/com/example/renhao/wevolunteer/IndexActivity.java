@@ -15,9 +15,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.renhao.wevolunteer.fragment.FindPageFragment;
-import com.example.renhao.wevolunteer.fragment.HomePageFragment;
-import com.example.renhao.wevolunteer.fragment.PersonalFragment;
+import com.example.renhao.wevolunteer.Fragment.HomePageFragment;
+import com.example.renhao.wevolunteer.Fragment.PersonalFragment;
+
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
 import com.orhanobut.logger.Logger;
 
@@ -50,7 +50,6 @@ public class IndexActivity extends AppCompatActivity {
     private View mCustomView;//actionbar的自定义视图
     private HomePageFragment mHomePageFragment;
     private PersonalFragment mPersonalFragment;
-    private FindPageFragment mFindPageFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,38 +115,21 @@ public class IndexActivity extends AppCompatActivity {
                 if (mHomePageFragment == null) {
                     mHomePageFragment = new HomePageFragment();
                     transaction.add(R.id.framelayout_index_content, mHomePageFragment);
-                }else {
+                } else {
                     transaction.show(mHomePageFragment);
                 }
                 mChangrTvIndexHomepage.setIconColor(getResources().getColor(R.color.colorCyan));
                 break;
             case 1:
-
-                if (mFindPageFragment == null){
-                    mFindPageFragment = new FindPageFragment();
-                    transaction.add(R.id.framelayout_index_content, mFindPageFragment);
-                }else {
-                    transaction.show(mFindPageFragment);
-                }
-
-                mChangrTvIndexFind.setIconColor(getResources().getColor(R.color.colorCyan));
                 break;
             case 2:
-
-                if (mFindPageFragment == null){
-                    mFindPageFragment = new FindPageFragment();
-                    transaction.add(R.id.framelayout_index_content, mFindPageFragment);
-                }else {
-                    transaction.show(mFindPageFragment);
-                }
-                mChangrTvIndexSignin.setIconColor(getResources().getColor(R.color.colorCyan));
                 break;
             case 3:
 
                 if (mPersonalFragment == null) {
                     mPersonalFragment = new PersonalFragment();
                     transaction.add(R.id.framelayout_index_content, mPersonalFragment);
-                }else {
+                } else {
                     transaction.show(mPersonalFragment);
                 }
                 mChangrTvIndexMyself.setIconColor(getResources().getColor(R.color.colorCyan));
@@ -158,17 +140,14 @@ public class IndexActivity extends AppCompatActivity {
 
     /**
      * 选择Fragment
+     *
      * @param transaction
      */
-    private void hideFragment(FragmentTransaction transaction){
-        if (mHomePageFragment != null){
+    private void hideFragment(FragmentTransaction transaction) {
+        if (mHomePageFragment != null) {
             transaction.hide(mHomePageFragment);
         }
-        if (mFindPageFragment != null){
-            transaction.hide(mFindPageFragment);
-//            transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
-        }
-        if (mPersonalFragment != null){
+        if (mPersonalFragment != null) {
             transaction.hide(mPersonalFragment);
 //            transaction.replace(R.id.framelayout_index_content, mPersonalFragment);
         }

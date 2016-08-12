@@ -1,194 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:divider="@drawable/underline"
+    android:showDividers="middle"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/LL_apply_area"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="所在区域"
+            android:padding="15dp"
+            android:text="@string/myArea_item_text"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tv_organization"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
+            android:src="@drawable/icon_right_indicator" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/LL_apply_ORG"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tv_politics_status"
+            android:padding="15dp"
+            android:text="@string/myORG_item_text"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
+            android:layout_weight="0.2"
+            android:src="@drawable/icon_right_indicator" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/LL_apply_politics"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
+
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tv_speciality_advantages"
+            android:padding="15dp"
+            android:text="@string/myPoliticsStatus_item_text"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
+            android:layout_weight="0.2"
+            android:src="@drawable/icon_right_indicator" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/LL_apply_major"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tv_work_unit"
+            android:padding="15dp"
+            android:text="@string/myMajor_item_text"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
+            android:layout_weight="0.2"
+            android:src="@drawable/icon_right_indicator" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/LL_apply_nowCompany"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tv_family_address"
+            android:padding="15dp"
+            android:text="@string/myNowCompany_item_text"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tv_intention_time"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
+            android:src="@drawable/icon_right_indicator" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/LL_apply_homeAddressa"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tv_intention_type"
+            android:padding="15dp"
+            android:text="@string/myHomeAddress_item_text"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
+            android:layout_weight="0.2"
+            android:src="@drawable/icon_right_indicator" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/LL_apply_imageTime"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="15dp"
+            android:text="@string/myImageTime_item_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.2"
+            android:src="@drawable/icon_right_indicator" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LL_apply_imageType"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:text="@string/myImageType_item_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.2"
+            android:src="@drawable/icon_right_indicator" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LL_apply_professional"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="15dp"
             android:text="@string/tv_professional_ability"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
+            android:layout_weight="0.2"
+            android:src="@drawable/icon_right_indicator" />
     </LinearLayout>
 
 

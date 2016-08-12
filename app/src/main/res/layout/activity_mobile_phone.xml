@@ -3,43 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorDarkDarkWhite"
+    android:orientation="vertical"
     tools:context="com.example.renhao.wevolunteer.activity.MobilePhoneActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_homepage_height"
         android:background="@color/colorCyan">
+
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="@dimen/imageview_homepage_magnifierSize"
             android:layout_height="@dimen/imageview_homepage_magnifierSize"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/actionbar_homepage_margin"
             android:layout_marginStart="@dimen/actionbar_homepage_margin"
-            android:src="@drawable/icon_indicator"
-            android:id="@+id/imageView" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="@string/title_mobile_phone"
-            android:textSize="22sp"
-            android:textColor="@color/colorWhite"
-            android:layout_centerInParent="true"
-            android:id="@+id/textView" />
+            android:src="@drawable/icon_indicator" />
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_submit"
-            android:textSize="@dimen/textview_submit_titlesize"
+            android:layout_centerInParent="true"
             android:gravity="center_vertical"
+            android:text="@string/title_mobile_phone"
             android:textColor="@color/colorWhite"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/textview_homepage_titlesize"
-            android:layout_marginEnd="@dimen/textview_homepage_titlesize"
+            android:textSize="22sp" />
+
+        <TextView
+            android:onClick="submitVerification"
+            android:id="@+id/tv_submitVerification"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/textview_homepage_titlesize"
+            android:layout_marginRight="@dimen/textview_homepage_titlesize"
+            android:gravity="center_vertical"
+            android:text="@string/tv_submit"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/textview_submit_titlesize" />
     </RelativeLayout>
 
     <LinearLayout
@@ -48,55 +54,62 @@
         android:layout_marginTop="@dimen/actionbar_homepage_margin"
         android:background="@drawable/bg_single_input"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="15dp"
             android:text="@string/title_mobile_phone"
             android:textSize="16sp"
-            android:textStyle="bold"
 
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <EditText
+            android:id="@+id/edit_myphone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:inputType="phone"
-            android:hint="@string/hint_mobile_phone"
             android:layout_weight="1"
-            android:textSize="15sp"/>
+            android:background="@color/colorWhite"
+            android:hint="@string/hint_mobile_phone"
+            android:inputType="phone"
+            android:textSize="15sp" />
+
         <Button
-            android:layout_width="100dp"
+            android:id="@+id/btn_phone_getVerify"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="15dp"
             android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/verify_common_btn"
             android:text="@string/btn_verification_code"
-            android:background="@drawable/btn_verification_code_bg"
-            android:textColor="@color/colorCyan"/>
+            android:textColor="@color/colorCyan" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/bg_single_input"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="15dp"
             android:text="@string/tv_verification_code"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
+            android:textStyle="bold" />
+
         <EditText
+            android:id="@+id/edit_Verification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:hint="@string/hint_verification_code"
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
-            android:textSize="15sp"/>
+            android:background="@color/colorWhite"
+            android:hint="@string/hint_verification_code"
+            android:textSize="15sp" />
     </LinearLayout>
-
-
 
 
 </LinearLayout>

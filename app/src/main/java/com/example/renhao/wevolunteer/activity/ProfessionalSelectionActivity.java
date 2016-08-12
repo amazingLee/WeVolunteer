@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +18,8 @@ import java.util.List;
 /**
  * 专业选择界面
  */
-public class MajorSelectionActivity extends AppCompatActivity {
-    private static final String TAG = "MajorSelectionActivity";
+public class ProfessionalSelectionActivity extends AppCompatActivity {
+    private static final String TAG = "ProfessionalSelectionActivity";
 
     private List<String> actions;
     private ListView listView;
@@ -26,8 +27,18 @@ public class MajorSelectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_major_selection);
-        listView = (ListView) findViewById(R.id.listView_major_selection);
+        setContentView(R.layout.activity_professional_selection);
+        listView = (ListView) findViewById(R.id.listView_professional_selection);
+
+        //回退按钮
+        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfessionalSelectionActivity.this.finish();
+            }
+        });
+
         String[] s = new String[]{
                 "法律援助",
                 "助老助残",
@@ -49,7 +60,7 @@ public class MajorSelectionActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,android.R.layout.simple_list_item_multiple_choice,android.R.id.text1,actions);
         listView.setAdapter(arrayAdapter);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);//这里我们直接在源代码中设置选择模式
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);//这里我们直接在代码中设置选择模式
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

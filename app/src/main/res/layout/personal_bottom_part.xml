@@ -7,8 +7,9 @@
     android:orientation="vertical"
     android:showDividers="middle">
 
+
     <LinearLayout
-        android:id="@+id/item_Professional"
+        android:id="@+id/LL_PF_Professional_true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
@@ -16,13 +17,12 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_personal_ifProfessional"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
             android:layout_weight="1"
-            android:text="@string/personal_ifProfessional_FALSE"
+            android:text="@string/personal_ifProfessional_TRUE"
             android:textColor="#000"
             android:textSize="@dimen/textview_bottom_left_size" />
 
@@ -35,8 +35,7 @@
             android:gravity="left"
             android:text="法律援助"
             android:textColor="#999"
-            android:textSize="@dimen/textview_bottom_right_size"
-            android:visibility="gone" />
+            android:textSize="@dimen/textview_bottom_right_size" />
 
         <ImageView
             android:layout_width="@dimen/imageview_bottom_mark_size"
@@ -47,7 +46,34 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_job"
+        android:id="@+id/LL_PF_Professional_false"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_item_height"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/textview_bottom_left_marginleft"
+            android:layout_weight="1"
+            android:text="@string/personal_ifProfessional_FALSE"
+            android:textColor="#000"
+            android:textSize="@dimen/textview_bottom_left_size" />
+
+
+        <ImageView
+            android:layout_width="@dimen/imageview_bottom_mark_size"
+            android:layout_height="@dimen/imageview_bottom_mark_size"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
+            android:src="@drawable/entry_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LL_PF_job"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
@@ -73,7 +99,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_attention"
+        android:id="@+id/LL_PF_attention"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:background="@drawable/linearlayout_select"
@@ -99,7 +125,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_ORG"
+        android:id="@+id/LL_PF_ORG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
@@ -126,7 +152,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_rank"
+        android:id="@+id/LL_PF_rank"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
@@ -159,11 +185,12 @@
             android:layout_height="@dimen/imageview_bottom_mark_size"
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
-            android:src="@drawable/entry_mark" />
+            android:src="@drawable/entry_mark"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_information"
+        android:id="@+id/LL_PF_information"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
@@ -190,7 +217,7 @@
 
     <!--底部item中的底部部分-->
     <LinearLayout
-        android:id="@+id/item_aboutUS"
+        android:id="@+id/LL_PF_aboutUS"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:layout_marginTop="@dimen/layout_bottom_aboutUS_margintop"
@@ -217,7 +244,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_WIPE_CACHE"
+        android:id="@+id/LL_PF_WIPE_CACHE"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
@@ -243,7 +270,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_REPORT_PROBLEM"
+        android:id="@+id/LL_PF_REPORT_PROBLEM"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
@@ -269,7 +296,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_FAQ"
+        android:id="@+id/LL_PF_FAQ"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_item_height"
         android:layout_marginBottom="@dimen/layout_bottom_bottom_marginbottom"

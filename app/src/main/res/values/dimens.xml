@@ -54,6 +54,7 @@
     <dimen name="middle_circle_margintop">12dp</dimen>
     <dimen name="middle_circle_marginbottom">12dp</dimen>
     <dimen name="bottom_item_height">48dp</dimen>
+    <dimen name="bottom_portrait_item_height">64dp</dimen>
     <dimen name="textview_bottom_left_size">18sp</dimen>
     <dimen name="textview_bottom_left_marginleft">4dp</dimen>
     <dimen name="textview_bottom_right_size">16sp</dimen>
@@ -65,9 +66,15 @@
 
     <!--activity for personal-->
     <dimen name="textview_submit_titlesize">16sp</dimen>
-    <dimen name="imageview_item_Portrait_size">35dp</dimen>
+    <dimen name="imageview_item_Portrait_size">56dp</dimen>
     <dimen name="item_myPortrait_margintop">10dp</dimen>
     <dimen name="item_myUser_margintop">20dp</dimen>
     <dimen name="btn_personalData_quitLogin_margin">20dp</dimen>
     <dimen name="btn_personalData_quitLogin_marginTop">10dp</dimen>
+
+    <!--pop for personalData-->
+    <dimen name="btn_PD_POP_margin">10dp</dimen>
+    <dimen name="btn_PD_POP_margintop">4dp</dimen>
+    <dimen name="btn_PD_POP_marginbottom">6dp</dimen>
+    <dimen name="btn_PD_POP_textsize">16sp</dimen>
 </resources>
