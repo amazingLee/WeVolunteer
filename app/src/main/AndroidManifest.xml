@@ -20,11 +20,11 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".IndexActivity" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- 定位需要的服务 使用2.0的定位需要加上这个 -->
@@ -65,15 +65,24 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.ForgotPasswordActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.ServiceTimeActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.RegisterActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>
         <activity
-            android:name=".activity.ServiceTimeActivity"
+            android:name=".activity.RegisterProBonoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         </activity>
-        <activity android:name=".activity.AffiliatedInstitutionActivity"
+        <activity
+            android:name=".activity.ApplyProBonoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>

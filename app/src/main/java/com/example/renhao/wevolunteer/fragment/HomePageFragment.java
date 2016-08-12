@@ -16,6 +16,11 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.core.AppAction;
+import com.example.core.AppActionImpl;
+import com.example.model.ActionCallbackListener;
+import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.PagedListEntityDto;
 import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.OrganizationActivity;
@@ -26,6 +31,7 @@ import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.view.NoScrollGridView;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -45,7 +51,7 @@ import java.util.List;
  * 修改备注：
  */
 public class HomePageFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
-    private static final String TAG = "HpmePageFragment";
+    private static final String TAG = "HomePageFragment";
 
     public static final int PROJECT = 0;
     public static final int ORGANIZATION = 1;
@@ -85,7 +91,24 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         mPtrListviewHomapageList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new FinishRefresh().execute();
+                AppAction mAction = new AppActionImpl(getActivity());
+                ActivityQueryOptionDto query = new ActivityQueryOptionDto();
+                query.setPageIndex(1);
+                query.setPageSize(5);
+                Logger.v(TAG, new Gson().toJson(query));
+                mAction.activityQuery(query, new ActionCallbackListener<PagedListEntityDto>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto data) {
+                        mPtrListviewHomapageList.onRefreshComplete();
+                        Logger.v(TAG,"-----"+ data.getRows().size());
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        mPtrListviewHomapageList.onRefreshComplete();
+                        Logger.v(TAG, "fail");
+                    }
+                });
             }
         });
         mPtrListviewHomapageList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);//设置头部下拉刷新

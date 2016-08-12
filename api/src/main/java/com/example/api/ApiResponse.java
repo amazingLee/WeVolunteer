@@ -1,7 +1,5 @@
 package com.example.api;
 
-import java.util.List;
-
 /**
  * 项目名称：BaseAndroid
  * 类描述：
@@ -12,22 +10,22 @@ import java.util.List;
 public class ApiResponse<T> {
     private static final String TAG = "ApiResponse";
 
-    private T Date;
+    private T Data;
     private boolean Success;
     private String Message;
-    private List<String> Info;
+    private Object Info;
 
     public ApiResponse(boolean Success, String Message) {
         this.Success = Success;
         this.Message = Message;
     }
 
-    public T getDate() {
-        return Date;
+    public T getData() {
+        return Data;
     }
 
-    public void setDate(T date) {
-        Date = date;
+    public void setData(T data) {
+        Data = data;
     }
 
     public boolean isSuccess() {
@@ -46,11 +44,11 @@ public class ApiResponse<T> {
         Message = message;
     }
 
-    public List<String> getInfo() {
+    public Object getInfo() {
         return Info;
     }
 
-    public void setInfo(List<String> info) {
+    public void setInfo(Object info) {
         Info = info;
     }
 }

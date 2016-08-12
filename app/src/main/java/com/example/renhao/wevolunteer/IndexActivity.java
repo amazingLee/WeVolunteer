@@ -14,6 +14,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.core.AppAction;
+import com.example.core.AppActionImpl;
+import com.example.core.listener.AccessTokenListener;
+import com.example.model.AccessTokenBO;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.fragment.FindPageFragment;
 import com.example.renhao.wevolunteer.fragment.HomePageFragment;
@@ -74,6 +78,21 @@ public class IndexActivity extends AppCompatActivity {
 
         initActionBar();
         setFragment(HOME);
+
+        //////////////////////////////////////////////////////////////////
+        AppAction mAction = new AppActionImpl(this);
+        mAction.getAccessToken("AndroidUser", "8NDVQX", new AccessTokenListener() {
+            @Override
+            public void success(AccessTokenBO accessTokenBO) {
+                Logger.v(TAG, "get token success");
+            }
+
+            @Override
+            public void fail() {
+                Logger.v(TAG, "get token fail");
+            }
+        });
+        ////////////////////////////////////////////////////////////////
     }
 
     /**

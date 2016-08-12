@@ -13,11 +13,10 @@ import com.example.core.listener.AccessTokenListener;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
 import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.activity.ActivityBO;
+import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
-import com.example.model.activity.ActivityQueryBO;
+import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -99,15 +98,15 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 });
                 break;
             case 2:
-                ActivityQueryBO query = new ActivityQueryBO();
+                ActivityQueryOptionDto query = new ActivityQueryOptionDto();
                 query.setType(0);
                 query.setStartTime("2016-08-01T05:50:43.562Z");
                 query.setPageIndex(0);
                 query.setPageSize(5);
                 Logger.v(TAG, new Gson().toJson(query));
-                mAction.activityQuery(query, new ActionCallbackListener<ActivityBO>() {
+                mAction.activityQuery(query, new ActionCallbackListener<PagedListEntityDto>() {
                     @Override
-                    public void onSuccess(ActivityBO data) {
+                    public void onSuccess(PagedListEntityDto data) {
                         showToast("success");
                     }
 
@@ -273,10 +272,10 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 Company_query.setPageSize(3);
                 Company_query.setIsAuth(0);//查询不到已经通过审核的组织
                 Logger.v(TAG, new Gson().toJson(Company_query));
-                mAction.companyQuery(Company_query, new ActionCallbackListener<PagedListEntityDto>() {
+                mAction.companyQuery(Company_query, new ActionCallbackListener<com.example.model.Company.PagedListEntityDto>() {
 
                     @Override
-                    public void onSuccess(PagedListEntityDto data) {
+                    public void onSuccess(com.example.model.Company.PagedListEntityDto data) {
                         showToast("success");
                     }
 

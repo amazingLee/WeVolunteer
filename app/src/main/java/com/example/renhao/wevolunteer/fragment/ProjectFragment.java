@@ -11,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.core.AppAction;
+import com.example.core.AppActionImpl;
+import com.example.model.ActionCallbackListener;
+import com.example.model.PagedListEntityDto;
+import com.example.model.dictionary.DictionaryListDto;
+import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
@@ -18,6 +24,7 @@ import com.example.renhao.wevolunteer.adapter.ListDropDownAdapter;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.orhanobut.logger.Logger;
 import com.yyydjk.library.DropDownMenu;
 
 import java.util.ArrayList;
@@ -54,11 +61,13 @@ public class ProjectFragment extends Fragment {
 
     private HomePageAdapter adapter;
 
-    private String headers[] = {"类型", "状态", "区域", "智能筛选"};
-    private String[] type = {"类型", "type1", "type2", "type3", "type4"};
-    private String[] state = {"状态", "state1", "state2", "state3", "state4"};
-    private String[] area = {"区域", "area1", "area2", "area3", "area4"};
-    private String[] smart = {"智能筛选", "smart1", "smart2", "smart3", "smart4"};
+    private String headers[] = {"类型","状态","区域","智能筛选"};
+    private String[] type = {"类型"};
+    private String[] state = {"状态"};
+    private String[] area = {"区域"};
+    private String[] smart = {"智能筛选"};
+
+    public AppAction mAction;
 
     /**
      * 设置此fragment的类型
@@ -74,6 +83,9 @@ public class ProjectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_project, container, false);
         ButterKnife.bind(this, view);
+
+        mAction = new AppActionImpl(getActivity());
+
         initDropDownMenu();
 
         View v = inflater.inflate(R.layout.view_prtlistview, null);
@@ -85,7 +97,29 @@ public class ProjectFragment extends Fragment {
         //init dropdownview
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, contentView);
 
+        initDictionary();
+
         return view;
+    }
+
+    private void initDictionary() {
+        //类型
+        DictionaryQueryOptionDto queryOptionDto = new DictionaryQueryOptionDto();
+        queryOptionDto.setLikeName("语言");
+        mAction.dictionaryQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<DictionaryListDto> data) {
+                Logger.v(TAG, "-------" + data.getRows().size());
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+
+            }
+        });
+        //状态
+        //区域
+        //智能筛选
     }
 
     private void initPtrListView(final PullToRefreshListView mPtr) {
@@ -141,7 +175,7 @@ public class ProjectFragment extends Fragment {
 
     private void initDropDownMenu() {
         //类型
-        final ListView typeView = new ListView(getActivity());
+        final ListView typeView = (ListView) LayoutInflater.from(getActivity()).inflate(R.layout.view_listview, null);
         typeAdapter = new ListDropDownAdapter(getActivity(), Arrays.asList(type));
         typeView.setDividerHeight(0);
         typeView.setAdapter(typeAdapter);
@@ -181,6 +215,7 @@ public class ProjectFragment extends Fragment {
         });
         //智能筛选
         final ListView smartView = new ListView(getActivity());
+        smartView.setDividerHeight(300);
         smartAdapter = new ListDropDownAdapter(getActivity(), Arrays.asList(smart));
         smartView.setDividerHeight(0);
         smartView.setAdapter(smartAdapter);

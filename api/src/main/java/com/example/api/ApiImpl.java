@@ -3,11 +3,13 @@ package com.example.api;
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
 import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.activity.ActivityBO;
+import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
-import com.example.model.activity.ActivityQueryBO;
+import com.example.model.activity.ActivityListDto;
+import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.dictionary.DictionaryListDto;
+import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -112,10 +114,10 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<ActivityBO> activityQuery(ActivityQueryBO query, String accessToken) {
+    public ApiResponse<PagedListEntityDto<ActivityListDto>> activityQuery(ActivityQueryOptionDto query, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(query);
-        Type typeOfT = new TypeToken<ApiResponse<ActivityBO>>() {
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto>>() {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, ACTIVITY_QUERY, typeOfT, accessToken);
@@ -183,10 +185,10 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<PagedListEntityDto> companyQuery(CompanyQueryOptionDto query, String accessToken) {
+    public ApiResponse<com.example.model.Company.PagedListEntityDto> companyQuery(CompanyQueryOptionDto query, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(query);
-        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto>>(){
+        Type typeOfT = new TypeToken<ApiResponse<com.example.model.Company.PagedListEntityDto>>(){
         }.getType();
         try {
             return httpEngine.postApiHandler(params, COMPANY_QUERY, typeOfT, accessToken);
@@ -233,6 +235,20 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, COMPANY_UPDATE, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<DictionaryListDto>> dictionaryQuery(DictionaryQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<DictionaryListDto>>>(){
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, DICTIONARY_QUERY, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

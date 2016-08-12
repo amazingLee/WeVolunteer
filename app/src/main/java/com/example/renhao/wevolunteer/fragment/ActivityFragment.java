@@ -42,6 +42,7 @@ public class ActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
         ButterKnife.bind(this, view);
         initPullToRefreshListView();
+
         return view;
     }
 
