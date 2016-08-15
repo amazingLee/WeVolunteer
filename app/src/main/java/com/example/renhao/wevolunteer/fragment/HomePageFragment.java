@@ -4,6 +4,7 @@ package com.example.renhao.wevolunteer.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
@@ -61,7 +61,6 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private NoScrollGridView gridView;
     private HomePageAdapter adapter;
 
-    private AppAction mAction;
     private List<HomePageListItem> list = null;
     private List<ActivityListDto> dates = new ArrayList<>();
 
@@ -70,8 +69,6 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
-
-        mAction = new AppActionImpl(getActivity());
 
         initImageSliderView();
 
@@ -102,7 +99,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         mPtrListviewHomapageList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);//设置头部下拉刷新
         //设置刷新时显示的文本
         ILoadingLayout startLayout = mPtrListviewHomapageList.getLoadingLayoutProxy(true, false);//开始头部的layout
-        startLayout.setPullLabel("正在下拉刷新....");
+        startLayout.setPullLabel("下拉刷新....");
         startLayout.setRefreshingLabel("正在玩命加载....");
         startLayout.setReleaseLabel("放开刷新");
 
@@ -125,7 +122,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         query.setPageIndex(1);
         query.setStick(1);
         query.setPageSize(4);
-        mAction.activityQuery(query, new ActionCallbackListener<PagedListEntityDto<ActivityListDto>>() {
+        AppActionImpl.getInstance(getActivity()).activityQuery(query, new ActionCallbackListener<PagedListEntityDto<ActivityListDto>>() {
             @Override
             public void onSuccess(PagedListEntityDto<ActivityListDto> data) {
                 list = new ArrayList<>();
@@ -146,7 +143,6 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                 mPtrListviewHomapageList.setAdapter(adapter);
 
                 mPtrListviewHomapageList.onRefreshComplete();
-                Logger.v(TAG, "-----" + data.getRows().size());
             }
 
             @Override
@@ -273,9 +269,17 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     @Override
     public void onResume() {
         super.onResume();
-        //自动刷新获取首页的内容
-        mPtrListviewHomapageList.setRefreshing();
-        getDate();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //自动刷新获取首页的内容
+                mPtrListviewHomapageList.onRefreshComplete();
+                mPtrListviewHomapageList.setRefreshing();
+                getDate();
+            }
+        }, 100);
+
 
     }
 }

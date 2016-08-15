@@ -183,8 +183,7 @@ public class HttpEngine {
     public <T> T postApiHandler(String params, String serverAction,
                                 Type typeOfT, String accessToken) throws IOException {
         Logger.json(TAG, params);
-        Logger.v(TAG, "serverAction  \n" + serverAction + "\n" +
-                "accessToken  \n" + accessToken);
+        Logger.v(TAG, "serverAction  \n" + serverAction + "\n");
         if (client == null) {
             client = new OkHttpClient.Builder()
                     .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间

@@ -82,7 +82,9 @@ public class HomePageAdapter extends BaseAdapter {
         viewHolder.titleTv.setText(item.getTitle());
 
         viewHolder.numTv.setText(item.getNum() + "/" + item.getMaxNum() + " 人");
-        viewHolder.timeTv.setText(item.getTime() + "小时");
+        float h = Float.parseFloat(item.getTime()) / 60;
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
+        viewHolder.timeTv.setText(df.format(h) + "小时");
 
         if (item.getType() == 0)//活动
         {

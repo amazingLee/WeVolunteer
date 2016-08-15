@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.AccessTokenBO;
@@ -22,13 +21,11 @@ public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
 
     private ProgressDialog normalDialog;
-    private AppAction mAction;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         normalDialog = new ProgressDialog(this);
-        mAction = new AppActionImpl(this);
     }
 
     @Override
@@ -59,7 +56,7 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected void getAccessToken() {
         showNormalDialog("正在连接服务器");
-        mAction.getAccessToken(null, null, new AccessTokenListener() {
+        AppActionImpl.getInstance(this).getAccessToken(null, null, new AccessTokenListener() {
             @Override
             public void success(AccessTokenBO accessTokenBO) {
                 Logger.v(TAG, "get token success");

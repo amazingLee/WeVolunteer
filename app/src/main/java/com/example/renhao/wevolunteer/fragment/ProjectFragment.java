@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
@@ -69,8 +68,6 @@ public class ProjectFragment extends Fragment {
     private String[] area = {"区域"};
     private String[] smart = {"智能筛选"};
 
-    public AppAction mAction;
-
     /**
      * 设置此fragment的类型
      *
@@ -85,8 +82,6 @@ public class ProjectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_project, container, false);
         ButterKnife.bind(this, view);
-
-        mAction = new AppActionImpl(getActivity());
 
         initDropDownMenu();
 
@@ -108,7 +103,7 @@ public class ProjectFragment extends Fragment {
         //类型
         DictionaryQueryOptionDto queryOptionDto = new DictionaryQueryOptionDto();
         queryOptionDto.setCulture("语言");
-        mAction.dictionaryQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
+        AppActionImpl.getInstance(getActivity()).dictionaryQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
             @Override
             public void onSuccess(PagedListEntityDto<DictionaryListDto> data) {
                 Logger.v(TAG, "-------" + data.getRows().size());
@@ -122,7 +117,7 @@ public class ProjectFragment extends Fragment {
         //状态
         DictionaryTypeQueryOptionDto typeQueryOptionDto=new DictionaryTypeQueryOptionDto();
         typeQueryOptionDto.setCode("ActivityType");
-        mAction.dictionaryTypeQuery(typeQueryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>>() {
+        AppActionImpl.getInstance(getActivity()).dictionaryTypeQuery(typeQueryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>>() {
             @Override
             public void onSuccess(PagedListEntityDto<DictionaryTypeListDto> data) {
                 Logger.v(TAG, "-------" + data.getRows().size());

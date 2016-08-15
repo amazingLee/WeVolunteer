@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/projectdetail_parent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorDarkDarkWhite">
+
+
+
     <LinearLayout
         android:id="@+id/bottombar_projectdetail"
         android:layout_width="match_parent"
@@ -40,11 +44,18 @@
             android:textSize="16sp"/>
     </LinearLayout>
 
+    <View
+        android:id="@+id/projectdetail_border"
+        android:layout_above="@id/bottombar_projectdetail"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#33000000"/>
+
     <ScrollView
         android:id="@+id/scrollview_projectdetail"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/bottombar_projectdetail"
+        android:layout_above="@id/projectdetail_border"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -87,7 +98,6 @@
                         android:layout_marginTop="@dimen/textview_listview_margin"
                         android:gravity="center_vertical"
                         android:singleLine="true"
-                        android:text="托起心中的太阳 慈溪市自信心困境教育帮助"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/textview_listview_textsize"/>
 
@@ -104,7 +114,6 @@
                         android:paddingLeft="@dimen/textview_listview_paddingBig"
                         android:paddingRight="@dimen/textview_listview_paddingBig"
                         android:paddingTop="@dimen/textview_listview_paddingSmall"
-                        android:text="活动招募人数"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/textview_listview_textsizeSmall"/>
 
@@ -121,7 +130,6 @@
                         android:paddingLeft="@dimen/textview_listview_paddingBig"
                         android:paddingRight="@dimen/textview_listview_paddingBig"
                         android:paddingTop="@dimen/textview_listview_paddingSmall"
-                        android:text="64/100人"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/textview_listview_textsizeSmall"/>
 
@@ -140,7 +148,6 @@
                         android:paddingLeft="@dimen/textview_listview_paddingBig"
                         android:paddingRight="@dimen/textview_listview_paddingBig"
                         android:paddingTop="@dimen/textview_listview_paddingSmall"
-                        android:text="活动服时长"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/textview_listview_textsizeSmall"/>
 
@@ -157,7 +164,6 @@
                         android:paddingLeft="@dimen/textview_listview_paddingBig"
                         android:paddingRight="@dimen/textview_listview_paddingBig"
                         android:paddingTop="@dimen/textview_listview_paddingSmall"
-                        android:text="11小时"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/textview_listview_textsizeSmall"/>
 
@@ -174,7 +180,6 @@
                         android:paddingLeft="@dimen/textview_listview_paddingBig"
                         android:paddingRight="@dimen/textview_listview_paddingBig"
                         android:paddingTop="@dimen/textview_listview_paddingSmall"
-                        android:text="招募中"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/textview_listview_textsizeSmall"/>
 
@@ -200,7 +205,6 @@
                       android:layout_weight="3"
                       android:gravity="center_vertical"
                       android:singleLine="true"
-                      android:text="活动类型："
                       android:textColor="@color/colorDarkCyan"
                       android:textSize="16sp"/>
 
@@ -216,7 +220,6 @@
                       android:layout_marginTop="@dimen/project_detail_marginTB"
                       android:layout_weight="5"
                       android:gravity="center_vertical"
-                      android:text="儿童关怀"
                       android:textSize="16sp"/>
               </LinearLayout>
 
@@ -244,7 +247,6 @@
                       android:layout_weight="3"
                       android:gravity="center_vertical"
                       android:singleLine="true"
-                      android:text="活动报名时间："
                       android:textColor="@color/colorDarkCyan"
                       android:textSize="16sp"/>
 
@@ -260,7 +262,6 @@
                       android:layout_marginTop="@dimen/project_detail_marginTB"
                       android:layout_weight="5"
                       android:gravity="center_vertical"
-                      android:text="2016-7-1-2016-7-22"
                       android:textSize="16sp"/>
               </LinearLayout>
 
@@ -288,7 +289,6 @@
                       android:layout_weight="3"
                       android:gravity="center_vertical"
                       android:singleLine="true"
-                      android:text="活动有效时间："
                       android:textColor="@color/colorDarkCyan"
                       android:textSize="16sp"/>
 
@@ -304,7 +304,6 @@
                       android:layout_marginTop="@dimen/project_detail_marginTB"
                       android:layout_weight="5"
                       android:gravity="center_vertical"
-                      android:text="2016-7-11-2016-8-22"
                       android:textSize="16sp"/>
               </LinearLayout>
 
@@ -332,7 +331,6 @@
                       android:layout_weight="3"
                       android:gravity="center_vertical"
                       android:singleLine="true"
-                      android:text="活动服务地址："
                       android:textColor="@color/colorDarkCyan"
                       android:textSize="16sp"/>
 
@@ -348,7 +346,6 @@
                       android:layout_marginTop="@dimen/project_detail_marginTB"
                       android:layout_weight="5"
                       android:gravity="center_vertical"
-                      android:text="慈溪市三北大街655号"
                       android:textSize="16sp"/>
               </LinearLayout>
 
@@ -376,7 +373,6 @@
                       android:layout_weight="3"
                       android:gravity="center_vertical"
                       android:singleLine="true"
-                      android:text="活动发起单位："
                       android:textColor="@color/colorDarkCyan"
                       android:textSize="16sp"/>
 
@@ -392,7 +388,6 @@
                       android:layout_marginTop="@dimen/project_detail_marginTB"
                       android:layout_weight="5"
                       android:gravity="center_vertical"
-                      android:text="慈溪市志愿者协会"
                       android:textSize="16sp"/>
               </LinearLayout>
 
@@ -436,7 +431,6 @@
                       android:layout_marginTop="@dimen/project_detail_marginTB"
                       android:layout_weight="5"
                       android:gravity="center_vertical"
-                      android:text="徐洁/123456"
                       android:textSize="16sp"/>
               </LinearLayout>
 
@@ -448,6 +442,7 @@
 
              <!--服务专业技能-->
              <LinearLayout
+                 android:id="@+id/relative_projectDetail_skill"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:background="#fdfdfe"
@@ -482,11 +477,11 @@
                      android:layout_marginTop="@dimen/project_detail_marginTB"
                      android:layout_weight="5"
                      android:gravity="center_vertical"
-                     android:text="摄影"
                      android:textSize="16sp"/>
              </LinearLayout>
 
              <View
+                 android:id="@+id/relative_projectDetail_skill_border"
                  android:layout_width="match_parent"
                  android:layout_height="0.5dp"
                  android:background="#33000000"/>
@@ -507,6 +502,7 @@
                  android:textSize="16sp"/>
 
              <View
+                 android:id="@+id/tv_projectDetail_infuse_border"
                  android:layout_width="match_parent"
                  android:layout_height="0.5dp"
                  android:background="#33000000"/>
@@ -534,7 +530,6 @@
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
-                     android:text="岗位详情"
                      android:textColor="@color/colorRed"
                      android:textSize="18sp"/>
 
@@ -563,7 +558,6 @@
                  android:paddingStart="@dimen/project_detail_marginLR"
                  android:paddingTop="@dimen/project_detail_marginTB"
                  android:background="#fdfdfe"
-                 android:text="岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n"
                  android:textSize="16sp"/>
 
             <View
@@ -594,7 +588,6 @@
                     android:layout_marginRight="@dimen/project_detail_marginLR"
                     android:layout_marginStart="@dimen/project_detail_marginLR"
                     android:layout_marginTop="@dimen/project_detail_marginTB"
-                    android:text="岗位详情"
                     android:textColor="@color/colorRed"
                     android:textSize="18sp"/>
 
@@ -615,7 +608,6 @@
                     android:layout_marginRight="8dp"
                     android:layout_toLeftOf="@id/imageview_projectDetail_more"
                     android:layout_toStartOf="@id/imageview_projectDetail_more"
-                    android:text="/100"
                     android:textSize="18sp"/>
 
                 <TextView
@@ -625,7 +617,6 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/tv_projectDetail_maxNum"
                     android:layout_toStartOf="@id/tv_projectDetail_maxNum"
-                    android:text="25"
                     android:textColor="@color/colorRed"
                     android:textSize="18sp"/>
 
@@ -648,6 +639,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
+                    android:visibility="gone"
                     android:layout_weight="1"
                     android:src="@drawable/activity"/>
 
@@ -657,6 +649,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:src="@drawable/activity"/>
 
                 <ImageView
@@ -664,6 +657,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
+                    android:visibility="gone"
                     android:layout_weight="1"
                     android:src="@drawable/activity"/>
 
@@ -673,6 +667,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:src="@drawable/activity"/>
 
                 <ImageView
@@ -680,6 +675,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
+                    android:visibility="gone"
                     android:layout_weight="1"
                     android:src="@drawable/activity"/>
             </LinearLayout>

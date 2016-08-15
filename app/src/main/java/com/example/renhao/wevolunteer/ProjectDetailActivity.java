@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.Company.CompanyListDto;
@@ -26,6 +25,8 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.orhanobut.logger.Logger;
+
+import java.text.DecimalFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -126,6 +127,16 @@ public class ProjectDetailActivity extends AppCompatActivity {
     TextView mTvRegisterTimeName;
     @Bind(R.id.tv_projectDetail_registerTime)
     TextView mTvRegisterTime;
+    @Bind(R.id.projectdetail_border)
+    View mProjectdetailBorder;
+    @Bind(R.id.relative_projectDetail_skill)
+    LinearLayout mRelativeSkill;
+    @Bind(R.id.relative_projectDetail_skill_border)
+    View mSkillBorder;
+    @Bind(R.id.tv_projectDetail_infuse_border)
+    View mInfuseBorder;
+    @Bind(R.id.projectdetail_parent)
+    RelativeLayout mParent;
 
     private View mCustomView;//actionbar的自定义视图
     ImageView indicatorImg;
@@ -134,15 +145,11 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
     private ActivityListDto mDate;
 
-    private AppAction mAction;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projectdetail);
         ButterKnife.bind(this);
-
-        mAction = new AppActionImpl(this);
 
         mDate = (ActivityListDto) getIntent().getSerializableExtra("date");//获取活动或岗位的数据
 
@@ -154,9 +161,12 @@ public class ProjectDetailActivity extends AppCompatActivity {
     private void initView() {
         mTvTilte.setText(mDate.getActivityName());
         mTvNum.setText(mDate.getRecruited() + "/" + mDate.getRecruitNumber() + "人");
-        mTvTime.setText(mDate.getLengthTime() + "小时");
 
-        mTvType.setText("活动类型");
+        float h = Float.parseFloat(mDate.getLengthTime()) / 60;
+        DecimalFormat df = new DecimalFormat("#.##");
+        mTvTime.setText(df.format(h) + "小时");
+
+        mTvType.setText("");
 
         mTvRegisterTime.setText("0000-00-00" + "-\n" + mDate.getEndTime());
 
@@ -169,8 +179,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
         //通过CompanyId获取联系人和联系方式
         CompanyQueryOptionDto queryOptionDto = new CompanyQueryOptionDto();
         queryOptionDto.setOrganizationId(mDate.getCompanyId());
-        Logger.v(TAG,mDate.getCompanyId());
-        mAction.companyQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<CompanyListDto>>() {
+        Logger.v(TAG, mDate.getCompanyId());
+        AppActionImpl.getInstance(this).companyQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<CompanyListDto>>() {
             @Override
             public void onSuccess(PagedListEntityDto<CompanyListDto> data) {
                 if (data.getRows().size() <= 0)
@@ -201,8 +211,13 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
         if (mDate.getType() == 0) {
             //活动
-            mTvSkill.setVisibility(View.INVISIBLE);
-            mTvInfuse.setVisibility(View.INVISIBLE);
+            mTvSkill.setVisibility(View.GONE);
+            mTvInfuse.setVisibility(View.GONE);
+            mRelativeSkill.setVisibility(View.GONE);
+            mSkillBorder.setVisibility(View.GONE);
+            mInfuseBorder.setVisibility(View.GONE);
+
+
             mTvTypeName.setText("活动类型");
             mTvRegisterTimeName.setText("活动报名时间");
             mTvEffectiveTimeName.setText("活动有效时间");
@@ -210,6 +225,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
             mTvFoundersName.setText("活动发起单位");
             mTvDetailName.setText("活动详情");
             mTvSignedName.setText("活动详情");
+            mTvNumName.setText("活动招募人数");
+            mTvTimeName.setText("活动服务时长");
         } else if (mDate.getType() == 1) {
             //岗位
             mTvTypeName.setText("岗位类型");
@@ -219,8 +236,17 @@ public class ProjectDetailActivity extends AppCompatActivity {
             mTvFoundersName.setText("岗位发起单位");
             mTvDetailName.setText("岗位详情");
             mTvSignedName.setText("岗位详情");
+            mTvNumName.setText("岗位招募人数");
+            mTvTimeName.setText("岗位服务时长");
 
-            mTvSkill.setText("服务专业技能");
+            mTvSkill.setText("");
+        }
+
+        for (int i = mDate.getRecruited() > 5 ? 5 : mDate.getRecruited(); i > 0; i--) {
+            ImageView view = (ImageView) mParent.getChildAt(i - 1);
+            view.setVisibility(View.VISIBLE);
+            //设置图片
+            view.setImageResource(R.mipmap.ic_launcher);
         }
 
     }

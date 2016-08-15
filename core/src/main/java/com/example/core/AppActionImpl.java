@@ -44,6 +44,21 @@ public class AppActionImpl implements AppAction {
     private Context context;
     private Api api;
 
+    private volatile static AppActionImpl singleton = null;    //注意此处加上了volatile关键字
+
+    public static AppActionImpl getInstance(Context context) {
+        if (singleton == null) {
+            synchronized (AppActionImpl.class) {
+                if (singleton == null) {
+                    singleton = new AppActionImpl(context);
+                    return singleton;    //有人提议在此处进行一次返回
+                }
+                return singleton;    //也有人提议在此处进行一次返回
+            }
+        }
+        return singleton;
+    }
+
     public AppActionImpl(Context context) {
         this.context = context;
         this.api = new ApiImpl();
