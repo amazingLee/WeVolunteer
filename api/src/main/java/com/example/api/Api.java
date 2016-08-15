@@ -9,6 +9,8 @@ import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
+import com.example.model.dictionary.DictionaryTypeListDto;
+import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -47,7 +49,8 @@ public interface Api {
     public static final String COMPANY_GET = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
 
     //字典
-    public static final String DICTIONARY_QUERY="Nbcei.Framework.Api.Impl/v1/dictionary/query ";
+    public static final String DICTIONARY_QUERY = "Nbcei.Framework.Api.Impl/v1/dictionary/query ";
+    public static final String DICTIONARYTYPE_QUERY = "Nbcei.Framework.Api.Impl/v1/dictionarytype/query";
 
     /**
      * 获取accessToken
@@ -82,7 +85,7 @@ public interface Api {
 
     public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update, String accessToken);
 
-    public ApiResponse<com.example.model.Company.PagedListEntityDto> companyQuery(CompanyQueryOptionDto query, String accessToken);
+    public ApiResponse<PagedListEntityDto<CompanyListDto>> companyQuery(CompanyQueryOptionDto query, String accessToken);
 
     public ApiResponse<CompanyListDto> companyGet(String id, String acessToken);
 
@@ -90,6 +93,13 @@ public interface Api {
 
     public ApiResponse<List<String>> companyUpdate(List<CompanyListDto> update, String accessToken);
 
+    /**
+     * @param query
+     * @param accessToken
+     * @return
+     */
     public ApiResponse<PagedListEntityDto<DictionaryListDto>> dictionaryQuery(DictionaryQueryOptionDto query, String accessToken);
+
+    public ApiResponse<PagedListEntityDto<DictionaryTypeListDto>> dictionaryTypeQuery(DictionaryTypeQueryOptionDto query, String accessToken);
 
 }

@@ -70,8 +70,14 @@ public class HomePageAdapter extends BaseAdapter {
 
         HomePageListItem item = mDate.get(position);
 
-        Picasso.with(mContext).load(item.getImg())
-                .into(viewHolder.imageView);//加载图片
+        if (!item.getImg().equals("")) {
+            Picasso.with(mContext)
+                    .load(item.getImg())
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(viewHolder.imageView);//加载图片
+        }
+
 
         viewHolder.titleTv.setText(item.getTitle());
 

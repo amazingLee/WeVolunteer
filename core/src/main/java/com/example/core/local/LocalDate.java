@@ -52,4 +52,27 @@ public class LocalDate {
     public String getLocalDate(String strName, String dftValue) {
         return mSharedPreferences.getString(strName, dftValue);
     }
+
+    /**
+     * 存储布尔类型的值
+     *
+     * @param name
+     * @param value
+     */
+    public void setLocalDate(String name, boolean value) {
+        editor = mSharedPreferences.edit();
+        editor.putBoolean(name, value);
+        editor.apply();
+    }
+
+    /**
+     * 获取布尔类型的值
+     *
+     * @param name
+     * @param dftValue
+     * @return
+     */
+    public boolean getLocalDate(String name, boolean dftValue) {
+        return mSharedPreferences.getBoolean(name, dftValue);
+    }
 }

@@ -6,9 +6,12 @@ import com.example.model.Company.CompanyListDto;
 import com.example.model.Company.CompanyQueryOptionDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
+import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
+import com.example.model.dictionary.DictionaryTypeListDto;
+import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -41,7 +44,7 @@ public interface AppAction {
 
     public void activityCreate(List<ActivityCreateBO> activityCreateBOs, ActionCallbackListener<List<String>> listener);
 
-    public void activityQuery(ActivityQueryOptionDto activityQueryOptionDto, ActionCallbackListener<PagedListEntityDto> listener);
+    public void activityQuery(ActivityQueryOptionDto activityQueryOptionDto, ActionCallbackListener<PagedListEntityDto<ActivityListDto>> listener);
 
     //志愿者（新增）
     public void volunteerCreate(List<VolunteerCreateDto> volunteerCreateBOs, ActionCallbackListener<List<String>> listener);
@@ -56,7 +59,7 @@ public interface AppAction {
     public void volunteerEdit(List<VolunteerEditDto> volunteerEditDto, ActionCallbackListener<List<String>> listener);
 
     //company POST 查询
-    public void companyQuery(CompanyQueryOptionDto companyQueryOptionDto, ActionCallbackListener<com.example.model.Company.PagedListEntityDto> listener);
+    public void companyQuery(CompanyQueryOptionDto companyQueryOptionDto, ActionCallbackListener<PagedListEntityDto<CompanyListDto>> listener);
 
     //company get 查询
     public void companyGet(String id, ActionCallbackListener<CompanyListDto> listener);
@@ -75,4 +78,11 @@ public interface AppAction {
      * @param listener
      */
     public void dictionaryQuery(DictionaryQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<DictionaryListDto>> listener);
+
+    /**
+     * dictionary 类型 查询
+     * @param query
+     * @param listener
+     */
+    public void dictionaryTypeQuery(DictionaryTypeQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>> listener);
 }

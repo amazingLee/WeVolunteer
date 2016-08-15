@@ -14,7 +14,6 @@ import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
 import com.example.model.Company.CompanyListDto;
 import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -104,7 +103,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 query.setPageIndex(0);
                 query.setPageSize(5);
                 Logger.v(TAG, new Gson().toJson(query));
-                mAction.activityQuery(query, new ActionCallbackListener<PagedListEntityDto>() {
+               /* mAction.activityQuery(query, new ActionCallbackListener<PagedListEntityDto>() {
                     @Override
                     public void onSuccess(PagedListEntityDto data) {
                         showToast("success");
@@ -114,7 +113,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     public void onFailure(String errorEvent, String message) {
                         showToast("fail");
                     }
-                });
+                });*/
                 break;
             case 3:
                 ActivityCreateBO create = new ActivityCreateBO();
@@ -272,7 +271,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 Company_query.setPageSize(3);
                 Company_query.setIsAuth(0);//查询不到已经通过审核的组织
                 Logger.v(TAG, new Gson().toJson(Company_query));
-                mAction.companyQuery(Company_query, new ActionCallbackListener<com.example.model.Company.PagedListEntityDto>() {
+               /* mAction.companyQuery(Company_query, new ActionCallbackListener<com.example.model.Company.PagedListEntityDto>() {
 
                     @Override
                     public void onSuccess(com.example.model.Company.PagedListEntityDto data) {
@@ -283,7 +282,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     public void onFailure(String errorEvent, String message) {
                         showToast("fail");
                     }
-                });
+                });*/
                 break;
             case 11:
                 mAction.companyGet("cf17245e-e6a5-4f97-9d33-c55ce89ba9e3", new ActionCallbackListener<CompanyListDto>() {

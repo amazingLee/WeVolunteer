@@ -232,7 +232,7 @@
                   android:orientation="horizontal">
 
                   <TextView
-                      android:id="@+id/tv_projectDetail_timeName"
+                      android:id="@+id/tv_projectDetail_registerTimeName"
                       android:layout_width="0dp"
                       android:layout_height="wrap_content"
                       android:layout_marginBottom="@dimen/project_detail_marginTB"
@@ -249,7 +249,7 @@
                       android:textSize="16sp"/>
 
                   <TextView
-                      android:id="@+id/tv_projectDetail_time"
+                      android:id="@+id/tv_projectDetail_registerTime"
                       android:layout_width="0dp"
                       android:layout_height="wrap_content"
                       android:layout_marginBottom="@dimen/project_detail_marginTB"
@@ -619,7 +619,7 @@
                     android:textSize="18sp"/>
 
                 <TextView
-                    android:id="@+id/tv_projectDetail_signedNum"
+                    android:id="@+id/tv_projectDetail_haveSignedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

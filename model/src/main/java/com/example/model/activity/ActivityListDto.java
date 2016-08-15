@@ -1,5 +1,7 @@
 package com.example.model.activity;
 
+import java.io.Serializable;
+
 /**
  * 项目名称：BaseAndroid
  * 类描述：
@@ -7,18 +9,18 @@ package com.example.model.activity;
  * 创建时间：2016/7/23 15:49
  * 修改备注：
  */
-public class ActivityListDto {
+public class ActivityListDto implements Serializable{
    private  String Id;//(string, optional): 获取或设置 活动标识
    private  String ActivityName;//(string, optional): 获取或设置 活动名称
    private  String StartTime;//(string, optional): 获取或设置 活动开始时间
    private  String FinishTime;// (string, optional): 获取或设置 活动结束时间
    private  String Addr;//(string, optional): 获取或设置 地址
    private  String JobText;//(string, optional),
-   private  int RecruitNumber;// (integer, optional): 获取或设置 招募人数
-   private  int Recruited;//(integer, optional): 获取或设置 已招募
-   private  int Status;//(integer, optional): 获取或设置 状态
+   private  Integer RecruitNumber;// (integer, optional): 获取或设置 招募人数
+   private  Integer Recruited;//(integer, optional): 获取或设置 已招募
+   private  Integer Status;//(integer, optional): 获取或设置 状态
    private  String StatusName;//(string, optional),
-   private  int SingleRecruit;//(integer, optional),
+   private  Integer SingleRecruit;//(integer, optional),
    private  String EndTime;// (string, optional),
    private  String LengthTime;// (number, optional),
    private  String DaySTime;//(string, optional),
@@ -26,7 +28,7 @@ public class ActivityListDto {
    private  String CompanyId;// (string, optional),
    private  String Lng;//(number, optional),
    private  String Lat;//(number, optional),
-   private  int Type;//(integer, optional),
+   private  Integer Type;//(integer, optional),
    private  String AreaCode;// (string, optional),
    private  String AreaName;//(string, optional),
    private  String CompanyName;//(string, optional)

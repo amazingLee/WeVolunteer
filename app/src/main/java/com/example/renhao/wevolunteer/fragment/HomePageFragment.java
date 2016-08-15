@@ -3,7 +3,6 @@ package com.example.renhao.wevolunteer.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,8 +18,9 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
-import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.PagedListEntityDto;
+import com.example.model.activity.ActivityListDto;
+import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.OrganizationActivity;
@@ -31,7 +31,6 @@ import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.view.NoScrollGridView;
-import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -62,11 +61,17 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private NoScrollGridView gridView;
     private HomePageAdapter adapter;
 
+    private AppAction mAction;
+    private List<HomePageListItem> list = null;
+    private List<ActivityListDto> dates = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
+
+        mAction = new AppActionImpl(getActivity());
 
         initImageSliderView();
 
@@ -91,24 +96,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         mPtrListviewHomapageList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                AppAction mAction = new AppActionImpl(getActivity());
-                ActivityQueryOptionDto query = new ActivityQueryOptionDto();
-                query.setPageIndex(1);
-                query.setPageSize(5);
-                Logger.v(TAG, new Gson().toJson(query));
-                mAction.activityQuery(query, new ActionCallbackListener<PagedListEntityDto>() {
-                    @Override
-                    public void onSuccess(PagedListEntityDto data) {
-                        mPtrListviewHomapageList.onRefreshComplete();
-                        Logger.v(TAG,"-----"+ data.getRows().size());
-                    }
-
-                    @Override
-                    public void onFailure(String errorEvent, String message) {
-                        mPtrListviewHomapageList.onRefreshComplete();
-                        Logger.v(TAG, "fail");
-                    }
-                });
+                getDate();
             }
         });
         mPtrListviewHomapageList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);//设置头部下拉刷新
@@ -118,34 +106,53 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         startLayout.setRefreshingLabel("正在玩命加载....");
         startLayout.setReleaseLabel("放开刷新");
 
-        List<HomePageListItem> list = new ArrayList<>();
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2098084338,2714656019&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img2.imgtn.bdimg.com/it/u=3602495621,3151039405&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img2.imgtn.bdimg.com/it/u=2469638367,241984841&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2132856998,369268727&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img0.imgtn.bdimg.com/it/u=2838777204,1513243120&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2666315763,3359766164&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=37827399,354780988&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=1130424812,3907942231&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=2152352573,3450421690&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=3896921233,133782688&fm=21&gp=0.jpg"));
+        list = new ArrayList<>();
         adapter = new HomePageAdapter(getActivity(), list);
         mPtrListviewHomapageList.setAdapter(adapter);
         mPtrListviewHomapageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Logger.v(TAG, "position " + position);
                 Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
+                intent.putExtra("date", dates.get(position - 3));
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void getDate() {
+        ActivityQueryOptionDto query = new ActivityQueryOptionDto();
+        query.setPageIndex(1);
+        query.setStick(1);
+        query.setPageSize(4);
+        mAction.activityQuery(query, new ActionCallbackListener<PagedListEntityDto<ActivityListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<ActivityListDto> data) {
+                list = new ArrayList<>();
+                dates = data.getRows();
+                for (int i = 0; i < dates.size(); i++) {
+                    ActivityListDto dto = dates.get(i);
+                    HomePageListItem item = new HomePageListItem();
+                    item.setType(dto.getType());
+                    item.setState(dto.getStatus());
+                    item.setTitle(dto.getActivityName());
+                    item.setNum(dto.getRecruited());
+                    item.setMaxNum(dto.getRecruitNumber());
+                    item.setTime(dto.getLengthTime());
+                    item.setImg("");
+                    list.add(item);
+                }
+                adapter = new HomePageAdapter(getActivity(), list);
+                mPtrListviewHomapageList.setAdapter(adapter);
+
+                mPtrListviewHomapageList.onRefreshComplete();
+                Logger.v(TAG, "-----" + data.getRows().size());
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+                mPtrListviewHomapageList.onRefreshComplete();
+                Logger.v(TAG, "fail");
             }
         });
     }
@@ -263,21 +270,12 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         EventBus.getDefault().post(new FragmentResultEvent(requestCode, resultCode, data));
     }
 
-    //测试用方法
-    private class FinishRefresh extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
-            return null;
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //自动刷新获取首页的内容
+        mPtrListviewHomapageList.setRefreshing();
+        getDate();
 
-        @Override
-        protected void onPostExecute(Void result) {
-//          adapter.notifyDataSetChanged();
-            mPtrListviewHomapageList.onRefreshComplete();
-        }
     }
 }

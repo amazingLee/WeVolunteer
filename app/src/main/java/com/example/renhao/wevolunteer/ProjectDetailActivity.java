@@ -15,6 +15,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.core.AppAction;
+import com.example.core.AppActionImpl;
+import com.example.model.ActionCallbackListener;
+import com.example.model.Company.CompanyListDto;
+import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.PagedListEntityDto;
+import com.example.model.activity.ActivityListDto;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -97,7 +104,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
     ImageView mImageviewMore;
     @Bind(R.id.tv_projectDetail_maxNum)
     TextView mTvMaxNum;
-    @Bind(R.id.tv_projectDetail_signedNum)
+    @Bind(R.id.tv_projectDetail_haveSignedNum)
     TextView mTvSignedNum;
     @Bind(R.id.relative_projectDetail_signed)
     RelativeLayout mRelativeSigned;
@@ -115,11 +122,19 @@ public class ProjectDetailActivity extends AppCompatActivity {
     LinearLayout mRelativeSignedPeople;
     @Bind(R.id.scrollview_projectdetail)
     ScrollView mScrollview;
+    @Bind(R.id.tv_projectDetail_registerTimeName)
+    TextView mTvRegisterTimeName;
+    @Bind(R.id.tv_projectDetail_registerTime)
+    TextView mTvRegisterTime;
 
     private View mCustomView;//actionbar的自定义视图
     ImageView indicatorImg;
     TextView titleTv;
     ImageView magnifierImg;
+
+    private ActivityListDto mDate;
+
+    private AppAction mAction;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,7 +142,87 @@ public class ProjectDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_projectdetail);
         ButterKnife.bind(this);
 
+        mAction = new AppActionImpl(this);
+
+        mDate = (ActivityListDto) getIntent().getSerializableExtra("date");//获取活动或岗位的数据
+
         initActionBar();
+
+        initView();
+    }
+
+    private void initView() {
+        mTvTilte.setText(mDate.getActivityName());
+        mTvNum.setText(mDate.getRecruited() + "/" + mDate.getRecruitNumber() + "人");
+        mTvTime.setText(mDate.getLengthTime() + "小时");
+
+        mTvType.setText("活动类型");
+
+        mTvRegisterTime.setText("0000-00-00" + "-\n" + mDate.getEndTime());
+
+        mTvEffectiveTime.setText(mDate.getStartTime() + "-\n" + mDate.getFinishTime());
+
+        mTvLocation.setText(mDate.getAddr());
+
+        mTvFounders.setText(mDate.getCompanyName());
+
+        //通过CompanyId获取联系人和联系方式
+        CompanyQueryOptionDto queryOptionDto = new CompanyQueryOptionDto();
+        queryOptionDto.setOrganizationId(mDate.getCompanyId());
+        Logger.v(TAG,mDate.getCompanyId());
+        mAction.companyQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<CompanyListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<CompanyListDto> data) {
+                if (data.getRows().size() <= 0)
+                    return;
+                CompanyListDto companyListDto = data.getRows().get(0);
+                mTvContact.setText(companyListDto.getPerson() +
+                        "/" + companyListDto.getTel() +
+                        "/" + companyListDto.getMobile());
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+
+            }
+        });
+
+        mTvDetail.setText(mDate.getJobText());
+
+        mTvSignedNum.setText(mDate.getRecruited() + "");
+
+        mTvMaxNum.setText("/" + mDate.getRecruitNumber());
+
+        if (mDate.getStatus() == 1) {
+            mTvState.setText("招募中");
+        } else if (mDate.getStatus() == 0) {
+            mTvState.setText("已结束");
+        }
+
+        if (mDate.getType() == 0) {
+            //活动
+            mTvSkill.setVisibility(View.INVISIBLE);
+            mTvInfuse.setVisibility(View.INVISIBLE);
+            mTvTypeName.setText("活动类型");
+            mTvRegisterTimeName.setText("活动报名时间");
+            mTvEffectiveTimeName.setText("活动有效时间");
+            mTvLocationName.setText("活动服务地址");
+            mTvFoundersName.setText("活动发起单位");
+            mTvDetailName.setText("活动详情");
+            mTvSignedName.setText("活动详情");
+        } else if (mDate.getType() == 1) {
+            //岗位
+            mTvTypeName.setText("岗位类型");
+            mTvRegisterTimeName.setText("岗位报名时间");
+            mTvEffectiveTimeName.setText("岗位有效时间");
+            mTvLocationName.setText("岗位服务地址");
+            mTvFoundersName.setText("岗位发起单位");
+            mTvDetailName.setText("岗位详情");
+            mTvSignedName.setText("岗位详情");
+
+            mTvSkill.setText("服务专业技能");
+        }
+
     }
 
     private void initActionBar() {
@@ -143,7 +238,12 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
         ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0, 0);
         titleTv = (TextView) mCustomView.findViewById(R.id.tv_normal_projectswitch);
-        titleTv.setText("岗位");
+        if (mDate.getType() == 0) {
+            titleTv.setText("活动");
+        } else if (mDate.getType() == 1) {
+            titleTv.setText("岗位");
+        }
+
         indicatorImg = (ImageView) mCustomView.findViewById(R.id.imageview_normal_indicator);
         indicatorImg.setOnClickListener(new View.OnClickListener() {
             @Override

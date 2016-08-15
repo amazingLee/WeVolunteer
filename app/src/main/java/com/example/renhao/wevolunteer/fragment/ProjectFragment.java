@@ -17,6 +17,8 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
+import com.example.model.dictionary.DictionaryTypeListDto;
+import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
@@ -105,7 +107,7 @@ public class ProjectFragment extends Fragment {
     private void initDictionary() {
         //类型
         DictionaryQueryOptionDto queryOptionDto = new DictionaryQueryOptionDto();
-        queryOptionDto.setLikeName("语言");
+        queryOptionDto.setCulture("语言");
         mAction.dictionaryQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
             @Override
             public void onSuccess(PagedListEntityDto<DictionaryListDto> data) {
@@ -118,6 +120,19 @@ public class ProjectFragment extends Fragment {
             }
         });
         //状态
+        DictionaryTypeQueryOptionDto typeQueryOptionDto=new DictionaryTypeQueryOptionDto();
+        typeQueryOptionDto.setCode("ActivityType");
+        mAction.dictionaryTypeQuery(typeQueryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<DictionaryTypeListDto> data) {
+                Logger.v(TAG, "-------" + data.getRows().size());
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+
+            }
+        });
         //区域
         //智能筛选
     }

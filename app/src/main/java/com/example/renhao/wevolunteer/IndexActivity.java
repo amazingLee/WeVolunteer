@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.core.AppAction;
-import com.example.core.AppActionImpl;
-import com.example.core.listener.AccessTokenListener;
-import com.example.model.AccessTokenBO;
+import com.example.core.local.LocalDate;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.fragment.FindPageFragment;
 import com.example.renhao.wevolunteer.fragment.HomePageFragment;
@@ -28,6 +25,11 @@ import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,7 +42,7 @@ import butterknife.OnClick;
  * 创建时间：2016/8/5 11:19
  * 修改备注：
  */
-public class IndexActivity extends AppCompatActivity {
+public class IndexActivity extends BaseActivity {
     private static final String TAG = "IndexActivity";
 
     public static final int HOME = 0;
@@ -79,21 +81,37 @@ public class IndexActivity extends AppCompatActivity {
         initActionBar();
         setFragment(HOME);
 
-        //////////////////////////////////////////////////////////////////
-        AppAction mAction = new AppActionImpl(this);
-        mAction.getAccessToken("AndroidUser", "8NDVQX", new AccessTokenListener() {
-            @Override
-            public void success(AccessTokenBO accessTokenBO) {
-                Logger.v(TAG, "get token success");
+        //判断用户是否登录
+        boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", true);
+        if (isLogin) {
+            Logger.v(TAG, "user is login");
+            SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
+            String strExpires = LocalDate.getInstance(this).getLocalDate("expires", "");
+            Logger.v(TAG, strExpires);
+            if (!strExpires.equals("")) {
+                try {
+                    Date expires = format.parse(strExpires);
+                    //判断票据是否过期
+                    if (new Date().getTime() >= expires.getTime()) {
+                        Logger.v(TAG, "accesstoken is overdue");
+                        getAccessToken();
+                    } else {
+                        //用户已登录，票据尚未过期--刷新票据
+                        Logger.v(TAG, "accesstoken is not overdue");
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //第一次登录
+                Logger.v(TAG, "第一次登录  " + strExpires);
+                getAccessToken();
             }
-
-            @Override
-            public void fail() {
-                Logger.v(TAG, "get token fail");
-            }
-        });
-        ////////////////////////////////////////////////////////////////
+        } else {
+            getAccessToken();
+        }
     }
+
 
     /**
      * 初始化actionbar 并绑定监听

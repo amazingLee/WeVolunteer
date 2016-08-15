@@ -19,6 +19,8 @@ import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
+import com.example.model.dictionary.DictionaryTypeListDto;
+import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -149,7 +151,8 @@ public class AppActionImpl implements AppAction {
     }
 
     @Override
-    public void activityQuery(final ActivityQueryOptionDto activityQueryOptionDto, final ActionCallbackListener<PagedListEntityDto> listener) {
+    public void activityQuery(final ActivityQueryOptionDto activityQueryOptionDto,
+                              final ActionCallbackListener<PagedListEntityDto<ActivityListDto>> listener) {
         //判断票据是否过期
         final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
 
@@ -281,17 +284,17 @@ public class AppActionImpl implements AppAction {
 
     //组织查询POST
     @Override
-    public void companyQuery(final CompanyQueryOptionDto companyQueryOptionDto, final ActionCallbackListener<com.example.model.Company.PagedListEntityDto> listener) {
+    public void companyQuery(final CompanyQueryOptionDto companyQueryOptionDto, final ActionCallbackListener<PagedListEntityDto<CompanyListDto>> listener) {
         //判断票据是否过期
         final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
-        new AsyncTask<Void, Void, ApiResponse<com.example.model.Company.PagedListEntityDto>>() {
+        new AsyncTask<Void, Void, ApiResponse<PagedListEntityDto<CompanyListDto>>>() {
             @Override
-            protected ApiResponse<com.example.model.Company.PagedListEntityDto> doInBackground(Void... params) {
+            protected ApiResponse<PagedListEntityDto<CompanyListDto>> doInBackground(Void... params) {
                 return api.companyQuery(companyQueryOptionDto, accessToken);
             }
 
             @Override
-            protected void onPostExecute(ApiResponse<com.example.model.Company.PagedListEntityDto> result) {
+            protected void onPostExecute(ApiResponse<PagedListEntityDto<CompanyListDto>> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;
@@ -392,6 +395,32 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<PagedListEntityDto<DictionaryListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void dictionaryTypeQuery(final DictionaryTypeQueryOptionDto query, final ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+
+        new AsyncTask<Void, Void, ApiResponse<PagedListEntityDto<DictionaryTypeListDto>>>() {
+            @Override
+            protected ApiResponse<PagedListEntityDto<DictionaryTypeListDto>> doInBackground(Void... params) {
+                return api.dictionaryTypeQuery(query, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<PagedListEntityDto<DictionaryTypeListDto>> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;

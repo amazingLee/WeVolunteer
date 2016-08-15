@@ -18,6 +18,9 @@ public class HomePageListItem {
     private String time;
     private String img;
 
+    public HomePageListItem() {
+    }
+
     public HomePageListItem(int type, int state, String title, int num, int maxNum, String time, String img) {
         this.type = type;
         this.state = state;
