@@ -16,9 +16,12 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.view.Gravity;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView.ShowOtherDates;
 import com.prolificinteractive.materialcalendarview.format.DayFormatter;
@@ -33,7 +36,7 @@ import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.
  * Display one day of a {@linkplain MaterialCalendarView}
  */
 @SuppressLint("ViewConstructor")
-class DayView extends CheckedTextView {
+class DayView extends FrameLayout {
 
     private CalendarDay date;
     private int selectionColor = Color.GRAY;
@@ -50,14 +53,25 @@ class DayView extends CheckedTextView {
     @ShowOtherDates
     private int showOtherDates = MaterialCalendarView.SHOW_DEFAULTS;
 
-    public DayView(Context context, CalendarDay day) {
+    private TextView dayTv, noteTv;
+    private RelativeLayout itemRe;
+
+    public DayView(Context context, CalendarDay day, String note) {
         super(context);
 
         fadeTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         setSelectionColor(this.selectionColor);
 
-        setGravity(Gravity.CENTER);
+        LayoutInflater.from(context).inflate(R.layout.calendar_day_view, this, true);
+        dayTv = (TextView) findViewById(R.id.calendar_day);
+        noteTv = (TextView) findViewById(R.id.calendar_day_note);
+        itemRe = (RelativeLayout) findViewById(R.id.calendar_day_item);
+
+        if (!TextUtils.isEmpty(note)) {
+            noteTv.setText(note);
+        }
+        //setGravity(Gravity.CENTER);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             setTextAlignment(TEXT_ALIGNMENT_CENTER);
@@ -68,7 +82,7 @@ class DayView extends CheckedTextView {
 
     public void setDay(CalendarDay date) {
         this.date = date;
-        setText(getLabel());
+        dayTv.setText(getLabel());
     }
 
     /**
@@ -78,7 +92,7 @@ class DayView extends CheckedTextView {
      */
     public void setDayFormatter(DayFormatter formatter) {
         this.formatter = formatter == null ? DayFormatter.DEFAULT : formatter;
-        CharSequence currentLabel = getText();
+        CharSequence currentLabel = dayTv.getText();
         Object[] spans = null;
         if (currentLabel instanceof Spanned) {
             spans = ((Spanned) currentLabel).getSpans(0, currentLabel.length(), Object.class);
@@ -89,7 +103,7 @@ class DayView extends CheckedTextView {
                 newLabel.setSpan(span, 0, newLabel.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
-        setText(newLabel);
+        dayTv.setText(newLabel);
     }
 
     @NonNull
@@ -153,7 +167,7 @@ class DayView extends CheckedTextView {
         }
 
         if (!isInMonth && shouldBeVisible) {
-            setTextColor(getTextColors().getColorForState(
+            dayTv.setTextColor(dayTv.getTextColors().getColorForState(
                     new int[]{-android.R.attr.state_enabled}, Color.GRAY));
         }
         setVisibility(shouldBeVisible ? View.VISIBLE : View.INVISIBLE);
@@ -248,11 +262,11 @@ class DayView extends CheckedTextView {
             for (DayViewFacade.Span span : spans) {
                 formattedLabel.setSpan(span.span, 0, label.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            setText(formattedLabel);
+            dayTv.setText(formattedLabel);
         }
         // Reset in case it was customized previously
         else {
-            setText(getLabel());
+            dayTv.setText(getLabel());
         }
     }
 
@@ -274,5 +288,27 @@ class DayView extends CheckedTextView {
         } else {
             tempRect.set(0, offset, width, radius + offset);
         }
+    }
+
+    private boolean isChecked;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        if (checked) {
+            isChecked = true;
+            //设置背景
+            itemRe.setBackgroundColor(Color.GRAY);
+        } else {
+            isChecked = false;
+            //设置背景
+            itemRe.setBackgroundColor(Color.WHITE);
+        }
+    }
+
+    public void setTextAppearance(Context context, int tagId) {
+        dayTv.setTextAppearance(context, tagId);
     }
 }

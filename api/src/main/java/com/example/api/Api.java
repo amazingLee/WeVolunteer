@@ -7,6 +7,7 @@ import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.activity.ActivityViewDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
@@ -32,8 +33,10 @@ public interface Api {
 
     public static final String USER_CREATE = "Nbcei.Framework.Api.Impl/v1/user/create";
     public static final String USER_LOGIN = "Nbcei.Framework.Api.Impl/v1/user/get";
+
     public static final String ACTIVITY_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/create";
     public static final String ACTIVITY_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/query";
+    public static final String ACTIVITY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/details";
 
     //志愿者
     public static final String VOLUNTEER_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/create";
@@ -76,6 +79,15 @@ public interface Api {
     public ApiResponse<List<String>> activityCreate(List<ActivityCreateBO> creates, String assessToken);
 
     public ApiResponse<PagedListEntityDto<ActivityListDto>> activityQuery(ActivityQueryOptionDto query, String accessToken);
+
+    /**
+     * activity 详细信息查询方法
+     *
+     * @param activityId
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<ActivityViewDto> activityDetail(String activityId, String accessToken);
 
     public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String accessToken);
 

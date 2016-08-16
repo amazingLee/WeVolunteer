@@ -14,6 +14,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Pager adapter backing the calendar view
@@ -41,9 +42,12 @@ abstract class CalendarPagerAdapter<V extends CalendarPagerView> extends PagerAd
     private List<DecoratorResult> decoratorResults = null;
     private boolean selectionEnabled = true;
 
-    CalendarPagerAdapter(MaterialCalendarView mcv) {
+    public Map<String ,String> notes;
+
+    CalendarPagerAdapter(MaterialCalendarView mcv, Map<String,String> notes) {
         this.mcv = mcv;
         this.today = CalendarDay.today();
+        this.notes=notes;
         currentViews = new ArrayDeque<>();
         currentViews.iterator();
         setRangeDates(null, null);

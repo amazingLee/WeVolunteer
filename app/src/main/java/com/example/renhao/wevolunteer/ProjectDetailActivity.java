@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +18,23 @@ import android.widget.TextView;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
-import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityListDto;
+import com.example.model.activity.ActivityTimeSimpleDto;
+import com.example.model.activity.ActivityViewDto;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.orhanobut.logger.Logger;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -144,6 +152,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
     ImageView magnifierImg;
 
     private ActivityListDto mDate;
+    private Map<String, String> notes = new HashMap<>();
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -156,6 +166,63 @@ public class ProjectDetailActivity extends AppCompatActivity {
         initActionBar();
 
         initView();
+
+        getDetail();
+    }
+
+    public void getDetail() {
+        AppActionImpl.getInstance(this).activityDetail(mDate.getId(), new ActionCallbackListener<ActivityViewDto>() {
+            @Override
+            public void onSuccess(ActivityViewDto data) {
+                String imagUrl = "";
+                if (data.getAppImgUrl() != null) {
+                    imagUrl = data.getAppImgUrl();
+                    Picasso.with(getApplicationContext()).load(imagUrl)
+                            .error(R.mipmap.ic_launcher)
+                            .into(mImageview);
+                } else {
+                    Picasso.with(getApplicationContext()).load(R.mipmap.ic_launcher)
+                            .error(R.mipmap.ic_launcher)
+                            .into(mImageview);
+                }
+
+                //岗位类型 可能有多个
+                String[] activityTypeName = data.getActivityTypeName().split(",");
+                String typeName = "";
+                for (int i = activityTypeName.length / 2; i < activityTypeName.length; i++) {
+                    typeName += activityTypeName[i]+"  ";
+                }
+                mTvType.setText(typeName);//
+
+                mTvRegisterTime.setText(data.getBeginTime() + "-\n" + mDate.getEndTime());
+
+                String contactStr = "";
+                contactStr += TextUtils.isEmpty(data.getLinker()) ? "" : data.getLinker() + "\n";
+                contactStr += TextUtils.isEmpty(data.getTel()) ? "" : data.getTel() + "\n";
+                contactStr += TextUtils.isEmpty(data.getMobile()) ? "" : data.getMobile();
+                mTvContact.setText(contactStr);
+
+                mTvSkill.setText(data.getJobText());
+
+                mTvDetail.setText(data.getText());
+
+
+                for (int i = 0; i < data.getActivityTimes().size(); i++) {
+                    ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
+                    try {
+                        Date date = format.parse(dto.getSTime());
+                        notes.put(new CalendarDay(date).toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+
+            }
+        });
     }
 
     private void initView() {
@@ -166,17 +233,13 @@ public class ProjectDetailActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("#.##");
         mTvTime.setText(df.format(h) + "小时");
 
-        mTvType.setText("");
-
-        mTvRegisterTime.setText("0000-00-00" + "-\n" + mDate.getEndTime());
-
         mTvEffectiveTime.setText(mDate.getStartTime() + "-\n" + mDate.getFinishTime());
 
         mTvLocation.setText(mDate.getAddr());
 
         mTvFounders.setText(mDate.getCompanyName());
 
-        //通过CompanyId获取联系人和联系方式
+      /*  //通过CompanyId获取联系人和联系方式
         CompanyQueryOptionDto queryOptionDto = new CompanyQueryOptionDto();
         queryOptionDto.setOrganizationId(mDate.getCompanyId());
         Logger.v(TAG, mDate.getCompanyId());
@@ -195,9 +258,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
             public void onFailure(String errorEvent, String message) {
 
             }
-        });
-
-        mTvDetail.setText(mDate.getJobText());
+        });*/
 
         mTvSignedNum.setText(mDate.getRecruited() + "");
 
@@ -300,11 +361,14 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 break;
             case R.id.btn_projectdetail_apply:
                 Holder holder = new ViewHolder(R.layout.dialog_caldroid);
+
                 DialogPlus dialogPlus = DialogPlus.newDialog(this)
                         .setContentHolder(holder)
                         .setCancelable(true)
                         .setGravity(Gravity.BOTTOM)
                         .create();
+                MaterialCalendarView calendarView = (MaterialCalendarView) dialogPlus.getHolderView().findViewById(R.id.calendarView);
+                calendarView.setNotes(notes);
                 dialogPlus.show();
                 break;
             case R.id.btn_projectdetail_focuson:

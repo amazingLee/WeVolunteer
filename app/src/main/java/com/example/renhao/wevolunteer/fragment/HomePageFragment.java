@@ -64,6 +64,8 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private List<HomePageListItem> list = null;
     private List<ActivityListDto> dates = new ArrayList<>();
 
+    private int loadFinish=0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -167,6 +169,17 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                 switch (position) {
                     case 0:
                         Logger.v(TAG, "注册志愿者");
+                        /*AppActionImpl.getInstance(getActivity()).activityDetail(dates.get(0).getId(), new ActionCallbackListener<ActivityViewDto>() {
+                            @Override
+                            public void onSuccess(ActivityViewDto data) {
+                                Logger.v(TAG, "onSuccess");
+                            }
+
+                            @Override
+                            public void onFailure(String errorEvent, String message) {
+                                Logger.v(TAG, "onFailure");
+                            }
+                        });*/
                         break;
                     case 1:
                         Logger.v(TAG, "注册专业志愿者");

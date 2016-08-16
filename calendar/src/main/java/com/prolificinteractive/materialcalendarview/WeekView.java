@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Display a week of {@linkplain DayView}s and
@@ -16,8 +17,9 @@ public class WeekView extends CalendarPagerView {
 
     public WeekView(@NonNull MaterialCalendarView view,
                     CalendarDay firstViewDay,
+                    Map<String, String> notes,
                     int firstDayOfWeek) {
-        super(view, firstViewDay, firstDayOfWeek);
+        super(view, firstViewDay, notes, firstDayOfWeek);
     }
 
     @Override

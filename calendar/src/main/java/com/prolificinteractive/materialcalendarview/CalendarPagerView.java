@@ -14,12 +14,13 @@ import com.prolificinteractive.materialcalendarview.format.WeekDayFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SHOW_DEFAULTS;
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.showOtherMonths;
 import static java.util.Calendar.DATE;
-import static java.util.Calendar.DAY_OF_WEEK;
 
 abstract class CalendarPagerView extends ViewGroup implements View.OnClickListener {
 
@@ -39,13 +40,18 @@ abstract class CalendarPagerView extends ViewGroup implements View.OnClickListen
 
     private final Collection<DayView> dayViews = new ArrayList<>();
 
+
+    private Map<String, String> notes = new HashMap<>();
+
     public CalendarPagerView(@NonNull MaterialCalendarView view,
                              CalendarDay firstViewDay,
+                             Map<String, String> notes,
                              int firstDayOfWeek) {
         super(view.getContext());
         this.mcv = view;
         this.firstViewDay = firstViewDay;
         this.firstDayOfWeek = firstDayOfWeek;
+        this.notes = notes;
 
         setClipChildren(false);
         setClipToPadding(false);
@@ -65,7 +71,10 @@ abstract class CalendarPagerView extends ViewGroup implements View.OnClickListen
 
     protected void addDayView(Collection<DayView> dayViews, Calendar calendar) {
         CalendarDay day = CalendarDay.from(calendar);
-        DayView dayView = new DayView(getContext(), day);
+        String note = "";
+        note = mcv.getNotes().get(day.toString());
+
+        DayView dayView = new DayView(getContext(), day, note);
         dayView.setOnClickListener(this);
         dayViews.add(dayView);
         addView(dayView, new LayoutParams());
@@ -249,6 +258,7 @@ abstract class CalendarPagerView extends ViewGroup implements View.OnClickListen
 
     /**
      * Return the number of rows to display per page
+     *
      * @return
      */
     protected abstract int getRows();

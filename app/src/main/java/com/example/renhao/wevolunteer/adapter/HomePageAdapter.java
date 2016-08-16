@@ -31,7 +31,7 @@ public class HomePageAdapter extends BaseAdapter {
     public HomePageAdapter(Context context, List<HomePageListItem> mDate) {
         mContext = context;
         this.mDate = mDate;
-        this.layoutInflater = layoutInflater.from(context);
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override

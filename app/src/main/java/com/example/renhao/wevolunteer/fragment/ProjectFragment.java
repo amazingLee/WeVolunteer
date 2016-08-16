@@ -1,7 +1,6 @@
 package com.example.renhao.wevolunteer.fragment;
 
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -62,7 +61,7 @@ public class ProjectFragment extends Fragment {
 
     private HomePageAdapter adapter;
 
-    private String headers[] = {"类型","状态","区域","智能筛选"};
+    private String headers[] = {"类型", "状态", "区域", "智能筛选"};
     private String[] type = {"类型"};
     private String[] state = {"状态"};
     private String[] area = {"区域"};
@@ -102,32 +101,34 @@ public class ProjectFragment extends Fragment {
     private void initDictionary() {
         //类型
         DictionaryQueryOptionDto queryOptionDto = new DictionaryQueryOptionDto();
-        queryOptionDto.setCulture("语言");
-        AppActionImpl.getInstance(getActivity()).dictionaryQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
-            @Override
-            public void onSuccess(PagedListEntityDto<DictionaryListDto> data) {
-                Logger.v(TAG, "-------" + data.getRows().size());
-            }
+        //queryOptionDto.setCulture("语言");
+        AppActionImpl.getInstance(getActivity()).dictionaryQuery(queryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<DictionaryListDto> data) {
+                        Logger.v(TAG, "-------" + data.getRows().size());
+                    }
 
-            @Override
-            public void onFailure(String errorEvent, String message) {
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
 
-            }
-        });
+                    }
+                });
         //状态
-        DictionaryTypeQueryOptionDto typeQueryOptionDto=new DictionaryTypeQueryOptionDto();
-        typeQueryOptionDto.setCode("ActivityType");
-        AppActionImpl.getInstance(getActivity()).dictionaryTypeQuery(typeQueryOptionDto, new ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>>() {
-            @Override
-            public void onSuccess(PagedListEntityDto<DictionaryTypeListDto> data) {
-                Logger.v(TAG, "-------" + data.getRows().size());
-            }
+        DictionaryTypeQueryOptionDto typeQueryOptionDto = new DictionaryTypeQueryOptionDto();
+        //typeQueryOptionDto.setCode("ActivityType");
+        AppActionImpl.getInstance(getActivity()).dictionaryTypeQuery(typeQueryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<DictionaryTypeListDto> data) {
+                        Logger.v(TAG, "-------" + data.getRows().size());
+                    }
 
-            @Override
-            public void onFailure(String errorEvent, String message) {
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
 
-            }
-        });
+                    }
+                });
         //区域
         //智能筛选
     }
@@ -138,12 +139,12 @@ public class ProjectFragment extends Fragment {
         mPtr.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new FinishRefresh().execute();
+
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new FinishRefresh().execute();
+
             }
         });
         mPtr.setMode(PullToRefreshBase.Mode.BOTH);//设置头部下拉刷新
@@ -249,24 +250,5 @@ public class ProjectFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-    }
-
-
-    //测试用方法
-    private class FinishRefresh extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-//          adapter.notifyDataSetChanged();
-            contentView.onRefreshComplete();
-        }
     }
 }

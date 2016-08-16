@@ -4,18 +4,19 @@ import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Experimental
 public class WeekPagerAdapter extends CalendarPagerAdapter<WeekView> {
 
-    public WeekPagerAdapter(MaterialCalendarView mcv) {
-        super(mcv);
+    public WeekPagerAdapter(MaterialCalendarView mcv, Map<String, String> notes) {
+        super(mcv, notes);
     }
 
     @Override
     protected WeekView createView(int position) {
-        return new WeekView(mcv, getItem(position), mcv.getFirstDayOfWeek());
+        return new WeekView(mcv, getItem(position), notes, mcv.getFirstDayOfWeek());
     }
 
     @Override

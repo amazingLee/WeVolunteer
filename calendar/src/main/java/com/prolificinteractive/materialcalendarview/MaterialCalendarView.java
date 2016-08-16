@@ -14,16 +14,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter;
@@ -40,7 +41,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -165,7 +168,8 @@ public class MaterialCalendarView extends ViewGroup {
     private final CalendarPager pager;
     private CalendarPagerAdapter<?> adapter;
     private CalendarDay currentMonth;
-    private LinearLayout topbar;
+    //private RelativeLayout topbar;
+    private View topbar;
     private CalendarMode calendarMode;
     /**
      * Used for the dynamic calendar height.
@@ -177,9 +181,12 @@ public class MaterialCalendarView extends ViewGroup {
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            Log.v("--- click ---", pager.getCurrentItem() + "");
             if (v == buttonFuture) {
+                Log.v("--- future ---", pager.getCurrentItem() + "");
                 pager.setCurrentItem(pager.getCurrentItem() + 1, true);
             } else if (v == buttonPast) {
+                Log.v("--- past ---", pager.getCurrentItem() + "");
                 pager.setCurrentItem(pager.getCurrentItem() - 1, true);
             }
         }
@@ -226,6 +233,9 @@ public class MaterialCalendarView extends ViewGroup {
 
     private State state;
 
+    private Map<String, String> notes = new HashMap<>();
+    private ImageView closeImg;
+
     public MaterialCalendarView(Context context) {
         this(context, null);
     }
@@ -243,15 +253,34 @@ public class MaterialCalendarView extends ViewGroup {
             setClipToPadding(true);
         }
 
-        buttonPast = new DirectionButton(getContext());
+        topbar = LayoutInflater.from(getContext()).inflate(R.layout.calendar_topbar, null);
+        topbar.setEnabled(false);
+
+        closeImg = (ImageView) topbar.findViewById(R.id.mcv_action_topbar_close);
+        closeImg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("-------", "close menu");
+            }
+        });
+
+        //buttonPast = new DirectionButton(getContext());
+        buttonPast = (DirectionButton) topbar.findViewById(R.id.mcv_action_previous_btn);
         buttonPast.setContentDescription(getContext().getString(R.string.previous));
-        title = new TextView(getContext());
-        buttonFuture = new DirectionButton(getContext());
+        //title = new TextView(getContext());
+        title = (TextView) topbar.findViewById(R.id.mcv_action_topbar_title);
+        //buttonFuture = new DirectionButton(getContext());
+        buttonFuture = (DirectionButton) topbar.findViewById(R.id.mcv_action_next_btn);
         buttonFuture.setContentDescription(getContext().getString(R.string.next));
         pager = new CalendarPager(getContext());
 
         title.setOnClickListener(onClickListener);
-        buttonPast.setOnClickListener(onClickListener);
+        buttonPast.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("----", "----");
+            }
+        });
         buttonFuture.setOnClickListener(onClickListener);
 
         titleChanger = new TitleChanger(title);
@@ -376,7 +405,7 @@ public class MaterialCalendarView extends ViewGroup {
 
         if (isInEditMode()) {
             removeView(pager);
-            MonthView monthView = new MonthView(this, currentMonth, getFirstDayOfWeek());
+            MonthView monthView = new MonthView(this, currentMonth, notes, getFirstDayOfWeek());
             monthView.setSelectionColor(getSelectionColor());
             monthView.setDateTextAppearance(adapter.getDateTextAppearance());
             monthView.setWeekDayTextAppearance(adapter.getWeekDayTextAppearance());
@@ -386,24 +415,24 @@ public class MaterialCalendarView extends ViewGroup {
     }
 
     private void setupChildren() {
-        topbar = new LinearLayout(getContext());
-        topbar.setOrientation(LinearLayout.HORIZONTAL);
-        topbar.setClipChildren(false);
-        topbar.setClipToPadding(false);
+      /*  topbar = new LinearLayout(getContext());
+        topbar.setOrientation(LinearLayout.HORIZONTAL);*/
+       /* topbar.setClipChildren(false);
+        topbar.setClipToPadding(false);*/
         addView(topbar, new LayoutParams(1));
 
         buttonPast.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         buttonPast.setImageResource(R.drawable.mcv_action_previous);
-        topbar.addView(buttonPast, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+        /*topbar.addView(buttonPast, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));*/
 
         title.setGravity(Gravity.CENTER);
-        topbar.addView(title, new LinearLayout.LayoutParams(
+        /*topbar.addView(title, new LinearLayout.LayoutParams(
                 0, LayoutParams.MATCH_PARENT, DEFAULT_DAYS_IN_WEEK - 2
-        ));
+        ));*/
 
         buttonFuture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         buttonFuture.setImageResource(R.drawable.mcv_action_next);
-        topbar.addView(buttonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+        /*topbar.addView(buttonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));*/
 
         pager.setId(R.id.mcv_pager);
         pager.setOffscreenPageLimit(1);
@@ -412,8 +441,11 @@ public class MaterialCalendarView extends ViewGroup {
 
     private void updateUi() {
         titleChanger.change(currentMonth);
-        buttonPast.setEnabled(canGoBack());
-        buttonFuture.setEnabled(canGoForward());
+        topbar.setEnabled(true);
+        buttonPast.setEnabled(true);
+        buttonFuture.setEnabled(true);
+       /* buttonPast.setEnabled(canGoBack());
+        buttonFuture.setEnabled(canGoForward());*/
     }
 
     /**
@@ -586,8 +618,6 @@ public class MaterialCalendarView extends ViewGroup {
     }
 
     /**
-     *
-     *
      * @return true if there is a future month that can be shown
      */
     public boolean canGoForward() {
@@ -606,8 +636,6 @@ public class MaterialCalendarView extends ViewGroup {
     }
 
     /**
-     *
-     *
      * @return true if there is a previous month that can be shown
      */
     public boolean canGoBack() {
@@ -1878,10 +1906,11 @@ public class MaterialCalendarView extends ViewGroup {
         final CalendarPagerAdapter<?> newAdapter;
         switch (calendarMode) {
             case MONTHS:
-                newAdapter = new MonthPagerAdapter(this);
+                Log.v("----  notesize ---", notes.size() + "");
+                newAdapter = new MonthPagerAdapter(this, notes);
                 break;
             case WEEKS:
-                newAdapter = new WeekPagerAdapter(this);
+                newAdapter = new WeekPagerAdapter(this, notes);
                 break;
             default:
                 throw new IllegalArgumentException("Provided display mode which is not yet implemented");
@@ -1903,5 +1932,14 @@ public class MaterialCalendarView extends ViewGroup {
                         : CalendarDay.today());
         invalidateDecorators();
         updateUi();
+    }
+
+
+    public void setNotes(Map<String, String> notes) {
+        this.notes = notes;
+    }
+
+    public Map<String, String> getNotes() {
+        return notes;
     }
 }

@@ -3,18 +3,20 @@ package com.prolificinteractive.materialcalendarview;
 import android.support.annotation.NonNull;
 import android.support.v4.util.SparseArrayCompat;
 
+import java.util.Map;
+
 /**
  * Pager adapter backing the calendar view
  */
 class MonthPagerAdapter extends CalendarPagerAdapter<MonthView> {
 
-    MonthPagerAdapter(MaterialCalendarView mcv) {
-        super(mcv);
+    public MonthPagerAdapter(MaterialCalendarView mcv, Map<String, String> notes) {
+        super(mcv, notes);
     }
 
     @Override
     protected MonthView createView(int position) {
-        return new MonthView(mcv, getItem(position), mcv.getFirstDayOfWeek());
+        return new MonthView(mcv, getItem(position), notes, mcv.getFirstDayOfWeek());
     }
 
     @Override

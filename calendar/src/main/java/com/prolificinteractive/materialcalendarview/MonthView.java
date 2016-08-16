@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Display a month of {@linkplain DayView}s and
@@ -13,8 +14,8 @@ import java.util.Collection;
 @SuppressLint("ViewConstructor")
 class MonthView extends CalendarPagerView {
 
-    public MonthView(@NonNull MaterialCalendarView view, CalendarDay month, int firstDayOfWeek) {
-        super(view, month, firstDayOfWeek);
+    public MonthView(@NonNull MaterialCalendarView view, CalendarDay month, Map<String, String> notes, int firstDayOfWeek) {
+        super(view, month, notes, firstDayOfWeek);
     }
 
     @Override

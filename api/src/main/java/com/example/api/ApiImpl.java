@@ -8,6 +8,7 @@ import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.activity.ActivityViewDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
@@ -123,6 +124,20 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, ACTIVITY_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<ActivityViewDto> activityDetail(String activityId, String accessToken) {
+        List<String> params=new ArrayList<>();
+        params.add(activityId);
+        Type typeOfT = new TypeToken<ApiResponse<ActivityViewDto>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, ACTIVITY_DETAIL, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

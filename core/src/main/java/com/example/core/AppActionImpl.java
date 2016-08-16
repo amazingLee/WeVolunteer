@@ -17,6 +17,7 @@ import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.activity.ActivityViewDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
@@ -180,6 +181,33 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<PagedListEntityDto<ActivityListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void activityDetail(final String activityId, final ActionCallbackListener<ActivityViewDto> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+
+        new AsyncTask<Void, Void, ApiResponse<ActivityViewDto>>() {
+
+            @Override
+            protected ApiResponse<ActivityViewDto> doInBackground(Void... params) {
+                return api.activityDetail(activityId, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<ActivityViewDto> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;
