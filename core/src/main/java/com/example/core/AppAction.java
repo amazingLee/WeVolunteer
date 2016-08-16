@@ -3,8 +3,8 @@ package com.example.core;
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
 import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.PagedListEntityDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -65,4 +65,10 @@ public interface AppAction {
 
     //company 更新
     public void companyUpdate(List<CompanyListDto> companyListDtos, ActionCallbackListener<List<String>> listener);
+
+    //发送短信验证码功能
+    public void getVerification(String phone, ActionCallbackListener<String> listener);
+
+    //验证短信验证码功能
+    public void getverify(String phone, String SMScode, ActionCallbackListener<String> listener);
 }

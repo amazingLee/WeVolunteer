@@ -12,8 +12,8 @@ import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
 import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.PagedListEntityDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -363,6 +363,56 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<List<String>> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void getVerification(final String  phone, final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.send_phone(phone, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getDate());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void getverify(final String phone, final String SMScode, final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.get_verify(phone,SMScode, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
                 if (result == null){
                     listener.onFailure("","未知错误");
                     return;

@@ -49,7 +49,11 @@
     <string name="title_common_problem">常见问题</string>
     <string name="title_professional_selection">专业选择</string>
     <string name="title_residence">现居住地址</string>
+    <string name="title_company">现工作单位</string>
+    <string name="title_politicsstatus">政治面貌</string>
     <string name="hint_residence">请输入现居住地址</string>
+    <string name="hint_company">请输入现工作单位</string>
+    <string name="hint_politicsstatus">请输入您的政治面貌</string>
     <string name="tv_certificate_uoload">证书上传</string>
     <string name="title_major_ability">专业能力</string>
     <string name="hint_major_ability">请输入专业能力</string>
@@ -62,6 +66,8 @@
     <string name="tv_afternoon">下午</string>
     <string name="tv_night">晚上</string>
     <string name="title_affiliated_institution">所属机构</string>
+    <string name="title_myproject">我的项目</string>
+    <string name="title_myattention">我的关注</string>
     <string name="title_service_time">意向志愿服务时间</string>
 
     <!--personalData-->
@@ -123,5 +129,9 @@
     <string name="btn_pickPIC">从相册选择</string>
     <string name="btn_takePIC">拍照</string>
     <string name="btn_cancel">取消</string>
+    <!--POP for PersonalData-->
+    <string name="btn_student">在校</string>
+    <string name="btn_on_job">在职</string>
+    <string name="btn_retire">退休</string>
 
 </resources>

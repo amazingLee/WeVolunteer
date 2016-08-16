@@ -18,6 +18,7 @@ import com.example.renhao.wevolunteer.activity.AboutUsActivity;
 import com.example.renhao.wevolunteer.activity.ApplyProBonoActivity;
 import com.example.renhao.wevolunteer.activity.FAQActivity;
 import com.example.renhao.wevolunteer.activity.MyORGActivity;
+import com.example.renhao.wevolunteer.activity.MyProjectActivity;
 import com.example.renhao.wevolunteer.activity.PersonalDataActivity;
 import com.example.renhao.wevolunteer.activity.ProfessionalSelectionActivity;
 import com.example.renhao.wevolunteer.activity.ReportProblemActivity;
@@ -26,9 +27,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     private View mainview;
 
 
-    private final int PROFESSIONAL = 0;
-    private final int TO_PROFESSIONAL = 1;
-    private final int TO_JOB = 2;
+    private final int PROFESSIONAL_SELECTION = 0;
+    private final int APPLY_PROFESSIONAL = 1;
+    private final int TO_MYPROJECT = 2;
     private final int TO_ATTENTION = 3;
     private final int TO_ORG = 4;
     private final int TO_RANK = 5;
@@ -81,9 +82,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         FAQ.setOnClickListener(this);
 
         //添加点击标签
-        professional_true.setTag(PROFESSIONAL);
-        Professional_false.setTag(TO_PROFESSIONAL);
-        job.setTag(TO_JOB);
+        professional_true.setTag(PROFESSIONAL_SELECTION);
+        Professional_false.setTag(APPLY_PROFESSIONAL);
+        job.setTag(TO_MYPROJECT);
         attention.setTag(TO_ATTENTION);
         ORG.setTag(TO_ORG);
         rank.setTag(TO_RANK);
@@ -111,17 +112,23 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         System.out.println(tag);
         Intent intent = new Intent();
         switch (tag) {
-            case PROFESSIONAL:
+            case PROFESSIONAL_SELECTION:
                 intent.setClass(getActivity(), ProfessionalSelectionActivity.class);
                 startActivity(intent);
                 break;
-            case TO_PROFESSIONAL:
+            case APPLY_PROFESSIONAL:
                 intent.setClass(getActivity(), ApplyProBonoActivity.class);
                 startActivity(intent);
                 break;
-            case TO_JOB:
+            case TO_MYPROJECT:
+                intent.putExtra("title", this.getResources().getString(R.string.title_myproject));
+                intent.setClass(getActivity(), MyProjectActivity.class);
+                startActivity(intent);
                 break;
             case TO_ATTENTION:
+                intent.putExtra("title", this.getResources().getString(R.string.title_myattention));
+                intent.setClass(getActivity(), MyProjectActivity.class);
+                startActivity(intent);
                 break;
             case TO_ORG:
                 intent.setClass(getActivity(), MyORGActivity.class);

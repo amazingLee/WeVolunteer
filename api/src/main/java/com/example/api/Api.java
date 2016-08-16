@@ -1,9 +1,9 @@
 package com.example.api;
 
 import com.example.model.AccessTokenBO;
-import com.example.model.Company.PagedListEntityDto;
-import com.example.model.Company.CompanyQueryOptionDto;
 import com.example.model.Company.CompanyListDto;
+import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.PagedListEntityDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public interface Api {
 
-    public static final String USER_CREATE="Nbcei.Framework.Api.Impl/v1/user/create";
+    public static final String USER_CREATE = "Nbcei.Framework.Api.Impl/v1/user/create";
     public static final String USER_LOGIN = "Nbcei.Framework.Api.Impl/v1/user/get";
     public static final String ACTIVITY_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/create";
     public static final String ACTIVITY_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/query";
@@ -35,14 +35,20 @@ public interface Api {
     public static final String VOLUNTEER_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/create";
     public static final String VOLUNTEER_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/query";
     public static final String VOLUNTEER_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/Volunteer/details";
-    public static final String VOLUNTEER_UPDATE ="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/Volunteer/update";
+    public static final String VOLUNTEER_UPDATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/Volunteer/update";
 
     //
     //组织
-    public static final String COMPANY_CREAT="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/create";
-    public static final String COMPANY_UPDATE="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/update";
-    public static final String COMPANY_QUERY="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/query";
-    public static final String COMPANY_GET="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
+    public static final String COMPANY_CREAT = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/create";
+    public static final String COMPANY_UPDATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/update";
+    public static final String COMPANY_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/query";
+    public static final String COMPANY_GET = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
+
+
+    //发送验证码
+    public static final String SEND_PHONE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/smsauth/send/register";
+    public static final String GET_VERYFY="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/smsauth/valid/register";
+
     /**
      * 获取accessToken
      *
@@ -70,18 +76,22 @@ public interface Api {
 
     public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String accessToken);
 
-    public ApiResponse<VolunteerDto> volunteerQuery(VolunteerQueryDto query,String accessToken);
+    public ApiResponse<VolunteerDto> volunteerQuery(VolunteerQueryDto query, String accessToken);
 
-    public ApiResponse<VolunteerViewDto> volunteerDetail(String id,String accessToken);
+    public ApiResponse<VolunteerViewDto> volunteerDetail(String id, String accessToken);
 
-    public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update,String accessToken);
+    public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update, String accessToken);
 
-    public ApiResponse<PagedListEntityDto>companyQuery(CompanyQueryOptionDto query, String accessToken);
+    public ApiResponse<PagedListEntityDto> companyQuery(CompanyQueryOptionDto query, String accessToken);
 
-    public ApiResponse<CompanyListDto>companyGet(String id, String acessToken);
+    public ApiResponse<CompanyListDto> companyGet(String id, String acessToken);
 
     public ApiResponse<List<String>> companyCreat(List<CompanyListDto> creates, String accessToken);
 
-    public ApiResponse<List<String>> companyUpdate(List<CompanyListDto> update,String accessToken);
+    public ApiResponse<List<String>> companyUpdate(List<CompanyListDto> update, String accessToken);
+
+    public ApiResponse<String> send_phone(String phone, String accessToken);
+
+    public ApiResponse<String> get_verify(String phone,String SMScode,String accessToken);
 
 }

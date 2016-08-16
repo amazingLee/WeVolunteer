@@ -13,7 +13,7 @@
         android:background="@color/colorCyan">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView_btn_back"
             android:layout_width="@dimen/imageview_homepage_magnifierSize"
             android:layout_height="@dimen/imageview_homepage_magnifierSize"
             android:layout_centerVertical="true"
@@ -22,7 +22,6 @@
             android:src="@drawable/icon_indicator" />
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

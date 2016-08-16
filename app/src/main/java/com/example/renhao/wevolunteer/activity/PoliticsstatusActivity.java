@@ -8,23 +8,24 @@ import android.widget.ImageView;
 import com.example.renhao.wevolunteer.R;
 
 /**
- * 关于我们界面
+ * 政治面貌
  */
-public class AboutUsActivity extends AppCompatActivity {
-    private static final String TAG = "AboutUsActivity";
+public class PoliticsstatusActivity extends AppCompatActivity {
+    private static final String TAG = "ResidenceActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about_us);
+        setContentView(R.layout.activity_politicsstatus);
 
+        //回退按钮
         ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AboutUsActivity.this.finish();
+                PoliticsstatusActivity.this.finish();
             }
         });
-    }
 
+    }
 }

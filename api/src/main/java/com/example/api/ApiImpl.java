@@ -3,8 +3,8 @@ package com.example.api;
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
 import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.PagedListEntityDto;
 import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.Company.PagedListEntityDto;
 import com.example.model.activity.ActivityBO;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryBO;
@@ -126,10 +126,10 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String accessToken){
+    public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(creates);
-        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, VOLUNTEER_CREATE, typeOfT, accessToken);
@@ -143,7 +143,7 @@ public class ApiImpl implements Api {
     public ApiResponse<VolunteerDto> volunteerQuery(VolunteerQueryDto query, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(query);
-        Type typeOfT = new TypeToken<ApiResponse<VolunteerDto>>(){
+        Type typeOfT = new TypeToken<ApiResponse<VolunteerDto>>() {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, VOLUNTEER_QUERY, typeOfT, accessToken);
@@ -151,42 +151,42 @@ public class ApiImpl implements Api {
             e.printStackTrace();
         }
 
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
     }
 
     @Override
     public ApiResponse<VolunteerViewDto> volunteerDetail(String id, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(id);
-        Type typeOft = new TypeToken<ApiResponse<VolunteerViewDto>>(){
+        Type typeOft = new TypeToken<ApiResponse<VolunteerViewDto>>() {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, VOLUNTEER_DETAIL, typeOft, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
     }
 
     @Override
     public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(update);
-        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, VOLUNTEER_UPDATE, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
     }
 
     @Override
     public ApiResponse<PagedListEntityDto> companyQuery(CompanyQueryOptionDto query, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(query);
-        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto>>(){
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto>>() {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, COMPANY_QUERY, typeOfT, accessToken);
@@ -194,28 +194,28 @@ public class ApiImpl implements Api {
             e.printStackTrace();
         }
 
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
     }
 
     @Override
     public ApiResponse<CompanyListDto> companyGet(String id, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(id);
-        Type typeOft = new TypeToken<ApiResponse<CompanyListDto>>(){
+        Type typeOft = new TypeToken<ApiResponse<CompanyListDto>>() {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, COMPANY_GET, typeOft, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
     }
 
     @Override
     public ApiResponse<List<String>> companyCreat(List<CompanyListDto> creates, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(creates);
-        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, COMPANY_CREAT, typeOfT, accessToken);
@@ -229,13 +229,42 @@ public class ApiImpl implements Api {
     public ApiResponse<List<String>> companyUpdate(List<CompanyListDto> update, String accessToken) {
         Gson gson = new Gson();
         String params = gson.toJson(update);
-        Type typeOfT = new TypeToken<ApiResponse<List<String>>>(){
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, COMPANY_UPDATE, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> send_phone(String phone, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(phone);
+        Type typeOft = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, SEND_PHONE, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> get_verify(String phone, String SMScode, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(phone);
+        params.add(SMScode);
+        Type typeOft = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, GET_VERYFY, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
     }
 }

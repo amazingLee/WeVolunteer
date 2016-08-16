@@ -30,9 +30,6 @@ android {
 }
 
 repositories{
-    flatDir{
-        dirs 'libs' //就是你放aar的目录地址
-    }
 }
 
 dependencies {
@@ -47,8 +44,4 @@ dependencies {
     compile project(':core')
     compile project(':model')
     compile project(':PullToRefresh')
-    compile files('libs/AMap_3DMap_V3.3.2_20160525.jar')
-    compile files('libs/MobCommons-2016.0714.1402.jar')
-    compile name:'SMSSDK-2.1.1',ext:'aar'
-    compile name:'SMSSDKGUI-2.1.1',ext:'aar'
 }

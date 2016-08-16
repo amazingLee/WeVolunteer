@@ -165,6 +165,17 @@
                     android:textColor="#000"
                     android:textSize="@dimen/textview_bottom_left_size" />
 
+                <TextView
+                    android:id="@+id/tv_personal_myPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/textview_bottom_right_marginright"
+                    android:gravity="left"
+                    android:text="133****5210"
+                    android:textColor="#999"
+                    android:textSize="@dimen/textview_bottom_right_size" />
+
 
                 <ImageView
                     android:layout_width="@dimen/imageview_bottom_mark_size"
@@ -249,7 +260,8 @@
                     android:layout_height="@dimen/imageview_bottom_mark_size"
                     android:layout_gravity="center"
                     android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
-                    android:src="@drawable/entry_mark" />
+                    android:src="@drawable/entry_mark"
+                    android:visibility="invisible" />
             </LinearLayout>
 
 
@@ -288,7 +300,8 @@
                     android:layout_height="@dimen/imageview_bottom_mark_size"
                     android:layout_gravity="center"
                     android:layout_marginRight="@dimen/imageview_bottom_mark_marginright"
-                    android:src="@drawable/entry_mark" />
+                    android:src="@drawable/entry_mark"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <!--个人属性-->
@@ -309,6 +322,17 @@
                     android:text="@string/myAttribute_item_text"
                     android:textColor="#000"
                     android:textSize="@dimen/textview_bottom_left_size" />
+
+                <TextView
+                    android:id="@+id/tv_personal_myAttribute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/textview_bottom_right_marginright"
+                    android:gravity="left"
+                    android:text="学生"
+                    android:textColor="#999"
+                    android:textSize="@dimen/textview_bottom_right_size" />
 
 
                 <ImageView

@@ -71,10 +71,26 @@
     <dimen name="item_myUser_margintop">20dp</dimen>
     <dimen name="btn_personalData_quitLogin_margin">20dp</dimen>
     <dimen name="btn_personalData_quitLogin_marginTop">10dp</dimen>
+    <dimen name="imageview_myproject_magnifierSize">20dp</dimen>
+
+    <!--myProject-->
+    <dimen name="myProject_item_height">70dp</dimen>
+    <dimen name="imageview_myproject_margin">10dp</dimen>
+    <dimen name="imageview_myproject_item_width">80dp</dimen>
+    <dimen name="imageview_myproject_item_height">40dp</dimen>
+    <dimen name="myproject_item_marginTop">10dp</dimen>
+    <dimen name="textview_myproject_textsize">12sp</dimen>
+    <dimen name="textview_myproject_time_textsize">9sp</dimen>
+    <dimen name="textview_myproject_state_heigth">50dp</dimen>
+    <dimen name="textview_myproject_state_width">25dp</dimen>
+    <dimen name="textview_myproject_width">190dp</dimen>
+
+
 
     <!--pop for personalData-->
     <dimen name="btn_PD_POP_margin">10dp</dimen>
     <dimen name="btn_PD_POP_margintop">4dp</dimen>
     <dimen name="btn_PD_POP_marginbottom">6dp</dimen>
     <dimen name="btn_PD_POP_textsize">16sp</dimen>
+
 </resources>

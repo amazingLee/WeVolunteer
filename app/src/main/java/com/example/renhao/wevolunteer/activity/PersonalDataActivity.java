@@ -21,13 +21,15 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.view.Attribute_Pop;
 import com.example.renhao.wevolunteer.view.Portrait_Pop;
 
 import java.io.File;
 
 public class PersonalDataActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Portrait_Pop portrait_pPwindow;
+    private Portrait_Pop portrait_PPwindow;
+    private Attribute_Pop attribute_PPwindow;
     public static Activity PDactivity;
 
 
@@ -40,9 +42,9 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
     private static final int CODE_CAMERA_REQUEST = 0xa1;
     private static final int CODE_RESULT_REQUEST = 0xa2;
 
-    // 裁剪后图片的宽(X)和高(Y),80 X 80的正方形。
-    private static int output_X = 80;
-    private static int output_Y = 80;
+    // 裁剪后图片的宽(X)和高(Y),100 X 100的正方形。
+    private static int output_X = 100;
+    private static int output_Y = 100;
 
 
     private final int BACK = -1;
@@ -71,6 +73,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
         PDactivity = PersonalDataActivity.this;//用于非本activity控制此activity
 
         SetOnclickListener();
+
 
     }
 
@@ -137,6 +140,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+
     @Override
     public void onClick(View v) {
         int tag = (int) v.getTag();
@@ -146,8 +150,8 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 this.finish();
                 break;
             case MY_PORTRAIT:
-                portrait_pPwindow = new Portrait_Pop(this, itemsOnClick);
-                portrait_pPwindow.showAtLocation(this.findViewById(R.id.SV_PD),
+                portrait_PPwindow = new Portrait_Pop(this, itemsOnClick);
+                portrait_PPwindow.showAtLocation(this.findViewById(R.id.SV_PD),
                         Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
                 break;
             case MY_NICKNAME:
@@ -169,8 +173,13 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
             case MY_IDNUMBER:
                 break;
             case MY_ATTRIBUTE:
+                attribute_PPwindow = new Attribute_Pop(this, itemsOnClick);
+                attribute_PPwindow.showAtLocation(this.findViewById(R.id.SV_PD),
+                        Gravity.CENTER, 0, 0); //设置layout在PopupWindow中显示的位置
                 break;
             case MY_POLITICSSTATUS:
+                intent.setClass(this, PoliticsstatusActivity.class);
+                startActivity(intent);
                 break;
             case MY_AREA:
                 intent.setClass(this, AreaSelectionActivity.class);
@@ -183,6 +192,8 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 startActivity(intent);
                 break;
             case MY_NOWCOMPANY:
+                intent.setClass(this, CompanyActivity.class);
+                startActivity(intent);
                 break;
             case MY_HOMEADDRESS:
                 intent.setClass(this, ResidenceActivity.class);
@@ -207,7 +218,12 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
 
         public void onClick(View v) {
             //点击以后销毁pop框，将背景恢复
-            portrait_pPwindow.dismiss();
+            try {
+                portrait_PPwindow.dismiss();
+            }catch (Exception e){
+                attribute_PPwindow.dismiss();
+            }
+
             backgroundAlpha(1);
             switch (v.getId()) {
                 case R.id.btn_take_photo:
@@ -216,7 +232,15 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                     break;
                 case R.id.btn_pick_photo:
                     chosePortraitFromGallery();
-
+                    break;
+                case R.id.btn_attribute_student:
+                    Toast.makeText(PersonalDataActivity.this, "在校学生", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btn_attribute_on_job:
+                    Toast.makeText(PersonalDataActivity.this, "在职员工", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btn_attribute_retire:
+                    Toast.makeText(PersonalDataActivity.this, "退休", Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
@@ -226,6 +250,9 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
         }
 
     };
+
+
+
 
     //从本地相册选择图片作为头像
     private void chosePortraitFromGallery() {

@@ -18,41 +18,36 @@ import android.widget.PopupWindow;
 
 import com.example.renhao.wevolunteer.R;
 
+import static com.example.renhao.wevolunteer.R.id.btn_attribute_on_job;
+import static com.example.renhao.wevolunteer.R.id.btn_attribute_student;
 import static com.example.renhao.wevolunteer.activity.PersonalDataActivity.PDactivity;
 
-public class Portrait_Pop extends PopupWindow {
-    private Button btn_take_photo, btn_pick_photo, btn_cancel;
+public class Attribute_Pop extends PopupWindow {
+    private Button btn_sutdent, btn_on_job, btn_retire;
     private View mMenuView;
 
 
-    public Portrait_Pop(Activity context, View.OnClickListener itemsOnClick) {
+    public Attribute_Pop(Activity context, View.OnClickListener itemsOnClick) {
         super(context);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.popupwindow_portrait, null);
-        btn_take_photo = (Button) mMenuView.findViewById(R.id.btn_take_photo);
-        btn_pick_photo = (Button) mMenuView.findViewById(R.id.btn_pick_photo);
-        btn_cancel = (Button) mMenuView.findViewById(R.id.btn_cancel);
+        mMenuView = inflater.inflate(R.layout.popupwindow_attribute, null);
+        btn_sutdent = (Button) mMenuView.findViewById(btn_attribute_student);
+        btn_on_job = (Button) mMenuView.findViewById(btn_attribute_on_job);
+        btn_retire = (Button) mMenuView.findViewById(R.id.btn_attribute_retire);
 
-        //取消按钮
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                //恢复底部activity的透明度
-                backgroundAlpha(1);
-            }
-        });
 
         //设置按钮监听
-        btn_pick_photo.setOnClickListener(itemsOnClick);
-        btn_take_photo.setOnClickListener(itemsOnClick);
+        btn_sutdent.setOnClickListener(itemsOnClick);
+        btn_on_job.setOnClickListener(itemsOnClick);
+        btn_retire.setOnClickListener(itemsOnClick);
+
         //设置SelectPicPopupWindow的View
         this.setContentView(mMenuView);
         //设置SelectPicPopupWindow弹出窗体的宽
-        this.setWidth(ViewGroup.LayoutParams.FILL_PARENT);
+        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         //设置SelectPicPopupWindow弹出窗体的高
-        this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         //设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(true);
         //设置SelectPicPopupWindow弹出窗体动画效果
@@ -67,11 +62,11 @@ public class Portrait_Pop extends PopupWindow {
 
             public boolean onTouch(View v, MotionEvent event) {
 
-                int height = mMenuView.findViewById(R.id.pop_layout).getTop();
+                int top = mMenuView.findViewById(R.id.attribute_pop_layout).getTop();
+                int height = mMenuView.findViewById(R.id.attribute_pop_layout).getHeight();
                 int y = (int) event.getY();
-                System.out.println(height+"|"+y);
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (y < height) {
+                    if (y < top || y > top + height) {
                         dismiss();//销毁弹出框
                         //恢复底部activity的透明度
                         backgroundAlpha(1);
@@ -82,7 +77,6 @@ public class Portrait_Pop extends PopupWindow {
         });
 
     }
-
 
 
     //背景透明度设置
