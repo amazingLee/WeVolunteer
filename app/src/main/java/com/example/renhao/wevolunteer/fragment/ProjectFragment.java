@@ -1,30 +1,31 @@
 package com.example.renhao.wevolunteer.fragment;
 
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
-import com.example.model.dictionary.DictionaryListDto;
-import com.example.model.dictionary.DictionaryQueryOptionDto;
-import com.example.model.dictionary.DictionaryTypeListDto;
-import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.activity.ActivityListDto;
+import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.items.HomePageListItem;
+import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.ListDropDownAdapter;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.orhanobut.logger.Logger;
 import com.yyydjk.library.DropDownMenu;
 
 import java.util.ArrayList;
@@ -41,10 +42,9 @@ import butterknife.ButterKnife;
  * 创建时间：2016/8/8 13:36
  * 修改备注：
  */
-public class ProjectFragment extends Fragment {
+public class ProjectFragment extends BaseFragment {
     private static final String TAG = "JobsFragment";
-    public static final int ACTIVITY = 0;
-    public static final int JOBS = 1;
+
 
     public int PROJECT_TYPE = ACTIVITY;
 
@@ -66,6 +66,17 @@ public class ProjectFragment extends Fragment {
     private String[] state = {"状态"};
     private String[] area = {"区域"};
     private String[] smart = {"智能筛选"};
+
+    private List<HomePageListItem> list = new ArrayList<>();
+    private List<ActivityListDto> dates = new ArrayList<>();
+    private int PageIndex;//(integer, optional): 当前页码
+    private int PageSize;//(integer, optional): 每页条数
+    private int TotalCount;// (integer, optional): 总共记录数
+    private int TotalPages;//(integer, optional): 总共分页数
+    private int StartPosition;// (integer, optional): 记录开始位置
+    private int EndPosition;//(integer, optional): 记录结束位置
+    private boolean HasPreviousPage;// (boolean, optional): 是否有上一页
+    private boolean HasNextPage;//(boolean, optional): 是否有下一页
 
     /**
      * 设置此fragment的类型
@@ -95,12 +106,65 @@ public class ProjectFragment extends Fragment {
 
         initDictionary();
 
+        initDate(REFRESH);
+
         return view;
+    }
+
+    private void initDate(final int type) {
+        ActivityQueryOptionDto dto = new ActivityQueryOptionDto();
+        dto.setType(PROJECT_TYPE);
+        if (type == ADD) {
+            dto.setPageIndex(PageIndex + 1);
+        }
+        AppActionImpl.getInstance(getActivity()).activityQuery(dto, new ActionCallbackListener<PagedListEntityDto<ActivityListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<ActivityListDto> data) {
+                contentView.onRefreshComplete();
+                if (type == REFRESH) {
+                    list = new ArrayList<HomePageListItem>();
+                    dates = new ArrayList<ActivityListDto>();
+                }
+                dates = data.getRows();
+                for (int i = 0; i < dates.size(); i++) {
+                    ActivityListDto listDto = dates.get(i);
+                    HomePageListItem item = new HomePageListItem();
+                    item.setType(listDto.getType());
+                    item.setState(listDto.getStatus());
+                    item.setTitle(listDto.getActivityName());
+                    item.setNum(listDto.getRecruited());
+                    item.setMaxNum(listDto.getRecruitNumber());
+                    item.setTime(listDto.getLengthTime());
+                    item.setImg("");
+                    list.add(item);
+                }
+                PageIndex = data.getPageIndex();
+                PageSize = data.getPageSize();
+                TotalCount = data.getTotalCount();
+                TotalPages = data.getTotalPages();
+                StartPosition = data.getStartPosition();
+                EndPosition = data.getEndPosition();
+                HasPreviousPage = data.getHasPreviousPage();
+                HasNextPage = data.getHasNextPage();
+
+                if (!HasNextPage) {
+                    showToast("到底了");
+                }
+
+                adapter.setDate(list);
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+                contentView.onRefreshComplete();
+            }
+        });
+
     }
 
     private void initDictionary() {
         //类型
-        DictionaryQueryOptionDto queryOptionDto = new DictionaryQueryOptionDto();
+      /*  DictionaryQueryOptionDto queryOptionDto = new DictionaryQueryOptionDto();
         //queryOptionDto.setCulture("语言");
         AppActionImpl.getInstance(getActivity()).dictionaryQuery(queryOptionDto,
                 new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
@@ -113,9 +177,9 @@ public class ProjectFragment extends Fragment {
                     public void onFailure(String errorEvent, String message) {
 
                     }
-                });
+                });*/
         //状态
-        DictionaryTypeQueryOptionDto typeQueryOptionDto = new DictionaryTypeQueryOptionDto();
+       /* DictionaryTypeQueryOptionDto typeQueryOptionDto = new DictionaryTypeQueryOptionDto();
         //typeQueryOptionDto.setCode("ActivityType");
         AppActionImpl.getInstance(getActivity()).dictionaryTypeQuery(typeQueryOptionDto,
                 new ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>>() {
@@ -128,7 +192,7 @@ public class ProjectFragment extends Fragment {
                     public void onFailure(String errorEvent, String message) {
 
                     }
-                });
+                });*/
         //区域
         //智能筛选
     }
@@ -139,11 +203,18 @@ public class ProjectFragment extends Fragment {
         mPtr.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-
+                initDate(REFRESH);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (HasNextPage) {
+                    initDate(ADD);
+                } else {
+                    showToast("已经是最后一页");
+                    new FinishRefresh().execute();
+
+                }
 
             }
         });
@@ -159,31 +230,27 @@ public class ProjectFragment extends Fragment {
         endLayout.setRefreshingLabel("正在玩命加载....");
         endLayout.setReleaseLabel("放开刷新");
 
-        List<HomePageListItem> list = new ArrayList<>();
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2098084338,2714656019&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img2.imgtn.bdimg.com/it/u=3602495621,3151039405&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img2.imgtn.bdimg.com/it/u=2469638367,241984841&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2132856998,369268727&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img0.imgtn.bdimg.com/it/u=2838777204,1513243120&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2666315763,3359766164&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=37827399,354780988&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=1130424812,3907942231&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=2152352573,3450421690&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(PROJECT_TYPE, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=3896921233,133782688&fm=21&gp=0.jpg"));
         adapter = new HomePageAdapter(getActivity(), list);
         mPtr.setAdapter(adapter);
+
+        mPtr.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
+                intent.putExtra("id", dates.get(position - 1).getId());
+                intent.putExtra("type", dates.get(position - 1).getType());
+                startActivity(intent);
+            }
+        });
     }
 
+    private void showToast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 初始化下拉菜单
+     */
     private void initDropDownMenu() {
         //类型
         final ListView typeView = (ListView) LayoutInflater.from(getActivity()).inflate(R.layout.view_listview, null);
@@ -250,5 +317,24 @@ public class ProjectFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+
+    //测试用方法
+    private class FinishRefresh extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+//          adapter.notifyDataSetChanged();
+            contentView.onRefreshComplete();
+        }
     }
 }

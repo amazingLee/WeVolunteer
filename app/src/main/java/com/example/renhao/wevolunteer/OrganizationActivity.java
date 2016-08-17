@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +13,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.core.AppActionImpl;
+import com.example.model.ActionCallbackListener;
+import com.example.model.PagedListEntityDto;
+import com.example.model.company.CompanyListDto;
+import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.items.OrganizationListItem;
 import com.example.renhao.wevolunteer.adapter.ListDropDownAdapter;
 import com.example.renhao.wevolunteer.adapter.OrganizationAdapter;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -39,7 +44,7 @@ import butterknife.OnClick;
  * 创建时间：2016/8/9 11:29
  * 修改备注：
  */
-public class OrganizationActivity extends AppCompatActivity {
+public class OrganizationActivity extends BaseActivity {
     private static final String TAG = "Organization";
     @Bind(R.id.changrTv_view_homepage)
     ChangeColorIconWithTextView mHomepage;
@@ -68,6 +73,17 @@ public class OrganizationActivity extends AppCompatActivity {
     private String[] type = {"类型", "类型1", "类型2", "类型3"};
     private String[] area = {"区域", "全市", "海曙区", "江东区"};
 
+    private ArrayList<OrganizationListItem> list = new ArrayList<>();
+    private List<CompanyListDto> dates = new ArrayList<>();
+    private Integer PageIndex;//(integer, optional): 当前页码
+    private Integer PageSize;//(integer, optional): 每页条数
+    private Integer TotalCount;// (integer, optional): 总共记录数
+    private Integer TotalPages;//(integer, optional): 总共分页数
+    private Integer StartPosition;// (integer, optional): 记录开始位置
+    private Integer EndPosition;//(integer, optional): 记录结束位置
+    private Boolean HasPreviousPage;// (boolean, optional): 是否有上一页
+    private Boolean HasNextPage;//(boolean, optional): 是否有下一页
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +105,8 @@ public class OrganizationActivity extends AppCompatActivity {
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, contentView);
 
         mHomepage.setIconColor(getResources().getColor(R.color.colorCyan));
+
+        initDate(REFRESH);
     }
 
     @Override
@@ -97,6 +115,9 @@ public class OrganizationActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /**
+     * 初始化actionBar
+     */
     private void initActionBar() {
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -127,16 +148,62 @@ public class OrganizationActivity extends AppCompatActivity {
         });
     }
 
+    private void initDate(final int type) {
+        CompanyQueryOptionDto companyQueryOptionDto = new CompanyQueryOptionDto();
+        if (type == ADD) {
+            companyQueryOptionDto.setPageIndex(PageIndex + 1);
+        }
+        AppActionImpl.getInstance(this).companyQuery(companyQueryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<CompanyListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<CompanyListDto> data) {
+                        contentView.onRefreshComplete();
+                        if (type == REFRESH) {
+                            list = new ArrayList<OrganizationListItem>();
+                            dates = new ArrayList<CompanyListDto>();
+                        }
+                        dates = data.getRows();
+                        for (int i = 0; i < dates.size(); i++) {
+                            OrganizationListItem item = new OrganizationListItem();
+                            item.setName(dates.get(i).getCompanyName());
+                            item.setAddress(dates.get(i).getAddr());
+                            item.setIconUrl(dates.get(i).getListurl());
+                            list.add(item);
+                        }
+                        PageIndex = data.getPageIndex();
+                        PageSize = data.getPageSize();
+                        TotalCount = data.getTotalCount();
+                        TotalPages = data.getTotalPages();
+                        StartPosition = data.getStartPosition();
+                        EndPosition = data.getEndPosition();
+                        HasPreviousPage = data.getHasPreviousPage();
+                        HasNextPage = data.getHasNextPage();
+                        adapter.setDate(list);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        new FinishRefresh().execute();
+                    }
+                });
+    }
+
     private void initPtrListView(final PullToRefreshListView mPtr) {
         mPtr.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new FinishRefresh().execute();
+                initDate(REFRESH);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new FinishRefresh().execute();
+                if (HasNextPage) {
+                    initDate(ADD);
+                } else {
+                    showToast("到底了");
+                    new FinishRefresh().execute();
+                }
+
             }
         });
         mPtr.setMode(PullToRefreshBase.Mode.BOTH);//设置头部下拉刷新
@@ -151,43 +218,13 @@ public class OrganizationActivity extends AppCompatActivity {
         endLayout.setRefreshingLabel("正在玩命加载....");
         endLayout.setReleaseLabel("放开刷新");
 
-        ArrayList<OrganizationListItem> list = new ArrayList<>();
-        list.add(new OrganizationListItem(
-                "http://img1.imgtn.bdimg.com/it/u=2098084338,2714656019&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img2.imgtn.bdimg.com/it/u=3602495621,3151039405&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img2.imgtn.bdimg.com/it/u=2469638367,241984841&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img1.imgtn.bdimg.com/it/u=2132856998,369268727&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img0.imgtn.bdimg.com/it/u=2838777204,1513243120&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img1.imgtn.bdimg.com/it/u=2666315763,3359766164&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img1.imgtn.bdimg.com/it/u=37827399,354780988&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img5.imgtn.bdimg.com/it/u=1130424812,3907942231&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img5.imgtn.bdimg.com/it/u=2152352573,3450421690&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
-        list.add(new OrganizationListItem(
-                "http://img5.imgtn.bdimg.com/it/u=3896921233,133782688&fm=21&gp=0.jpg"
-                , "共青团宁波市江北区委员会", "地点：宁波市象山县观海南路28号"));
         adapter = new OrganizationAdapter(this, list);
         mPtr.setAdapter(adapter);
         mPtr.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(OrganizationActivity.this, OrganizationDetailActivity.class);
+                intent.putExtra("id", dates.get(position - 1).getId());
                 startActivity(intent);
             }
         });
@@ -257,7 +294,7 @@ public class OrganizationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
             }
             return null;
@@ -265,7 +302,6 @@ public class OrganizationActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-//          adapter.notifyDataSetChanged();
             contentView.onRefreshComplete();
         }
     }

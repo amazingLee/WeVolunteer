@@ -1,4 +1,4 @@
-package com.example.model.Company;
+package com.example.model.company;
 /*
  *
  * Created by Ge on 2016/8/5.

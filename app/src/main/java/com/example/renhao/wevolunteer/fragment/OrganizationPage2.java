@@ -6,11 +6,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.model.activity.ActivityViewDto;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
+import com.example.renhao.wevolunteer.event.OrganizationDetailEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,47 +37,56 @@ public class OrganizationPage2 extends Fragment {
     ListView mListvew;
 
     private HomePageAdapter adapter;
+    private List<HomePageListItem> list = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_organization_page2, container, false);
         ButterKnife.bind(this, v);
-
+        EventBus.getDefault().register(this);
         initListView();
         return v;
     }
 
-    private void initListView() {
-        List<HomePageListItem> list = new ArrayList<>();
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2098084338,2714656019&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img2.imgtn.bdimg.com/it/u=3602495621,3151039405&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img2.imgtn.bdimg.com/it/u=2469638367,241984841&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2132856998,369268727&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img0.imgtn.bdimg.com/it/u=2838777204,1513243120&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=2666315763,3359766164&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img1.imgtn.bdimg.com/it/u=37827399,354780988&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=1130424812,3907942231&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=2152352573,3450421690&fm=21&gp=0.jpg"));
-        list.add(new HomePageListItem(0, 0, "托起心中的太阳 慈溪市自信心困境教育帮助", 10, 100, "11",
-                "http://img5.imgtn.bdimg.com/it/u=3896921233,133782688&fm=21&gp=0.jpg"));
+    @Subscribe
+    public void onEventMainThread(OrganizationDetailEvent event) {
+        List<ActivityViewDto> dates = event.getCompanyViewDto().getActivitys();
+        if (dates == null)
+            return;
+        list = new ArrayList<>();
+        for (int i = 0; i < dates.size(); i++) {
+            HomePageListItem item = new HomePageListItem();
+            item.setType(dates.get(i).getType());
+            item.setState(dates.get(i).getStatus());
+            item.setTitle(dates.get(i).getActivityName());
+            item.setNum(dates.get(i).getRecruited());
+            item.setMaxNum(dates.get(i).getRecruitNumber());
+            item.setTime(dates.get(i).getLengthTime());
+            item.setImg(dates.get(i).getAppImgUrl());
+            list.add(item);
+        }
 
+        adapter.setDate(list);
+
+    }
+
+    private void initListView() {
         adapter = new HomePageAdapter(getActivity(), list);
         mListvew.setAdapter(adapter);
+
+        mListvew.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 }

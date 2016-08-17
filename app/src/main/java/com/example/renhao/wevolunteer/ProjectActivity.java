@@ -15,6 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.core.AppActionImpl;
+import com.example.model.ActionCallbackListener;
+import com.example.model.PagedListEntityDto;
+import com.example.model.dictionary.DictionaryListDto;
+import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.renhao.wevolunteer.adapter.FragmentSwitchAdapter;
 import com.example.renhao.wevolunteer.fragment.ProjectFragment;
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
@@ -81,6 +86,8 @@ public class ProjectActivity extends AppCompatActivity implements RadioGroup.OnC
 
         initActionbar();
 
+        initDictionary();
+
         page = getIntent().getIntExtra("page", ACTIVITY);
         if (page == JOBS) {
             switchPage.setCurrentItem(page);
@@ -90,6 +97,22 @@ public class ProjectActivity extends AppCompatActivity implements RadioGroup.OnC
         }
 
         mHomepage.setIconColor(getResources().getColor(R.color.colorCyan));
+    }
+
+    private void initDictionary() {
+        DictionaryQueryOptionDto dto=new DictionaryQueryOptionDto();
+        dto.setDictionaryTypeId("ActivityType");
+        AppActionImpl.getInstance(this).dictionaryQuery(dto, new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<DictionaryListDto> data) {
+
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+
+            }
+        });
     }
 
     private void initActionbar() {

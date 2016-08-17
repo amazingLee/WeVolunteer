@@ -321,7 +321,7 @@
             android:paddingRight="@dimen/project_detail_marginLR"
             android:paddingStart="@dimen/project_detail_marginLR"
             android:paddingTop="@dimen/project_detail_marginTB"
-            android:text="岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n"
+            android:text="岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n"
             android:textSize="16sp"/>
 
         <View

@@ -12,8 +12,8 @@ import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
-import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.company.CompanyListDto;
+import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -285,7 +285,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 });*/
                 break;
             case 11:
-                mAction.companyGet("cf17245e-e6a5-4f97-9d33-c55ce89ba9e3", new ActionCallbackListener<CompanyListDto>() {
+               /* mAction.companyGet("cf17245e-e6a5-4f97-9d33-c55ce89ba9e3", new ActionCallbackListener<CompanyListDto>() {
                     @Override
                     public void onSuccess(CompanyListDto data) {
                         showToast("success");
@@ -295,7 +295,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                     public void onFailure(String errorEvent, String message) {
                         showToast("fail");
                     }
-                });
+                });*/
                 break;
             case 12:
                 CompanyListDto cp_create = new CompanyListDto();

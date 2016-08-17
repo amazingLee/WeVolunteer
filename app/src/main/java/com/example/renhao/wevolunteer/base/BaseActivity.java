@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
@@ -20,6 +21,10 @@ import com.orhanobut.logger.Logger;
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
 
+    public static final int REFRESH = 0;
+    public static final int ADD = 1;
+
+
     private ProgressDialog normalDialog;
 
     @Override
@@ -31,6 +36,10 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    protected void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     /**

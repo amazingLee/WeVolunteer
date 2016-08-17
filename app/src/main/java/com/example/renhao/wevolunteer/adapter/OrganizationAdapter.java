@@ -1,6 +1,7 @@
 package com.example.renhao.wevolunteer.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.example.renhao.wevolunteer.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +35,11 @@ public class OrganizationAdapter extends BaseAdapter {
     public OrganizationAdapter(Context mContext, ArrayList<OrganizationListItem> mDate) {
         this.mContext = mContext;
         this.mDate = mDate;
+    }
+
+    public void setDate(List<OrganizationListItem> dates) {
+        mDate = (ArrayList<OrganizationListItem>) dates;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -63,8 +70,16 @@ public class OrganizationAdapter extends BaseAdapter {
 
         OrganizationListItem item = mDate.get(position);
 
-        Picasso.with(mContext).load(item.getIconUrl())
-                .into(viewHolder.mIcon);//加载图片
+        if (!TextUtils.isEmpty(item.getIconUrl())) {
+            Picasso.with(mContext).load(item.getIconUrl())
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(viewHolder.mIcon);//加载图片
+        } else {
+            Picasso.with(mContext).load(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(viewHolder.mIcon);//加载图片
+        }
 
         viewHolder.mName.setText(item.getName());
         viewHolder.mAddress.setText(item.getAddress());

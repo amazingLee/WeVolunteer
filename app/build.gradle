@@ -47,4 +47,5 @@ dependencies {
     compile project(':dropdownmenu')
     compile project(':dialogplus')
     compile project(':calendar')
+    compile project(':qrcodescan')
 }

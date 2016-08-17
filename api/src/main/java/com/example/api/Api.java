@@ -1,17 +1,20 @@
 package com.example.api;
 
 import com.example.model.AccessTokenBO;
-import com.example.model.Company.CompanyQueryOptionDto;
-import com.example.model.Company.CompanyListDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.company.CompanyListDto;
+import com.example.model.company.CompanyQueryOptionDto;
+import com.example.model.company.CompanyViewDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.organization.OrganizationListDto;
+import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -49,11 +52,15 @@ public interface Api {
     public static final String COMPANY_CREAT = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/create";
     public static final String COMPANY_UPDATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/update";
     public static final String COMPANY_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/query";
-    public static final String COMPANY_GET = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
+    public static final String COMPANY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
 
     //字典
     public static final String DICTIONARY_QUERY = "Nbcei.Framework.Api.Impl/v1/dictionary/query ";
     public static final String DICTIONARYTYPE_QUERY = "Nbcei.Framework.Api.Impl/v1/dictionarytype/query";
+
+    //组织
+    public static final String ORGANIZATION_QUERY = "Nbcei.Framework.Api.Impl/v1/organization/query";
+    public static final String ORGANIZATION_DETAIL="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
 
     /**
      * 获取accessToken
@@ -99,7 +106,7 @@ public interface Api {
 
     public ApiResponse<PagedListEntityDto<CompanyListDto>> companyQuery(CompanyQueryOptionDto query, String accessToken);
 
-    public ApiResponse<CompanyListDto> companyGet(String id, String acessToken);
+    public ApiResponse<CompanyViewDto> companyDetail(String id, String acessToken);
 
     public ApiResponse<List<String>> companyCreat(List<CompanyListDto> creates, String accessToken);
 
@@ -113,5 +120,21 @@ public interface Api {
     public ApiResponse<PagedListEntityDto<DictionaryListDto>> dictionaryQuery(DictionaryQueryOptionDto query, String accessToken);
 
     public ApiResponse<PagedListEntityDto<DictionaryTypeListDto>> dictionaryTypeQuery(DictionaryTypeQueryOptionDto query, String accessToken);
+
+    /**
+     * 组织查询
+     * @param query
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<PagedListEntityDto<OrganizationListDto>> organizationQuery(OrganizationQueryOptionDto query,String accessToken);
+
+ /*   *//**
+     * 查询组织详细信息
+     * @param id
+     * @param accessToken
+     * @return
+     *//*
+    public ApiResponse<CompanyViewDto> organizationDetail(String id,String accessToken);*/
 
 }

@@ -639,7 +639,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:layout_weight="1"
                     android:src="@drawable/activity"/>
 
@@ -649,7 +649,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:src="@drawable/activity"/>
 
                 <ImageView
@@ -657,7 +657,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:layout_weight="1"
                     android:src="@drawable/activity"/>
 
@@ -667,7 +667,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:src="@drawable/activity"/>
 
                 <ImageView
@@ -675,7 +675,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:layout_weight="1"
                     android:src="@drawable/activity"/>
             </LinearLayout>

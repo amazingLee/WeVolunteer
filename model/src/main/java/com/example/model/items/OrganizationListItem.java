@@ -14,6 +14,9 @@ public class OrganizationListItem {
    private  String name;
    private  String address;
 
+    public OrganizationListItem() {
+    }
+
     public OrganizationListItem(String iconUrl, String name, String address) {
         this.iconUrl = iconUrl;
         this.name = name;

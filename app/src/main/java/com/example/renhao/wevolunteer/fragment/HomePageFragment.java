@@ -64,7 +64,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private List<HomePageListItem> list = null;
     private List<ActivityListDto> dates = new ArrayList<>();
 
-    private int loadFinish=0;
+    private int loadFinish = 0;
 
     @Nullable
     @Override
@@ -113,7 +113,8 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Logger.v(TAG, "position " + position);
                 Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
-                intent.putExtra("date", dates.get(position - 3));
+                intent.putExtra("id", dates.get(position - 3).getId());
+                intent.putExtra("type",dates.get(position - 3).getType());
                 startActivity(intent);
             }
         });
@@ -141,8 +142,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                     item.setImg("");
                     list.add(item);
                 }
-                adapter = new HomePageAdapter(getActivity(), list);
-                mPtrListviewHomapageList.setAdapter(adapter);
+                adapter.setDate(list);
 
                 mPtrListviewHomapageList.onRefreshComplete();
             }

@@ -2,17 +2,20 @@ package com.example.api;
 
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
-import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.CompanyQueryOptionDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.company.CompanyListDto;
+import com.example.model.company.CompanyQueryOptionDto;
+import com.example.model.company.CompanyViewDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.organization.OrganizationListDto;
+import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -217,13 +220,13 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<CompanyListDto> companyGet(String id, String accessToken) {
+    public ApiResponse<CompanyViewDto> companyDetail(String id, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(id);
-        Type typeOft = new TypeToken<ApiResponse<CompanyListDto>>() {
+        Type typeOft = new TypeToken<ApiResponse<CompanyViewDto>>() {
         }.getType();
         try {
-            return httpEngine.getApiHandler(params, COMPANY_GET, typeOft, accessToken);
+            return httpEngine.getApiHandler(params, COMPANY_DETAIL, typeOft, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -280,6 +283,20 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, DICTIONARYTYPE_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<OrganizationListDto>> organizationQuery(OrganizationQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<OrganizationListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ORGANIZATION_QUERY, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

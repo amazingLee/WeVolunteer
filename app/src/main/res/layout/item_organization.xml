@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/imageview_organizationitem_icon"
         android:layout_width="@dimen/imageview_organizationitem_width"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/relative_organizationitem_height"
         android:layout_centerVertical="true"
         android:layout_marginBottom="@dimen/imageview_organizationitem_marginTB"
         android:layout_marginEnd="@dimen/imageview_organizationitem_marginLR"

@@ -3,7 +3,6 @@ package com.example.renhao.wevolunteer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -18,9 +17,9 @@ import android.widget.TextView;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
-import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityTimeSimpleDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -35,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,7 +48,7 @@ import butterknife.OnClick;
  * 创建时间：2016/8/9 16:09
  * 修改备注：
  */
-public class ProjectDetailActivity extends AppCompatActivity {
+public class ProjectDetailActivity extends BaseActivity {
     private static final String TAG = "ProjectDetailActivity";
     @Bind(R.id.btn_projectdetail_share)
     Button mBtnShare;
@@ -147,11 +148,13 @@ public class ProjectDetailActivity extends AppCompatActivity {
     RelativeLayout mParent;
 
     private View mCustomView;//actionbar的自定义视图
-    ImageView indicatorImg;
-    TextView titleTv;
-    ImageView magnifierImg;
+    private ImageView indicatorImg;
+    private TextView titleTv;
+    private ImageView magnifierImg;
 
-    private ActivityListDto mDate;
+    private ActivityViewDto mDate;
+    private String id;
+    private int type;
     private Map<String, String> notes = new HashMap<>();
     private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
@@ -161,19 +164,32 @@ public class ProjectDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_projectdetail);
         ButterKnife.bind(this);
 
-        mDate = (ActivityListDto) getIntent().getSerializableExtra("date");//获取活动或岗位的数据
+        type = getIntent().getIntExtra("type", 0);
 
         initActionBar();
 
-        initView();
-
-        getDetail();
+        mDate = (ActivityViewDto) getIntent().getSerializableExtra("date");//获取活动或岗位的数据
+        id = getIntent().getStringExtra("id");
+        if (mDate == null && !TextUtils.isEmpty(id)) {
+            getDetail();
+        } else if (mDate != null) {
+            initView();
+        }
     }
 
+
     public void getDetail() {
-        AppActionImpl.getInstance(this).activityDetail(mDate.getId(), new ActionCallbackListener<ActivityViewDto>() {
+
+        showNormalDialog("正在加载数据...");
+
+        AppActionImpl.getInstance(this).activityDetail(id, new ActionCallbackListener<ActivityViewDto>() {
             @Override
             public void onSuccess(ActivityViewDto data) {
+                mDate = data;
+                initView();
+
+                dissMissNormalDialog();
+
                 String imagUrl = "";
                 if (data.getAppImgUrl() != null) {
                     imagUrl = data.getAppImgUrl();
@@ -189,8 +205,15 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 //岗位类型 可能有多个
                 String[] activityTypeName = data.getActivityTypeName().split(",");
                 String typeName = "";
-                for (int i = activityTypeName.length / 2; i < activityTypeName.length; i++) {
-                    typeName += activityTypeName[i]+"  ";
+
+                Pattern pattern;
+                Matcher matcher;
+                pattern = Pattern.compile("^[\\u4E00-\\u9FA5]+$");
+                for (int i = 0; i < activityTypeName.length; i++) {
+                    matcher = pattern.matcher(activityTypeName[i]);
+                    if (matcher.matches()) {
+                        typeName += activityTypeName[i] + "   ";
+                    }
                 }
                 mTvType.setText(typeName);//
 
@@ -220,7 +243,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorEvent, String message) {
-
+                dissMissNormalDialog();
             }
         });
     }
@@ -264,9 +287,9 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
         mTvMaxNum.setText("/" + mDate.getRecruitNumber());
 
-        if (mDate.getStatus() == 1) {
+        if (mDate.getStatus() == 0) {
             mTvState.setText("招募中");
-        } else if (mDate.getStatus() == 0) {
+        } else if (mDate.getStatus() == 1) {
             mTvState.setText("已结束");
         }
 
@@ -303,8 +326,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
             mTvSkill.setText("");
         }
 
-        for (int i = mDate.getRecruited() > 5 ? 5 : mDate.getRecruited(); i > 0; i--) {
-            ImageView view = (ImageView) mParent.getChildAt(i - 1);
+        for (int i = (mDate.getRecruited() > 5 ? 5 : mDate.getRecruited()) - 1; i >= 0; i--) {
+            ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
             view.setVisibility(View.VISIBLE);
             //设置图片
             view.setImageResource(R.mipmap.ic_launcher);
@@ -325,9 +348,9 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
         ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0, 0);
         titleTv = (TextView) mCustomView.findViewById(R.id.tv_normal_projectswitch);
-        if (mDate.getType() == 0) {
+        if (type == 0) {
             titleTv.setText("活动");
-        } else if (mDate.getType() == 1) {
+        } else if (type == 1) {
             titleTv.setText("岗位");
         }
 
@@ -360,8 +383,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 dialogShare.show();
                 break;
             case R.id.btn_projectdetail_apply:
+                showNormalDialog("请稍后...");
                 Holder holder = new ViewHolder(R.layout.dialog_caldroid);
-
                 DialogPlus dialogPlus = DialogPlus.newDialog(this)
                         .setContentHolder(holder)
                         .setCancelable(true)
@@ -370,6 +393,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 MaterialCalendarView calendarView = (MaterialCalendarView) dialogPlus.getHolderView().findViewById(R.id.calendarView);
                 calendarView.setNotes(notes);
                 dialogPlus.show();
+                dissMissNormalDialog();
                 break;
             case R.id.btn_projectdetail_focuson:
                 break;

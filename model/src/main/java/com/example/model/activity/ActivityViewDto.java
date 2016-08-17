@@ -3,6 +3,7 @@ package com.example.model.activity;
 import com.example.model.user.CreateOperationDto;
 import com.example.model.user.ModifyOperationDto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  * 创建时间：2016/8/16 15:01
  * 修改备注：
  */
-public class ActivityViewDto {
+public class ActivityViewDto implements Serializable{
     private CreateOperationDto CreateOperation;//(CreateOperationDto, optional): 登记信息
     private String ActivityCode;//(string, optional): 获取或设置 活动编码
     private ModifyOperationDto ModifyOperation;//(ModifyOperationDto, optional): 更新信息

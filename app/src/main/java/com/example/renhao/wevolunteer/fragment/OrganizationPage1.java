@@ -6,8 +6,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.example.model.company.CompanyViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.event.OrganizationDetailEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 项目名称：WeVolunteer
@@ -18,11 +28,63 @@ import com.example.renhao.wevolunteer.R;
  */
 public class OrganizationPage1 extends Fragment {
     private static final String TAG = "OrganizationPage1";
+    @Bind(R.id.tv_organization_addressName)
+    TextView mTvAddressName;
+    @Bind(R.id.tv_organization_address)
+    TextView mTvAddress;
+    @Bind(R.id.tv_organization_chargeName)
+    TextView mTvChargeName;
+    @Bind(R.id.tv_organization_charge)
+    TextView mTvCharge;
+    @Bind(R.id.tv_organization_phoneName)
+    TextView mTvPhoneName;
+    @Bind(R.id.tv_organization_phone)
+    TextView mTvPhone;
+    @Bind(R.id.tv_organization_honourName)
+    TextView mTvHonourName;
+    @Bind(R.id.tv_organization_honour)
+    TextView mTvHonour;
+    @Bind(R.id.tv_organization_createName)
+    TextView mTvCreateName;
+    @Bind(R.id.tv_organization_create)
+    TextView mTvCreate;
+    @Bind(R.id.tv_organization_serverName)
+    TextView mTvServerName;
+    @Bind(R.id.tv_organization_server)
+    TextView mTvServer;
+    @Bind(R.id.tv_organization_detailName)
+    TextView mTvDetailName;
+    @Bind(R.id.relative_organization_detailName)
+    RelativeLayout mRelativeDetailName;
+    @Bind(R.id.tv_organization_detail)
+    TextView mTvDetail;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.fragment_organization_page1,container,false);
+        View v = inflater.inflate(R.layout.fragment_organization_page1, container, false);
+        ButterKnife.bind(this, v);
+        EventBus.getDefault().register(this);
         return v;
+    }
+
+    @Subscribe
+    public void onEventMainThread(OrganizationDetailEvent event) {
+        CompanyViewDto dto = event.getCompanyViewDto();
+        mTvAddress.setText(dto.getAddr());
+        mTvCharge.setText(dto.getPerson());
+        mTvPhone.setText(dto.getTel() + "\n" + dto.getMobile());
+        //组织荣耀
+
+        mTvCreate.setText(dto.getCreateTime());
+        mTvServer.setText(dto.getServiceType());
+        mTvDetail.setText(dto.getDescription());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 }

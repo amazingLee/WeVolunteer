@@ -3,9 +3,12 @@ package com.example.renhao.wevolunteer;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.MrL.qrcodescan.MipcaActivityCapture;
 import com.example.core.local.LocalDate;
 import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
@@ -134,13 +138,14 @@ public class IndexActivity extends BaseActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.v(TAG, "scan");
+                Intent intent = new Intent(IndexActivity.this, MipcaActivityCapture.class);
+                startActivityForResult(intent, 0);
             }
         });
         magnifier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.v(TAG, "magnifier");
+
             }
         });
     }
@@ -263,5 +268,27 @@ public class IndexActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String qrcodeMsg = data.getExtras().getString("result");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(qrcodeMsg);
+        builder.setTitle("二维码内容");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.create().show();
     }
 }

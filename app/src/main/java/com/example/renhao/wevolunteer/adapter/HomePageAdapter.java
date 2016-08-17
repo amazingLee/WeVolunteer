@@ -34,6 +34,11 @@ public class HomePageAdapter extends BaseAdapter {
         this.layoutInflater = LayoutInflater.from(context);
     }
 
+    public void setDate(List<HomePageListItem> dates) {
+        mDate = dates;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return mDate.size();

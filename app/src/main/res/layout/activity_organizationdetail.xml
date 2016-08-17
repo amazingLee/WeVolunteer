@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/imageview_organization_icon"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_margin="8dp"/>
 
     <com.example.renhao.wevolunteer.view.SlidingTabLayout

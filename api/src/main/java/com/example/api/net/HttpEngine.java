@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -45,11 +44,12 @@ public class HttpEngine {
     private OkHttpClient client = null;
 
     private HttpEngine() {
-        client = new OkHttpClient.Builder()
-/*                .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
-                .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)//设置写的超时时间*/
-                .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)//设置连接超时时间
-                .build();
+/*        client = new OkHttpClient.Builder()
+*//*                .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)//设置写的超时时间*//*
+                //.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)//设置连接超时时间
+                .build();*/
+        client=new OkHttpClient();
     }
 
     public static HttpEngine getInstance() {
@@ -75,6 +75,7 @@ public class HttpEngine {
      */
     public AccessTokenBO getAccessToken(String username, String password) throws IOException {
         Logger.v(TAG, "get token  \n" + username + "\n" + password);
+        client=new OkHttpClient();
        /* if (client == null) {
             client = new OkHttpClient.Builder()
                     .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
@@ -133,6 +134,7 @@ public class HttpEngine {
      */
     public AccessTokenBO getAccessToken(String refreshToken) throws IOException {
         Logger.v(TAG, "refresh token  \n" + refreshToken);
+        client=new OkHttpClient();
        /* if (client == null) {
             client = new OkHttpClient.Builder()
                     .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
@@ -190,6 +192,7 @@ public class HttpEngine {
                                 Type typeOfT, String accessToken) throws IOException {
         Logger.json(TAG, params);
         Logger.v(TAG, "serverAction  \n" + serverAction + "\n");
+        client=new OkHttpClient();
        /* if (client == null) {
             client = new OkHttpClient.Builder()
                     .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
@@ -238,7 +241,8 @@ public class HttpEngine {
      * @throws IOException
      */
     public <T> T getApiHandler(Map<String, String> params, String serverAction, Type typeOfT, String accessToken) throws IOException {
-       /* if (client == null) {
+        client=new OkHttpClient();
+        /* if (client == null) {
             client = new OkHttpClient.Builder()
                     .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
                     .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)//设置写的超时时间
@@ -291,6 +295,7 @@ public class HttpEngine {
      * @throws IOException
      */
     public <T> T getApiHandler(List<String> params, String serverAction, Type typeOfT, String accessToken) throws IOException {
+        client=new OkHttpClient();
        /* if (client == null) {
             client = new OkHttpClient.Builder()
                     .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间

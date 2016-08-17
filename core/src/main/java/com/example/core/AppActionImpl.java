@@ -11,17 +11,20 @@ import com.example.core.listener.AccessTokenListener;
 import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
-import com.example.model.Company.CompanyListDto;
-import com.example.model.Company.CompanyQueryOptionDto;
+import com.example.model.company.CompanyListDto;
+import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.company.CompanyViewDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.organization.OrganizationListDto;
+import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
@@ -352,16 +355,16 @@ public class AppActionImpl implements AppAction {
     }
 
     @Override
-    public void companyGet(final String id, final ActionCallbackListener<CompanyListDto> listener) {
+    public void companyDetail(final String id, final ActionCallbackListener<CompanyViewDto> listener) {
         final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
-        new AsyncTask<Void, Void, ApiResponse<CompanyListDto>>() {
+        new AsyncTask<Void, Void, ApiResponse<CompanyViewDto>>() {
             @Override
-            protected ApiResponse<CompanyListDto> doInBackground(Void... params) {
-                return api.companyGet(id, accessToken);
+            protected ApiResponse<CompanyViewDto> doInBackground(Void... params) {
+                return api.companyDetail(id, accessToken);
             }
 
             @Override
-            protected void onPostExecute(ApiResponse<CompanyListDto> result) {
+            protected void onPostExecute(ApiResponse<CompanyViewDto> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;
@@ -464,6 +467,32 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<PagedListEntityDto<DictionaryTypeListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void organizationQuery(final OrganizationQueryOptionDto query, final ActionCallbackListener<PagedListEntityDto<OrganizationListDto>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+
+        new AsyncTask<Void, Void, ApiResponse<PagedListEntityDto<OrganizationListDto>>>() {
+            @Override
+            protected ApiResponse<PagedListEntityDto<OrganizationListDto>> doInBackground(Void... params) {
+                return api.organizationQuery(query, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<PagedListEntityDto<OrganizationListDto>> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;
