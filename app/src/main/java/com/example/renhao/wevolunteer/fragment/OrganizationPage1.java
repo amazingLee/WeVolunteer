@@ -3,13 +3,17 @@ package com.example.renhao.wevolunteer.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.core.AppActionImpl;
+import com.example.model.ActionCallbackListener;
 import com.example.model.company.CompanyViewDto;
+import com.example.model.dictionary.DictionaryViewDto;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.event.OrganizationDetailEvent;
 
@@ -71,13 +75,30 @@ public class OrganizationPage1 extends Fragment {
     @Subscribe
     public void onEventMainThread(OrganizationDetailEvent event) {
         CompanyViewDto dto = event.getCompanyViewDto();
-        mTvAddress.setText(dto.getAddr());
-        mTvCharge.setText(dto.getPerson());
-        mTvPhone.setText(dto.getTel() + "\n" + dto.getMobile());
-        //组织荣耀
+        mTvAddress.setText(TextUtils.isEmpty(dto.getAddr()) ? "" : dto.getAddr());
+        mTvCharge.setText(TextUtils.isEmpty(dto.getPerson()) ? "" : dto.getPerson());
+        String phone = (TextUtils.isEmpty(dto.getTel()) ? "" : (dto.getTel() + "\n"))
+                + (TextUtils.isEmpty(dto.getMobile()) ? "" : dto.getMobile());
+        mTvPhone.setText(phone);
+        //组织荣耀?????????????????????
 
         mTvCreate.setText(dto.getCreateTime());
-        mTvServer.setText(dto.getServiceType());
+
+        AppActionImpl.getInstance(getActivity()).dictionaryQueryDetailDefault("ActivityType",
+                dto.getServiceType(),
+                new ActionCallbackListener<DictionaryViewDto>() {
+                    @Override
+                    public void onSuccess(DictionaryViewDto data) {
+                        mTvServer.setText(data.getName());
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+
+
         mTvDetail.setText(dto.getDescription());
     }
 

@@ -2,10 +2,12 @@ package com.example.renhao.wevolunteer.fragment;
 
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,7 +116,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                 Logger.v(TAG, "position " + position);
                 Intent intent = new Intent(getActivity(), ProjectDetailActivity.class);
                 intent.putExtra("id", dates.get(position - 3).getId());
-                intent.putExtra("type",dates.get(position - 3).getType());
+                intent.putExtra("type", dates.get(position - 3).getType());
                 startActivity(intent);
             }
         });
@@ -168,41 +170,40 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        Logger.v(TAG, "注册志愿者");
-                        /*AppActionImpl.getInstance(getActivity()).activityDetail(dates.get(0).getId(), new ActionCallbackListener<ActivityViewDto>() {
-                            @Override
-                            public void onSuccess(ActivityViewDto data) {
-                                Logger.v(TAG, "onSuccess");
-                            }
-
-                            @Override
-                            public void onFailure(String errorEvent, String message) {
-                                Logger.v(TAG, "onFailure");
-                            }
-                        });*/
                         break;
                     case 1:
-                        Logger.v(TAG, "注册专业志愿者");
                         break;
                     case 2:
-                        Logger.v(TAG, "组织");
                         intent.setClass(getActivity(), OrganizationActivity.class);
                         startActivityForResult(intent, ORGANIZATION);
                         break;
                     case 3:
-                        Logger.v(TAG, "岗位");
                         intent.setClass(getActivity(), ProjectActivity.class);
                         intent.putExtra("page", ProjectActivity.JOBS);
                         startActivityForResult(intent, PROJECT);
                         break;
                     case 4:
-                        Logger.v(TAG, "活动");
                         intent.setClass(getActivity(), ProjectActivity.class);
                         intent.putExtra("page", ProjectActivity.ACTIVITY);
                         startActivityForResult(intent, PROJECT);
                         break;
                     case 5:
-                        Logger.v(TAG, "积分商城");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("此功能正在开发中");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        builder.create().show();
                         break;
                 }
             }

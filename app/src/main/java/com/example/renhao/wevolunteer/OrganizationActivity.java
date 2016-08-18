@@ -18,6 +18,7 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
+import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.items.OrganizationListItem;
 import com.example.renhao.wevolunteer.adapter.ListDropDownAdapter;
 import com.example.renhao.wevolunteer.adapter.OrganizationAdapter;
@@ -70,7 +71,9 @@ public class OrganizationActivity extends BaseActivity {
     private List<View> popupViews = new ArrayList<>();
 
     private String[] headers = {"类型", "区域"};
-    private String[] type = {"类型", "类型1", "类型2", "类型3"};
+    private List<String> type = new ArrayList<>();
+    private List<String> typeCode = new ArrayList<>();
+    private int typeSelect = -1;
     private String[] area = {"区域", "全市", "海曙区", "江东区"};
 
     private ArrayList<OrganizationListItem> list = new ArrayList<>();
@@ -103,6 +106,12 @@ public class OrganizationActivity extends BaseActivity {
         contentView = ButterKnife.findById(v, R.id.ptrListview_view_list);
         initPtrListView(contentView);
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, contentView);
+        mDropDownMenu.setPopupViewListener(new DropDownMenu.PopupViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                setDropDownMenuList(position);
+            }
+        });
 
         mHomepage.setIconColor(getResources().getColor(R.color.colorCyan));
 
@@ -113,6 +122,37 @@ public class OrganizationActivity extends BaseActivity {
     protected void onResume() {
 
         super.onResume();
+    }
+
+    /**
+     * 获取dropdownmenu的下拉的list
+     *
+     * @param position
+     */
+    private void setDropDownMenuList(int position) {
+        if (position == 0) {
+            AppActionImpl.getInstance(this).dictionaryQueryDefault("ActivityType", "",
+                    new ActionCallbackListener<List<DictionaryListDto>>() {
+                        @Override
+                        public void onSuccess(List<DictionaryListDto> data) {
+                            type = new ArrayList<String>();
+                            type.add("类型");
+                            typeCode = new ArrayList<String>();
+                            for (int i = 0; i < data.size(); i++) {
+                                type.add(data.get(i).getName());
+                                typeCode.add(data.get(i).getCode());
+                            }
+                            typeAdapter.setDate(type);
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+
+                        }
+                    });
+        } else if (position == 1) {
+
+        }
     }
 
     /**
@@ -152,6 +192,9 @@ public class OrganizationActivity extends BaseActivity {
         CompanyQueryOptionDto companyQueryOptionDto = new CompanyQueryOptionDto();
         if (type == ADD) {
             companyQueryOptionDto.setPageIndex(PageIndex + 1);
+        }
+        if (typeSelect > -1) {
+            companyQueryOptionDto.setServiceType(typeCode.get(typeSelect));
         }
         AppActionImpl.getInstance(this).companyQuery(companyQueryOptionDto,
                 new ActionCallbackListener<PagedListEntityDto<CompanyListDto>>() {
@@ -232,15 +275,18 @@ public class OrganizationActivity extends BaseActivity {
 
     private void initDropDownMenu() {
         //类型
+        type.add("类型");
         final ListView typeView = new ListView(this);
-        typeAdapter = new ListDropDownAdapter(this, Arrays.asList(type));
+        typeAdapter = new ListDropDownAdapter(this, type);
         typeView.setDividerHeight(0);
         typeView.setAdapter(typeAdapter);
         typeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                typeSelect = position - 1;
+                initDate(REFRESH);
                 typeAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[0] : type[position]);
+                mDropDownMenu.setTabText(position == 0 ? headers[0] : type.get(position));
                 mDropDownMenu.closeMenu();
             }
         });

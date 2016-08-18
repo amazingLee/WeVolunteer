@@ -17,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.MrL.qrcodescan.MipcaActivityCapture;
+import com.example.core.AppActionImpl;
 import com.example.core.local.LocalDate;
+import com.example.model.ActionCallbackListener;
+import com.example.model.dictionary.DictionaryViewDto;
 import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.fragment.FindPageFragment;
@@ -72,6 +75,8 @@ public class IndexActivity extends BaseActivity {
     private FindPageFragment mFindPageFragment;
     private SigninPageFragment mSigninPageFragment;
     private MySelfFragment mMySelfFragment;
+
+
 
     private int fragmentPosition = -1;
 
@@ -145,7 +150,17 @@ public class IndexActivity extends BaseActivity {
         magnifier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppActionImpl.getInstance(getApplicationContext()).dictionaryQueryDetailDefault("ActivityType", "00008", new ActionCallbackListener<DictionaryViewDto>() {
+                    @Override
+                    public void onSuccess(DictionaryViewDto data) {
 
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
             }
         });
     }

@@ -46,7 +46,6 @@
                 android:layout_marginTop="@dimen/project_detail_marginTB"
                 android:layout_weight="5"
                 android:gravity="center_vertical"
-                android:text="宁波市海曙区柳丁街93号市青少年宫二楼"
                 android:textSize="16sp"/>
         </LinearLayout>
 
@@ -90,7 +89,6 @@
                 android:layout_marginTop="@dimen/project_detail_marginTB"
                 android:layout_weight="5"
                 android:gravity="center_vertical"
-                android:text="丁键"
                 android:textSize="16sp"/>
         </LinearLayout>
 
@@ -134,7 +132,6 @@
                 android:layout_marginTop="@dimen/project_detail_marginTB"
                 android:layout_weight="5"
                 android:gravity="center_vertical"
-                android:text="15728006904"
                 android:textSize="16sp"/>
         </LinearLayout>
 
@@ -178,7 +175,6 @@
                 android:layout_marginTop="@dimen/project_detail_marginTB"
                 android:layout_weight="5"
                 android:gravity="center_vertical"
-                android:text="宁波市十佳志愿者组织"
                 android:textSize="16sp"/>
         </LinearLayout>
 
@@ -222,7 +218,6 @@
                 android:layout_marginTop="@dimen/project_detail_marginTB"
                 android:layout_weight="5"
                 android:gravity="center_vertical"
-                android:text="2016-8"
                 android:textSize="16sp"/>
         </LinearLayout>
 
@@ -266,7 +261,6 @@
                 android:layout_marginTop="@dimen/project_detail_marginTB"
                 android:layout_weight="5"
                 android:gravity="center_vertical"
-                android:text="赛会服务"
                 android:textSize="16sp"/>
         </LinearLayout>
 
@@ -321,7 +315,6 @@
             android:paddingRight="@dimen/project_detail_marginLR"
             android:paddingStart="@dimen/project_detail_marginLR"
             android:paddingTop="@dimen/project_detail_marginTB"
-            android:text="岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n岗位详情\n"
             android:textSize="16sp"/>
 
         <View

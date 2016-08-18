@@ -141,12 +141,12 @@ public class DropDownMenu extends LinearLayout {
 
     }
 
-    private void addTab(@NonNull List<String> tabTexts, int i) {
+    private void addTab(@NonNull List<String> tabTexts, final int i) {
         final TextView tab = new TextView(getContext());
         tab.setSingleLine();
         tab.setEllipsize(TextUtils.TruncateAt.END);
         tab.setGravity(Gravity.CENTER);
-        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX,menuTextSize);
+        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, menuTextSize);
         tab.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
         tab.setTextColor(textUnselectedColor);
         tab.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(menuUnselectedIcon), null);
@@ -157,11 +157,14 @@ public class DropDownMenu extends LinearLayout {
             @Override
             public void onClick(View v) {
                 switchMenu(tab);
+                if (mListener != null) {
+                    mListener.onClick(v, i);
+                }
             }
         });
         tabMenuView.addView(tab);
         //添加分割线
-        if (i < tabTexts.size() ) {
+        if (i < tabTexts.size()) {
             View view = new View(getContext());
             view.setLayoutParams(new LayoutParams(dpTpPx(0.5f), ViewGroup.LayoutParams.MATCH_PARENT));
             view.setBackgroundColor(dividerColor);
@@ -218,7 +221,6 @@ public class DropDownMenu extends LinearLayout {
      * @param target
      */
     private void switchMenu(View target) {
-        System.out.println(current_tab_position);
         for (int i = 0; i < tabMenuView.getChildCount(); i = i + 2) {
             if (target == tabMenuView.getChildAt(i)) {
                 if (current_tab_position == i) {
@@ -250,5 +252,15 @@ public class DropDownMenu extends LinearLayout {
     public int dpTpPx(float value) {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, dm) + 0.5);
+    }
+
+    public interface PopupViewClickListener {
+        public void onClick(View v, int position);
+    }
+
+    private PopupViewClickListener mListener;
+
+    public void setPopupViewListener(PopupViewClickListener listener) {
+        mListener = listener;
     }
 }

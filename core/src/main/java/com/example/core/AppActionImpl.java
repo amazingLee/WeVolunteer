@@ -23,6 +23,7 @@ import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -441,6 +442,58 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<PagedListEntityDto<DictionaryListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void dictionaryQueryDefault(final String typeCode, final String parentId, final ActionCallbackListener<List<DictionaryListDto>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+
+        new AsyncTask<Void, Void, ApiResponse<List<DictionaryListDto>>>() {
+            @Override
+            protected ApiResponse<List<DictionaryListDto>> doInBackground(Void... params) {
+                return api.dictionaryQueryDefault(typeCode, parentId, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<List<DictionaryListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void dictionaryQueryDetailDefault(final String typeCode, final String code, final ActionCallbackListener<DictionaryViewDto> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+
+        new AsyncTask<Void, Void, ApiResponse<DictionaryViewDto>>() {
+            @Override
+            protected ApiResponse<DictionaryViewDto> doInBackground(Void... params) {
+                return api.dictionaryQueryDetailDefault(typeCode, code, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<DictionaryViewDto> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;

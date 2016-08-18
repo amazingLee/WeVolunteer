@@ -13,6 +13,7 @@ import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -57,10 +58,13 @@ public interface Api {
     //字典
     public static final String DICTIONARY_QUERY = "Nbcei.Framework.Api.Impl/v1/dictionary/query ";
     public static final String DICTIONARYTYPE_QUERY = "Nbcei.Framework.Api.Impl/v1/dictionarytype/query";
+    public static final String DICTIONARYTYPE_QUERY_CHILD = "Nbcei.Framework.Api.Impl/v1/dictionary/query/child";
+    public static final String DICTIONARYTYPE_QUERY_DEFAULT = "Nbcei.Framework.Api.Impl/v1/dictionary/query/default/bycode";
+    public static final String DICTIONARYTYPE_QUERY_DETAIL_DEFAULT = "Nbcei.Framework.Api.Impl/v1/dictionary/details/default";
 
     //组织
     public static final String ORGANIZATION_QUERY = "Nbcei.Framework.Api.Impl/v1/organization/query";
-    public static final String ORGANIZATION_DETAIL="Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
+    public static final String ORGANIZATION_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
 
     /**
      * 获取accessToken
@@ -122,12 +126,25 @@ public interface Api {
     public ApiResponse<PagedListEntityDto<DictionaryTypeListDto>> dictionaryTypeQuery(DictionaryTypeQueryOptionDto query, String accessToken);
 
     /**
+     * 字典查询方法
+     *
+     * @param typeCode
+     * @param parentId
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<List<DictionaryListDto>> dictionaryQueryDefault(String typeCode, String parentId, String accessToken);
+
+    public ApiResponse<DictionaryViewDto> dictionaryQueryDetailDefault(String typeCode,String code,String accessToken);
+
+    /**
      * 组织查询
+     *
      * @param query
      * @param accessToken
      * @return
      */
-    public ApiResponse<PagedListEntityDto<OrganizationListDto>> organizationQuery(OrganizationQueryOptionDto query,String accessToken);
+    public ApiResponse<PagedListEntityDto<OrganizationListDto>> organizationQuery(OrganizationQueryOptionDto query, String accessToken);
 
  /*   *//**
      * 查询组织详细信息

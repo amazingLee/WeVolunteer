@@ -1,5 +1,7 @@
 package com.example.api;
 
+import android.text.TextUtils;
+
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
 import com.example.model.PagedListEntityDto;
@@ -14,6 +16,7 @@ import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -135,7 +138,7 @@ public class ApiImpl implements Api {
 
     @Override
     public ApiResponse<ActivityViewDto> activityDetail(String activityId, String accessToken) {
-        List<String> params=new ArrayList<>();
+        List<String> params = new ArrayList<>();
         params.add(activityId);
         Type typeOfT = new TypeToken<ApiResponse<ActivityViewDto>>() {
         }.getType();
@@ -283,6 +286,40 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, DICTIONARYTYPE_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<DictionaryListDto>> dictionaryQueryDefault(String typeCode, String parentId, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(typeCode);
+        if (TextUtils.isEmpty(parentId)) {
+            params.add("00000000-0000-0000-0000-000000000000");
+        } else {
+            params.add(parentId);
+        }
+        Type typeOft = new TypeToken<ApiResponse<List<DictionaryListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, DICTIONARYTYPE_QUERY_DEFAULT, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<DictionaryViewDto> dictionaryQueryDetailDefault(String typeCode, String code, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(typeCode);
+        params.add(code);
+        Type typeOft = new TypeToken<ApiResponse<DictionaryViewDto>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, DICTIONARYTYPE_QUERY_DETAIL_DEFAULT, typeOft, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -17,6 +17,7 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
@@ -62,10 +63,16 @@ public class ProjectFragment extends BaseFragment {
     private HomePageAdapter adapter;
 
     private String headers[] = {"类型", "状态", "区域", "智能筛选"};
-    private String[] type = {"类型"};
-    private String[] state = {"状态"};
+    private List<String> type = new ArrayList<>();
+    private List<String> typeCode = new ArrayList<>();
+    private int typeSelect = -1;
+    private String[] state = {"状态", "招募中", "已结束"};
+    private List<Integer> stateInt = Arrays.asList(0, 1);
+    private int stateSelect = -1;
     private String[] area = {"区域"};
-    private String[] smart = {"智能筛选"};
+    private List<Integer> areaInt = new ArrayList<>();
+    private String[] smart = {"智能筛选", "最新发布", "热门报名", "距离最近"};
+    private List<Integer> smartInt = Arrays.asList(0, 1, 2);
 
     private List<HomePageListItem> list = new ArrayList<>();
     private List<ActivityListDto> dates = new ArrayList<>();
@@ -93,108 +100,117 @@ public class ProjectFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_project, container, false);
         ButterKnife.bind(this, view);
 
-        initDropDownMenu();
-
         View v = inflater.inflate(R.layout.view_prtlistview, null);
         //PullToRefreshListView contentView = new PullToRefreshListView(getActivity());
         contentView = ButterKnife.findById(v, R.id.ptrListview_view_list);
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initDropDownMenu();
         initPtrListView(contentView);
 
         //init dropdownview
-        mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, contentView);
-
-        initDictionary();
+        initDropdownview();
 
         initDate(REFRESH);
+    }
 
-        return view;
+    private void initDropdownview() {
+        mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, contentView);
+        mDropDownMenu.setPopupViewListener(new DropDownMenu.PopupViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                setDropDownMenuList(position);
+            }
+        });
+    }
+
+    public void setDropDownMenuList(int position) {
+        if (position == 0) {
+            AppActionImpl.getInstance(getActivity()).dictionaryQueryDefault("ActivityType", "",
+                    new ActionCallbackListener<List<DictionaryListDto>>() {
+                        @Override
+                        public void onSuccess(List<DictionaryListDto> data) {
+                            type=new ArrayList<String>();
+                            type.add("类型");
+                            typeCode = new ArrayList<String>();
+                            for (int i = 0; i < data.size(); i++) {
+                                type.add(data.get(i).getName());
+                                typeCode.add(data.get(i).getCode());
+                            }
+                            typeAdapter.setDate(type);
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+
+                        }
+                    });
+        } else if (position == 2) {
+
+        }
     }
 
     private void initDate(final int type) {
         ActivityQueryOptionDto dto = new ActivityQueryOptionDto();
         dto.setType(PROJECT_TYPE);
+        if (typeSelect > -1) {
+            dto.setActivityType(typeCode.get(typeSelect));
+        }
+        if (stateSelect > -1) {
+            dto.setStatus(stateInt.get(stateSelect));
+        }
         if (type == ADD) {
             dto.setPageIndex(PageIndex + 1);
         }
-        AppActionImpl.getInstance(getActivity()).activityQuery(dto, new ActionCallbackListener<PagedListEntityDto<ActivityListDto>>() {
-            @Override
-            public void onSuccess(PagedListEntityDto<ActivityListDto> data) {
-                contentView.onRefreshComplete();
-                if (type == REFRESH) {
-                    list = new ArrayList<HomePageListItem>();
-                    dates = new ArrayList<ActivityListDto>();
-                }
-                dates = data.getRows();
-                for (int i = 0; i < dates.size(); i++) {
-                    ActivityListDto listDto = dates.get(i);
-                    HomePageListItem item = new HomePageListItem();
-                    item.setType(listDto.getType());
-                    item.setState(listDto.getStatus());
-                    item.setTitle(listDto.getActivityName());
-                    item.setNum(listDto.getRecruited());
-                    item.setMaxNum(listDto.getRecruitNumber());
-                    item.setTime(listDto.getLengthTime());
-                    item.setImg("");
-                    list.add(item);
-                }
-                PageIndex = data.getPageIndex();
-                PageSize = data.getPageSize();
-                TotalCount = data.getTotalCount();
-                TotalPages = data.getTotalPages();
-                StartPosition = data.getStartPosition();
-                EndPosition = data.getEndPosition();
-                HasPreviousPage = data.getHasPreviousPage();
-                HasNextPage = data.getHasNextPage();
-
-                if (!HasNextPage) {
-                    showToast("到底了");
-                }
-
-                adapter.setDate(list);
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                contentView.onRefreshComplete();
-            }
-        });
-
-    }
-
-    private void initDictionary() {
-        //类型
-      /*  DictionaryQueryOptionDto queryOptionDto = new DictionaryQueryOptionDto();
-        //queryOptionDto.setCulture("语言");
-        AppActionImpl.getInstance(getActivity()).dictionaryQuery(queryOptionDto,
-                new ActionCallbackListener<PagedListEntityDto<DictionaryListDto>>() {
+        AppActionImpl.getInstance(getActivity()).activityQuery(dto,
+                new ActionCallbackListener<PagedListEntityDto<ActivityListDto>>() {
                     @Override
-                    public void onSuccess(PagedListEntityDto<DictionaryListDto> data) {
-                        Logger.v(TAG, "-------" + data.getRows().size());
+                    public void onSuccess(PagedListEntityDto<ActivityListDto> data) {
+                        contentView.onRefreshComplete();
+                        if (type == REFRESH) {
+                            list = new ArrayList<HomePageListItem>();
+                            dates = new ArrayList<ActivityListDto>();
+                        }
+                        dates = data.getRows();
+                        for (int i = 0; i < dates.size(); i++) {
+                            ActivityListDto listDto = dates.get(i);
+                            HomePageListItem item = new HomePageListItem();
+                            item.setType(listDto.getType());
+                            item.setState(listDto.getStatus());
+                            item.setTitle(listDto.getActivityName());
+                            item.setNum(listDto.getRecruited());
+                            item.setMaxNum(listDto.getRecruitNumber());
+                            item.setTime(listDto.getLengthTime());
+                            item.setImg("");
+                            list.add(item);
+                        }
+                        PageIndex = data.getPageIndex();
+                        PageSize = data.getPageSize();
+                        TotalCount = data.getTotalCount();
+                        TotalPages = data.getTotalPages();
+                        StartPosition = data.getStartPosition();
+                        EndPosition = data.getEndPosition();
+                        HasPreviousPage = data.getHasPreviousPage();
+                        HasNextPage = data.getHasNextPage();
+
+                        if (!HasNextPage) {
+                            showToast("到底了");
+                        }
+
+                        adapter.setDate(list);
                     }
 
                     @Override
                     public void onFailure(String errorEvent, String message) {
-
+                        contentView.onRefreshComplete();
                     }
-                });*/
-        //状态
-       /* DictionaryTypeQueryOptionDto typeQueryOptionDto = new DictionaryTypeQueryOptionDto();
-        //typeQueryOptionDto.setCode("ActivityType");
-        AppActionImpl.getInstance(getActivity()).dictionaryTypeQuery(typeQueryOptionDto,
-                new ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>>() {
-                    @Override
-                    public void onSuccess(PagedListEntityDto<DictionaryTypeListDto> data) {
-                        Logger.v(TAG, "-------" + data.getRows().size());
-                    }
+                });
 
-                    @Override
-                    public void onFailure(String errorEvent, String message) {
-
-                    }
-                });*/
-        //区域
-        //智能筛选
     }
 
     private void initPtrListView(final PullToRefreshListView mPtr) {
@@ -253,16 +269,19 @@ public class ProjectFragment extends BaseFragment {
      */
     private void initDropDownMenu() {
         //类型
+        type.add("类型");
         final ListView typeView = (ListView) LayoutInflater.from(getActivity()).inflate(R.layout.view_listview, null);
-        typeAdapter = new ListDropDownAdapter(getActivity(), Arrays.asList(type));
+        typeAdapter = new ListDropDownAdapter(getActivity(), type);
         typeView.setDividerHeight(0);
         typeView.setAdapter(typeAdapter);
         typeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                typeSelect = position - 1;
                 typeAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[0] : type[position]);
+                mDropDownMenu.setTabText(position == 0 ? headers[0] : type.get(position));
                 mDropDownMenu.closeMenu();
+                initDate(REFRESH);
             }
         });
         //状态
@@ -273,6 +292,8 @@ public class ProjectFragment extends BaseFragment {
         stateView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                stateSelect = position - 1;
+                initDate(REFRESH);
                 stateAdapter.setCheckItem(position);
                 mDropDownMenu.setTabText(position == 0 ? headers[1] : state[position]);
                 mDropDownMenu.closeMenu();

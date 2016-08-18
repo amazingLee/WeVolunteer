@@ -31,6 +31,11 @@ public class ListDropDownAdapter extends BaseAdapter {
         this.list = list;
     }
 
+    public void setDate(List<String> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return list.size();

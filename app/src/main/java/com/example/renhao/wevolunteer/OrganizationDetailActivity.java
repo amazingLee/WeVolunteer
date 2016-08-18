@@ -44,9 +44,9 @@ public class OrganizationDetailActivity extends BaseActivity {
     ViewPager mViewpage;
 
     private View mCustomView;//actionbar的自定义视图
-    ImageView indicatorImg;
-    TextView titleTv;
-    ImageView magnifierImg;
+    private ImageView indicatorImg;
+    private TextView titleTv;
+    private ImageView magnifierImg;
 
     private String companyId;
 

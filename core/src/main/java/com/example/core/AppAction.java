@@ -14,6 +14,7 @@ import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
+import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -90,6 +91,11 @@ public interface AppAction {
      * @param listener
      */
     public void dictionaryQuery(DictionaryQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<DictionaryListDto>> listener);
+
+    public void dictionaryQueryDefault(String typeCode, String parentId, ActionCallbackListener<List<DictionaryListDto>> listener);
+
+    public void dictionaryQueryDetailDefault(String typeCode, String code, ActionCallbackListener<DictionaryViewDto> listener);
+
 
     /**
      * dictionary 类型 查询
