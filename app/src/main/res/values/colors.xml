@@ -21,4 +21,6 @@
     <color name="colorRed">#ff5114</color>
     <color name="color">#dfdfdf</color>
 
+    <color name="colorLightGray">#DADADA</color>
+
 </resources>
