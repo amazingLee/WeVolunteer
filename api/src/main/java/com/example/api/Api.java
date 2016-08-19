@@ -6,6 +6,7 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.area.AreaListDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.company.CompanyViewDto;
@@ -17,6 +18,7 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
+import com.example.model.user.UserListDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
@@ -35,6 +37,7 @@ import java.util.List;
  */
 public interface Api {
 
+    public static final String USERNAME_LOGIN = "Nbcei.Framework.Api.Impl/v1/user/query/LoginUserByUserName";
     public static final String USER_CREATE = "Nbcei.Framework.Api.Impl/v1/user/create";
     public static final String USER_LOGIN = "Nbcei.Framework.Api.Impl/v1/user/get";
 
@@ -66,6 +69,9 @@ public interface Api {
     public static final String ORGANIZATION_QUERY = "Nbcei.Framework.Api.Impl/v1/organization/query";
     public static final String ORGANIZATION_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
 
+
+    //所在区域
+    public static final String AREA_QUERY = "Nbcei.Framework.Api.Impl/v1/area/query/child";
     /**
      * 获取accessToken
      *
@@ -91,6 +97,8 @@ public interface Api {
 
     public ApiResponse<PagedListEntityDto<ActivityListDto>> activityQuery(ActivityQueryOptionDto query, String accessToken);
 
+    //利用用户票据获得的username，来获取用户信息
+    public ApiResponse<UserListDto> userNameLogin(String username,String accessToken);
     /**
      * activity 详细信息查询方法
      *
@@ -153,5 +161,11 @@ public interface Api {
      * @return
      *//*
     public ApiResponse<CompanyViewDto> organizationDetail(String id,String accessToken);*/
+
+    /**
+     * 所在区域查询
+     *
+     */
+    public ApiResponse<List<AreaListDto>> AreaQuery(String parentId,String accessToken);
 
 }

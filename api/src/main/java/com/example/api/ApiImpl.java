@@ -9,6 +9,7 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.area.AreaListDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.company.CompanyViewDto;
@@ -20,6 +21,7 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
+import com.example.model.user.UserListDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
@@ -69,6 +71,21 @@ public class ApiImpl implements Api {
         }
         return null;
     }
+
+
+    @Override
+    public ApiResponse<UserListDto> userNameLogin(String username, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(username);
+        Type typeOft = new TypeToken<ApiResponse<UserListDto>>(){}.getType();
+        try {
+            return httpEngine.getApiHandler(params, USERNAME_LOGIN, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
+    }
+
 
     @Override
     public ApiResponse<List<String>> userCreate(List<UserDto> creates, String accessToken) {
@@ -338,5 +355,19 @@ public class ApiImpl implements Api {
             e.printStackTrace();
         }
         return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<AreaListDto>> AreaQuery(String parentId, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(parentId);
+        Type typeOft = new TypeToken<ApiResponse<List<AreaListDto>>>(){}.getType();
+        try {
+            return httpEngine.getApiHandler(params, AREA_QUERY, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ApiResponse<>(false,"未知错误");
     }
 }

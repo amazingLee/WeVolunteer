@@ -2,12 +2,18 @@ package com.example.renhao.wevolunteer.fragment;
 
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -18,20 +24,27 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.event.FlagEvent;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import static com.example.renhao.wevolunteer.IndexActivity.flag;
 
 /**
  * 发现地图界面
  * A simple {@link Fragment} subclass.
  */
 public class FindPageFragment extends Fragment implements LocationSource,
-        AMapLocationListener,AMap.OnMapLoadedListener, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener {
+        AMapLocationListener,AMap.OnMapLoadedListener, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener,View.OnClickListener {
     private static final String TAG = "FindPageFragment";
 
     private AMap aMap;
@@ -39,14 +52,27 @@ public class FindPageFragment extends Fragment implements LocationSource,
     private OnLocationChangedListener mListener;//声明定位回调监听器
     private AMapLocationClient mlocationClient;//声明AMapLocationClient类对象
     private AMapLocationClientOption mLocationOption;
+    private UiSettings mUiSettings;//设置地图控件对象
 
     private LatLng latlng = new LatLng(29.8600630808,121.6242721236);
+
+    Button sign_in;//签到
+    Button sign_out;//签退
+    LinearLayout linearLayout;//签到计时的布局
+    Chronometer chronometer;//计时器
 
 
     public FindPageFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册EventBus
+        EventBus.getDefault().register(this);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,10 +81,70 @@ public class FindPageFragment extends Fragment implements LocationSource,
         View localView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_find_page, null);
         //获取地图控件引用
         this.mapView = (MapView) localView.findViewById(R.id.map);
+        this.sign_in = (Button) localView.findViewById(R.id.btn_sign_in);
+        this.sign_out = (Button) localView.findViewById(R.id.btn_sign_out);
+        this.linearLayout = (LinearLayout) localView.findViewById(R.id.time_layout);
+        this.chronometer = (Chronometer) localView.findViewById(R.id.chronometer);
+        chronometer.setFormat("%s");
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
         this.mapView.onCreate(savedInstanceState);// 此方法必须重写
+        getbundle();
         init();
+        setmListener();
         return localView;
+    }
+
+    //利用Intent的Bundle来进行传值
+    private void getbundle(){
+        Bundle data = getArguments();//获得从activity中传递过来的值
+        String string = data.getString("Tag");
+        System.out.println("bundle=" + string);
+        if(string != null && string.equals("true")) {
+            System.out.println("back=="+flag);
+            if (!flag){
+                sign_in.setVisibility(View.VISIBLE);
+            }else {
+                sign_out.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+            }
+        }else if (string != null && string.equals("false")){
+            sign_in.setVisibility(View.GONE);
+        }
+    }
+
+    //接受消息的函数
+    @Subscribe
+    public void onEventMainThread(FlagEvent event) {
+
+        String msg = event.getMsg();
+        Log.d("harvic", msg);
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+
+        if (msg.equals("find")){//判断当前是否点击了发现按钮
+            sign_in.setVisibility(View.GONE);
+            sign_out.setVisibility(View.INVISIBLE);
+            linearLayout.setVisibility(View.INVISIBLE);
+        }else if (msg.equals("sign_in")){//判断当前是否点击了签到按钮
+//            System.out.println("flag="+flag.toString());
+//            Boolean f1 = flag;
+//            SharedPreferences sp = getActivity().getSharedPreferences("flag", Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sp.edit();
+//            editor.putBoolean("flag",f1);
+//            editor.commit();
+            System.out.println("flag="+flag);
+            if (!flag){
+                sign_in.setVisibility(View.VISIBLE);
+            }else {
+                sign_out.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
+
+    private void setmListener(){
+        sign_in.setOnClickListener(this);
+        sign_out.setOnClickListener(this);
     }
 
 
@@ -66,10 +152,11 @@ public class FindPageFragment extends Fragment implements LocationSource,
      * 初始化AMap对象
      */
     private void init() {
-        Logger.d(TAG,"init");
+        Logger.d(TAG, "init");
         if (aMap == null) {
             aMap = mapView.getMap();
-            setUpMap();
+            mUiSettings = aMap.getUiSettings();
+            mUiSettings.setZoomControlsEnabled(false);//去除地图缩放按钮控件
         }
     }
 
@@ -122,10 +209,14 @@ public class FindPageFragment extends Fragment implements LocationSource,
      */
     @Override
     public void onResume() {
-        Logger.d(TAG,"onResume");
+        Logger.d(TAG, "onResume");
         super.onResume();
-        //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
         this.mapView.onResume();
+        if (mlocationClient!=null)
+        mlocationClient.startLocation();
+        if (aMap != null) {
+            setUpMap();
+        }
     }
 
     /**
@@ -135,7 +226,6 @@ public class FindPageFragment extends Fragment implements LocationSource,
     public void onPause() {
         Logger.d(TAG,"onPause");
         super.onPause();
-        //在activity执行onPause时执行mMapView.onPause ()，实现地图生命周期管理
         this.mapView.onPause();
         deactivate();
     }
@@ -146,9 +236,8 @@ public class FindPageFragment extends Fragment implements LocationSource,
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Logger.d(TAG,"onSaveInstanceState");
+        Logger.d(TAG, "onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，实现地图生命周期管理
         this.mapView.onSaveInstanceState(outState);
     }
 
@@ -161,6 +250,8 @@ public class FindPageFragment extends Fragment implements LocationSource,
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         this.mapView.onDestroy();
+        aMap=null;
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
 
@@ -172,10 +263,11 @@ public class FindPageFragment extends Fragment implements LocationSource,
      */
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        Logger.d(TAG,"onLocationChanged");
+        Logger.d(TAG, "onLocationChanged");
         if (mListener != null && aMapLocation != null) {
             if (aMapLocation != null
                     && aMapLocation.getErrorCode() == 0) {
+                Logger.v(TAG,aMapLocation.getAddress());
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
                 this.mlocationClient.stopLocation();//停止定位
                 // 获取当前地图中心点的坐标
@@ -188,6 +280,11 @@ public class FindPageFragment extends Fragment implements LocationSource,
                 String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
                 Log.e("AmapErr", errText);
             }
+        }else{
+            if (aMapLocation!=null)
+            Logger.v(TAG,aMapLocation.getAddress());
+            else
+                Logger.v(TAG,"aMapLocation is null");
         }
     }
 
@@ -246,4 +343,34 @@ public class FindPageFragment extends Fragment implements LocationSource,
         return false;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_sign_in:
+                flag = true;
+                saveFlag(flag);
+                sign_out.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                break;
+            case R.id.btn_sign_out:
+                flag = false;
+                saveFlag(flag);
+                chronometer.stop();
+                sign_in.setVisibility(View.VISIBLE);
+                sign_out.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.GONE);
+                Toast.makeText(getActivity(), "签退成功", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private Boolean saveFlag(Boolean flag){
+        SharedPreferences sp = getActivity().getSharedPreferences("flag", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("flag", flag);
+        editor.commit();
+        return flag;
+    }
 }
