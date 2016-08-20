@@ -1,13 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.example.renhao.wevolunteer.view.FractionTranslateLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.renhao.wevolunteer.fragment.FindPageFragment">
+    >
 
     <com.amap.api.maps.MapView
         android:id="@+id/map"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        app:ptrHeaderBackground="#ffeaebeb">
     </com.amap.api.maps.MapView>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btn_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/btn_sign_in"
+        android:textSize="18sp"
+        android:visibility="visible"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/btn_login"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"/>
+    <Button
+        android:id="@+id/btn_sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/btn_sign_out"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/btn_login"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"/>
+    <LinearLayout
+        android:id="@+id/time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_above="@+id/btn_sign_out"
+        android:background="@drawable/btn_register"
+        android:visibility="gone"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="签到时间"
+            android:textSize="18sp"
+            android:textColor="@color/colorOrange"/>
+
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorOrange"
+            android:textSize="18sp"
+            android:format="H:MM:SS"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            />
+    </LinearLayout>
+</com.example.renhao.wevolunteer.view.FractionTranslateLayout>

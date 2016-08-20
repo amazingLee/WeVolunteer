@@ -2,6 +2,7 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
+import com.example.model.area.AreaListDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.PagedListEntityDto;
@@ -18,6 +19,7 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
+import com.example.model.user.UserListDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
@@ -50,6 +52,9 @@ public interface AppAction {
     public void activityCreate(List<ActivityCreateBO> activityCreateBOs, ActionCallbackListener<List<String>> listener);
 
     public void activityQuery(ActivityQueryOptionDto activityQueryOptionDto, ActionCallbackListener<PagedListEntityDto<ActivityListDto>> listener);
+
+    //用户登录利用票据获取到的username，来获取用户的信息
+    public void userNameLogin(String username,ActionCallbackListener<UserListDto> listener);
 
     /**
      * activity 详细查询方法
@@ -112,4 +117,13 @@ public interface AppAction {
      * @param listener
      */
     public void organizationQuery(OrganizationQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<OrganizationListDto>> listener);
+
+    /**
+     * 所在区域  get
+     *一级一级展开查询
+     * @param parentId
+     * @param listener
+     */
+    public void AreaQuery(String parentId,ActionCallbackListener<List<AreaListDto>> listener);
+
 }

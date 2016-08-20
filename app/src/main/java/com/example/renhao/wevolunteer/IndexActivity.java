@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import com.MrL.qrcodescan.MipcaActivityCapture;
 import com.example.core.local.LocalDate;
 import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.event.FlagEvent;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.fragment.FindPageFragment;
 import com.example.renhao.wevolunteer.fragment.HomePageFragment;
@@ -76,10 +78,14 @@ public class IndexActivity extends BaseActivity {
 
     private int fragmentPosition = -1;
 
+    public static Boolean flag = false;//地图签到按钮的判断
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
+        //在使用百度或高德地图时，防止切换Fragment出现闪屏黑屏情况。
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
@@ -180,20 +186,41 @@ public class IndexActivity extends BaseActivity {
                 break;
             case FIND:
                 mChangrTvIndexFind.setIconColor(getResources().getColor(R.color.colorCyan));
-                if (mFindPageFragment == null) {
-                    mFindPageFragment = new FindPageFragment();
+                if(fragmentPosition!=SIGNIN){
+
+                    if (mFindPageFragment == null) {
+                        mFindPageFragment = new FindPageFragment();
+                        System.out.println("1");
+                    }
+                    Bundle data = new Bundle();
+                    data.putString("Tag", "false");
+                    mFindPageFragment.setArguments(data);
+                    setFractionTranslate(transaction, FIND);
+                    transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
+                }else {
+                    //发送消息，隐藏签到按钮控件
+                    EventBus.getDefault().post(new FlagEvent("find"));
                 }
-                setFractionTranslate(transaction, FIND);
-                transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
+
                 fragmentPosition = FIND;
                 break;
             case SIGNIN:
                 mChangrTvIndexSignin.setIconColor(getResources().getColor(R.color.colorCyan));
-                if (mSigninPageFragment == null) {
-                    mSigninPageFragment = new SigninPageFragment();
+                if (fragmentPosition !=FIND){
+
+                    if (mFindPageFragment == null) {
+                        mFindPageFragment = new FindPageFragment();
+                        System.out.println("2");
+                    }
+                    Bundle data = new Bundle();
+                    data.putString("Tag", "true");
+                    mFindPageFragment.setArguments(data);
+                    setFractionTranslate(transaction, FIND);
+                    transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
+                }else {
+                    //发送消息，显示签到按钮控件
+                    EventBus.getDefault().post(new FlagEvent("sign_in"));
                 }
-                setFractionTranslate(transaction, SIGNIN);
-                transaction.replace(R.id.framelayout_index_content, mSigninPageFragment);
                 fragmentPosition = SIGNIN;
                 break;
             case MYSELF:
@@ -238,9 +265,11 @@ public class IndexActivity extends BaseActivity {
                 break;
             case R.id.changrTv_index_find:
                 setFragment(FIND);
+
                 break;
             case R.id.changrTv_index_signin:
                 setFragment(SIGNIN);
+
                 break;
             case R.id.changrTv_index_myself:
                 setFragment(MYSELF);
