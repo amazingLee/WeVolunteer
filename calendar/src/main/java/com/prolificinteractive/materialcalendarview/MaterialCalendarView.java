@@ -14,17 +14,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter;
@@ -165,11 +164,12 @@ public class MaterialCalendarView extends ViewGroup {
     private final TextView title;
     private final DirectionButton buttonPast;
     private final DirectionButton buttonFuture;
+    private final DirectionButton buttonClose;
     private final CalendarPager pager;
     private CalendarPagerAdapter<?> adapter;
     private CalendarDay currentMonth;
     //private RelativeLayout topbar;
-    private View topbar;
+    private LinearLayout topbar;
     private CalendarMode calendarMode;
     /**
      * Used for the dynamic calendar height.
@@ -181,12 +181,9 @@ public class MaterialCalendarView extends ViewGroup {
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.v("--- click ---", pager.getCurrentItem() + "");
             if (v == buttonFuture) {
-                Log.v("--- future ---", pager.getCurrentItem() + "");
                 pager.setCurrentItem(pager.getCurrentItem() + 1, true);
             } else if (v == buttonPast) {
-                Log.v("--- past ---", pager.getCurrentItem() + "");
                 pager.setCurrentItem(pager.getCurrentItem() - 1, true);
             }
         }
@@ -224,6 +221,7 @@ public class MaterialCalendarView extends ViewGroup {
     private int arrowColor = Color.BLACK;
     private Drawable leftArrowMask;
     private Drawable rightArrowMask;
+    private Drawable closeArrowMask;
     private int tileHeight = -1;
     private int tileWidth = -1;
     @SelectionMode
@@ -253,35 +251,41 @@ public class MaterialCalendarView extends ViewGroup {
             setClipToPadding(true);
         }
 
-        topbar = LayoutInflater.from(getContext()).inflate(R.layout.calendar_topbar, null);
-        topbar.setEnabled(false);
+        /*topbar = LayoutInflater.from(getContext()).inflate(R.layout.calendar_topbar, null);
+        topbar.setEnabled(true);*/
 
-        closeImg = (ImageView) topbar.findViewById(R.id.mcv_action_topbar_close);
+        /*closeImg = (ImageView) topbar.findViewById(R.id.mcv_action_topbar_close);
         closeImg.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v("-------", "close menu");
             }
-        });
+        });*/
 
-        //buttonPast = new DirectionButton(getContext());
-        buttonPast = (DirectionButton) topbar.findViewById(R.id.mcv_action_previous_btn);
+        buttonPast = new DirectionButton(getContext());
+        //buttonPast = (DirectionButton) topbar.findViewById(R.id.mcv_action_previous_btn);
         buttonPast.setContentDescription(getContext().getString(R.string.previous));
-        //title = new TextView(getContext());
-        title = (TextView) topbar.findViewById(R.id.mcv_action_topbar_title);
-        //buttonFuture = new DirectionButton(getContext());
-        buttonFuture = (DirectionButton) topbar.findViewById(R.id.mcv_action_next_btn);
+        title = new TextView(getContext());
+        //title = (TextView) topbar.findViewById(R.id.mcv_action_topbar_title);
+        buttonFuture = new DirectionButton(getContext());
+        //buttonFuture = (DirectionButton) topbar.findViewById(R.id.mcv_action_next_btn);
         buttonFuture.setContentDescription(getContext().getString(R.string.next));
+
+        buttonClose = new DirectionButton(getContext());
+        buttonClose.setContentDescription("close");
+
         pager = new CalendarPager(getContext());
 
         title.setOnClickListener(onClickListener);
-        buttonPast.setOnClickListener(new OnClickListener() {
+        buttonPast.setOnClickListener(onClickListener);
+        buttonFuture.setOnClickListener(onClickListener);
+        buttonClose.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("----", "----");
+                if (closeListener != null)
+                    closeListener.close(v);
             }
         });
-        buttonFuture.setOnClickListener(onClickListener);
 
         titleChanger = new TitleChanger(title);
         titleChanger.setTitleFormatter(DEFAULT_TITLE_FORMATTER);
@@ -351,6 +355,12 @@ public class MaterialCalendarView extends ViewGroup {
             }
             setRightArrowMask(rightMask);
 
+            Drawable closeMask = a.getDrawable(R.styleable.MaterialCalendarView_mcv_closeArrowMask);
+            if (closeMask == null) {
+                closeMask = getResources().getDrawable(R.drawable.mcv_action_close);
+            }
+            setCloseArrowMask(closeMask);
+
             setSelectionColor(
                     a.getColor(
                             R.styleable.MaterialCalendarView_mcv_selectionColor,
@@ -415,24 +425,34 @@ public class MaterialCalendarView extends ViewGroup {
     }
 
     private void setupChildren() {
-      /*  topbar = new LinearLayout(getContext());
-        topbar.setOrientation(LinearLayout.HORIZONTAL);*/
-       /* topbar.setClipChildren(false);
-        topbar.setClipToPadding(false);*/
+        topbar = new LinearLayout(getContext());
+        topbar.setOrientation(LinearLayout.HORIZONTAL);
+        topbar.setClipChildren(false);
+        topbar.setClipToPadding(false);
         addView(topbar, new LayoutParams(1));
 
         buttonPast.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         buttonPast.setImageResource(R.drawable.mcv_action_previous);
-        /*topbar.addView(buttonPast, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));*/
+        topbar.addView(buttonPast, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
 
         title.setGravity(Gravity.CENTER);
+        topbar.addView(title, new LinearLayout.LayoutParams(
+                0, LayoutParams.MATCH_PARENT, 2
+        ));
         /*topbar.addView(title, new LinearLayout.LayoutParams(
                 0, LayoutParams.MATCH_PARENT, DEFAULT_DAYS_IN_WEEK - 2
         ));*/
 
         buttonFuture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         buttonFuture.setImageResource(R.drawable.mcv_action_next);
-        /*topbar.addView(buttonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));*/
+        topbar.addView(buttonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+
+        View view = new View(getContext());
+        topbar.addView(view, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 2));
+
+        buttonClose.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        buttonClose.setImageResource(R.drawable.mcv_action_close);
+        topbar.addView(buttonClose, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
 
         pager.setId(R.id.mcv_pager);
         pager.setOffscreenPageLimit(1);
@@ -682,6 +702,7 @@ public class MaterialCalendarView extends ViewGroup {
         arrowColor = color;
         buttonPast.setColor(color);
         buttonFuture.setColor(color);
+        buttonClose.setColor(color);
         invalidate();
     }
 
@@ -751,6 +772,15 @@ public class MaterialCalendarView extends ViewGroup {
     public void setRightArrowMask(Drawable icon) {
         rightArrowMask = icon;
         buttonFuture.setImageDrawable(icon);
+    }
+
+    public Drawable getCloseArrowMask() {
+        return closeArrowMask;
+    }
+
+    public void setCloseArrowMask(Drawable icon) {
+        closeArrowMask = icon;
+        buttonClose.setImageDrawable(icon);
     }
 
     /**
@@ -1580,7 +1610,8 @@ public class MaterialCalendarView extends ViewGroup {
         } else if (measureTileSize <= 0) {
             if (measureTileWidth <= 0) {
                 //Set width to default if no value were set
-                measureTileWidth = dpToPx(DEFAULT_TILE_SIZE_DP);
+                //measureTileWidth = dpToPx(DEFAULT_TILE_SIZE_DP);
+                measureTileWidth = desiredTileWidth;
             }
             if (measureTileHeight <= 0) {
                 //Set height to default if no value were set
@@ -1906,7 +1937,6 @@ public class MaterialCalendarView extends ViewGroup {
         final CalendarPagerAdapter<?> newAdapter;
         switch (calendarMode) {
             case MONTHS:
-                Log.v("----  notesize ---", notes.size() + "");
                 newAdapter = new MonthPagerAdapter(this, notes);
                 break;
             case WEEKS:
@@ -1941,5 +1971,15 @@ public class MaterialCalendarView extends ViewGroup {
 
     public Map<String, String> getNotes() {
         return notes;
+    }
+
+    public interface CloseListener {
+        public void close(View view);
+    }
+
+    private CloseListener closeListener;
+
+    public void setOnClickListener(CloseListener closeListener) {
+        this.closeListener = closeListener;
     }
 }

@@ -15,10 +15,12 @@
     <color name="colorTransparentDark">#66000000</color>
     <color name="colorShallowDark">#22000000</color>
     <color name="colorGreen">#76c71c</color>
+    <color name="colorLightBlue">#9c30a2ec</color>
     <color name="colorBlue">#2e9ce3</color>
+    <color name="colorDarkBlue">#1a577e</color>
     <color name="colorOrange">#fc9553</color>
     <color name="colorBlack">#ff000000</color>
     <color name="colorRed">#ff5114</color>
-    <color name="color">#dfdfdf</color>
+    <color name="color">#05b0ad</color>
 
 </resources>

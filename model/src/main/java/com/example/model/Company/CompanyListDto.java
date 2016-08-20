@@ -39,6 +39,7 @@ public class CompanyListDto {
     private int Member;//成员人员
     private String Description;//描述
     private String Listurl;//列表图片
+    private String AppLstUrl ;//(string, optional): App图片
     private int Registration;//登记备案
     private String Institution;//登记备案机构
     private int SortIndex;//排序
@@ -431,5 +432,13 @@ public class CompanyListDto {
 
     public void setDeleted(boolean deleted) {
         IsDeleted = deleted;
+    }
+
+    public String getAppLstUrl() {
+        return AppLstUrl;
+    }
+
+    public void setAppLstUrl(String appLstUrl) {
+        AppLstUrl = appLstUrl;
     }
 }

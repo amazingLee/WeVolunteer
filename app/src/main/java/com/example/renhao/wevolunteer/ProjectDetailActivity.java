@@ -383,7 +383,6 @@ public class ProjectDetailActivity extends BaseActivity {
                 dialogShare.show();
                 break;
             case R.id.btn_projectdetail_apply:
-                showNormalDialog("请稍后...");
                 Holder holder = new ViewHolder(R.layout.dialog_caldroid);
                 DialogPlus dialogPlus = DialogPlus.newDialog(this)
                         .setContentHolder(holder)
@@ -393,7 +392,6 @@ public class ProjectDetailActivity extends BaseActivity {
                 MaterialCalendarView calendarView = (MaterialCalendarView) dialogPlus.getHolderView().findViewById(R.id.calendarView);
                 calendarView.setNotes(notes);
                 dialogPlus.show();
-                dissMissNormalDialog();
                 break;
             case R.id.btn_projectdetail_focuson:
                 break;

@@ -300,7 +300,7 @@ class DayView extends FrameLayout {
         if (checked) {
             isChecked = true;
             //设置背景
-            itemRe.setBackgroundColor(Color.GRAY);
+            itemRe.setBackground(getResources().getDrawable(R.drawable.bg_tv_dateselect));
         } else {
             isChecked = false;
             //设置背景

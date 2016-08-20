@@ -10,6 +10,7 @@
         <attr name="mcv_arrowColor" format="color" />
         <attr name="mcv_leftArrowMask" format="reference" />
         <attr name="mcv_rightArrowMask" format="reference" />
+        <attr name="mcv_closeArrowMask" format="reference" />
         <attr name="mcv_selectionColor" format="color" />
 
         <attr name="mcv_showOtherDates" format="integer">

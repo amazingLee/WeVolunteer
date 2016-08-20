@@ -13,12 +13,14 @@ import android.widget.TextView;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.company.CompanyViewDto;
-import com.example.model.dictionary.DictionaryViewDto;
+import com.example.model.dictionary.DictionaryListDto;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.event.OrganizationDetailEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -84,12 +86,34 @@ public class OrganizationPage1 extends Fragment {
 
         mTvCreate.setText(dto.getCreateTime());
 
-        AppActionImpl.getInstance(getActivity()).dictionaryQueryDetailDefault("ActivityType",
+       /* AppActionImpl.getInstance(getActivity()).dictionaryQueryDetailDefault("ActivityType",
                 dto.getServiceType(),
                 new ActionCallbackListener<DictionaryViewDto>() {
                     @Override
                     public void onSuccess(DictionaryViewDto data) {
-                        mTvServer.setText(data.getName());
+                        if (data != null)
+                            mTvServer.setText(data.getName());
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });*/
+        final String[] types = dto.getServiceType().split(",");
+        AppActionImpl.getInstance(getActivity()).dictionaryQueryDefault("ActivityType", "",
+                new ActionCallbackListener<List<DictionaryListDto>>() {
+                    @Override
+                    public void onSuccess(List<DictionaryListDto> data) {
+                        String type = "";
+                        for (int i = 0; i < data.size(); i++) {
+                            for (int j = 0; j < types.length; j++) {
+                                if (data.get(i).getCode().equals(types[j])) {
+                                    type += "  " + data.get(i).getName();
+                                }
+                            }
+                        }
+                        mTvServer.setText(type);
                     }
 
                     @Override

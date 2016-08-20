@@ -1,6 +1,7 @@
 package com.example.renhao.wevolunteer.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.R;
+import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -75,9 +77,10 @@ public class HomePageAdapter extends BaseAdapter {
 
         HomePageListItem item = mDate.get(position);
 
-        if (!item.getImg().equals("")) {
+        if (!TextUtils.isEmpty(item.getImg())) {
+            Logger.v(TAG, mContext.getResources().getString(R.string.url) + item.getImg());
             Picasso.with(mContext)
-                    .load(item.getImg())
+                    .load(mContext.getResources().getString(R.string.url) + item.getImg())
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(viewHolder.imageView);//加载图片

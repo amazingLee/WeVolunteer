@@ -6,13 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -36,7 +39,13 @@ import com.example.renhao.wevolunteer.view.NoScrollGridView;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.Holder;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.orhanobut.logger.Logger;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -141,7 +150,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                     item.setNum(dto.getRecruited());
                     item.setMaxNum(dto.getRecruitNumber());
                     item.setTime(dto.getLengthTime());
-                    item.setImg("");
+                    item.setImg(dto.getAppLstUrl());
                     list.add(item);
                 }
                 adapter.setDate(list);
@@ -170,6 +179,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
+                        initDialog();
                         break;
                     case 1:
                         break;
@@ -196,13 +206,6 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
 
                             }
                         });
-                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
                         builder.create().show();
                         break;
                 }
@@ -216,6 +219,32 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         items.add(new HomePageGridItem(R.drawable.activity, "活动", null, R.color.colorGreen));
         items.add(new HomePageGridItem(R.drawable.shop, "积分商城", null, R.color.colorOrange));
         gridView.setAdapter(new HomePageNoScrollGridAdapter(getActivity(), items));
+    }
+
+    private void initDialog() {
+        Holder holder = new ViewHolder(R.layout.dialog_caldroid);
+        final DialogPlus dialogPlus = DialogPlus.newDialog(getActivity())
+                .setContentHolder(holder)
+                .setCancelable(true)
+                .setGravity(Gravity.BOTTOM)
+                .create();
+        final TextView selsecTv = (TextView) dialogPlus.getHolderView().findViewById(R.id.tv_dialogCaldroid_dateSelect);
+        MaterialCalendarView calendarView = (MaterialCalendarView) dialogPlus.getHolderView().findViewById(R.id.calendarView);
+        calendarView.setTileHeightDp(44);
+        calendarView.setArrowColor(getResources().getColor(R.color.colorCyan));
+        calendarView.setOnClickListener(new MaterialCalendarView.CloseListener() {
+            @Override
+            public void close(View view) {
+                dialogPlus.dismiss();
+            }
+        });
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                selsecTv.setText(date.getYear() + "-" + (date.getMonth() + 1) + "-" + date.getDay());
+            }
+        });
+        dialogPlus.show();
     }
 
     /**

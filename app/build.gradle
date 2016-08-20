@@ -13,7 +13,7 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.example.renhao.wevolunteer"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -41,6 +41,7 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile project(':core')
     compile project(':model')
     compile project(':PullToRefresh')

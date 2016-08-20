@@ -9,29 +9,32 @@ import java.io.Serializable;
  * 创建时间：2016/7/23 15:49
  * 修改备注：
  */
-public class ActivityListDto implements Serializable{
-   private  String Id;//(string, optional): 获取或设置 活动标识
-   private  String ActivityName;//(string, optional): 获取或设置 活动名称
-   private  String StartTime;//(string, optional): 获取或设置 活动开始时间
-   private  String FinishTime;// (string, optional): 获取或设置 活动结束时间
-   private  String Addr;//(string, optional): 获取或设置 地址
-   private  String JobText;//(string, optional),
-   private  Integer RecruitNumber;// (integer, optional): 获取或设置 招募人数
-   private  Integer Recruited;//(integer, optional): 获取或设置 已招募
-   private  Integer Status;//(integer, optional): 获取或设置 状态
-   private  String StatusName;//(string, optional),
-   private  Integer SingleRecruit;//(integer, optional),
-   private  String EndTime;// (string, optional),
-   private  String LengthTime;// (number, optional),
-   private  String DaySTime;//(string, optional),
-   private  String DayETime;//(string, optional),
-   private  String CompanyId;// (string, optional),
-   private  String Lng;//(number, optional),
-   private  String Lat;//(number, optional),
-   private  Integer Type;//(integer, optional),
-   private  String AreaCode;// (string, optional),
-   private  String AreaName;//(string, optional),
-   private  String CompanyName;//(string, optional)
+public class ActivityListDto implements Serializable {
+    private String Id;//(string, optional): 获取或设置 活动标识
+    private String ActivityName;//(string, optional): 获取或设置 活动名称
+    private String StartTime;//(string, optional): 获取或设置 活动开始时间
+    private String FinishTime;// (string, optional): 获取或设置 活动结束时间
+    private String Addr;//(string, optional): 获取或设置 地址
+    private String JobText;//(string, optional),
+    private Integer RecruitNumber;// (integer, optional): 获取或设置 招募人数
+    private Integer Recruited;//(integer, optional): 获取或设置 已招募
+    private Integer Status;//(integer, optional): 获取或设置 状态
+    private String StatusName;//(string, optional),
+    private Integer SingleRecruit;//(integer, optional),
+    private String EndTime;// (string, optional),
+    private String LengthTime;// (number, optional),
+    private String DaySTime;//(string, optional),
+    private String DayETime;//(string, optional),
+    private String CompanyId;// (string, optional),
+    private String Lng;//(number, optional),
+    private String Lat;//(number, optional),
+    private Integer Type;//(integer, optional),
+    private String AreaCode;// (string, optional),
+    private String AreaName;//(string, optional),
+    private String CompanyName;//(string, optional)
+    private String LstUrl;//(string, optional): 图片Id
+    private String PcLstUrl;//(string, optional): Pc图片
+    private String AppLstUrl;//(string, optional): App图片
 
     public String getActivityName() {
         return ActivityName;
@@ -47,6 +50,14 @@ public class ActivityListDto implements Serializable{
 
     public void setAddr(String addr) {
         Addr = addr;
+    }
+
+    public String getAppLstUrl() {
+        return AppLstUrl;
+    }
+
+    public void setAppLstUrl(String appLstUrl) {
+        AppLstUrl = appLstUrl;
     }
 
     public String getAreaCode() {
@@ -153,27 +164,43 @@ public class ActivityListDto implements Serializable{
         Lng = lng;
     }
 
-    public int getRecruited() {
+    public String getLstUrl() {
+        return LstUrl;
+    }
+
+    public void setLstUrl(String lstUrl) {
+        LstUrl = lstUrl;
+    }
+
+    public String getPcLstUrl() {
+        return PcLstUrl;
+    }
+
+    public void setPcLstUrl(String pcLstUrl) {
+        PcLstUrl = pcLstUrl;
+    }
+
+    public Integer getRecruited() {
         return Recruited;
     }
 
-    public void setRecruited(int recruited) {
+    public void setRecruited(Integer recruited) {
         Recruited = recruited;
     }
 
-    public int getRecruitNumber() {
+    public Integer getRecruitNumber() {
         return RecruitNumber;
     }
 
-    public void setRecruitNumber(int recruitNumber) {
+    public void setRecruitNumber(Integer recruitNumber) {
         RecruitNumber = recruitNumber;
     }
 
-    public int getSingleRecruit() {
+    public Integer getSingleRecruit() {
         return SingleRecruit;
     }
 
-    public void setSingleRecruit(int singleRecruit) {
+    public void setSingleRecruit(Integer singleRecruit) {
         SingleRecruit = singleRecruit;
     }
 
@@ -185,11 +212,11 @@ public class ActivityListDto implements Serializable{
         StartTime = startTime;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return Status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         Status = status;
     }
 
@@ -201,11 +228,11 @@ public class ActivityListDto implements Serializable{
         StatusName = statusName;
     }
 
-    public int getType() {
+    public Integer getType() {
         return Type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         Type = type;
     }
 }

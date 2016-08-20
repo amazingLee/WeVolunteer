@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">WE志愿</string>
+
+    <string name="url">http://115.238.150.174:5018/</string>
+
     <string name="tv_scan">扫一扫</string>
     <string name="tv_appName">WE志愿</string>
     <string name="changeTv_homepage">主页</string>

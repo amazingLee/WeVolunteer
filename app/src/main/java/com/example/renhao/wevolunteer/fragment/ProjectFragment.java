@@ -104,12 +104,6 @@ public class ProjectFragment extends BaseFragment {
         //PullToRefreshListView contentView = new PullToRefreshListView(getActivity());
         contentView = ButterKnife.findById(v, R.id.ptrListview_view_list);
 
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         initDropDownMenu();
         initPtrListView(contentView);
 
@@ -117,6 +111,14 @@ public class ProjectFragment extends BaseFragment {
         initDropdownview();
 
         initDate(REFRESH);
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     private void initDropdownview() {
@@ -135,7 +137,7 @@ public class ProjectFragment extends BaseFragment {
                     new ActionCallbackListener<List<DictionaryListDto>>() {
                         @Override
                         public void onSuccess(List<DictionaryListDto> data) {
-                            type=new ArrayList<String>();
+                            type = new ArrayList<String>();
                             type.add("类型");
                             typeCode = new ArrayList<String>();
                             for (int i = 0; i < data.size(); i++) {
@@ -186,7 +188,7 @@ public class ProjectFragment extends BaseFragment {
                             item.setNum(listDto.getRecruited());
                             item.setMaxNum(listDto.getRecruitNumber());
                             item.setTime(listDto.getLengthTime());
-                            item.setImg("");
+                            item.setImg(listDto.getAppLstUrl());
                             list.add(item);
                         }
                         PageIndex = data.getPageIndex();
