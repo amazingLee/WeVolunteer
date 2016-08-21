@@ -29,10 +29,10 @@ import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
+import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
-import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.google.gson.Gson;
@@ -176,34 +176,6 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ApiResponse<List<String>> activityRecruitCreate(List<ActivityRecruitDto> create, String accessToken) {
-        Gson gson = new Gson();
-        String params = gson.toJson(create);
-        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
-        }.getType();
-        try {
-            return httpEngine.postApiHandler(params, ACTIVITY_RECRUIT_CREAT, typeOfT, accessToken);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ApiResponse<>(false, "未知错误");
-    }
-
-    @Override
-    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken) {
-        Gson gson = new Gson();
-        String params = gson.toJson(query);
-        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ActivityRecruitListDto>>>() {
-        }.getType();
-        try {
-            return httpEngine.postApiHandler(params, ACTIVITY_RECRUIT_QUERY, typeOfT, accessToken);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ApiResponse<>(false, "未知错误");
-    }
-
-    @Override
     public ApiResponse<JobActivityViewDto> jobActivityDetail(String jobActivityId, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(jobActivityId);
@@ -246,33 +218,6 @@ public class ApiImpl implements Api {
         return new ApiResponse<>(false, "未知错误");
     }
 
-    @Override
-    public ApiResponse<VolunteerViewDto> volunteerDetail(String id, String accessToken) {
-        List<String> params = new ArrayList<>();
-        params.add(id);
-        Type typeOft = new TypeToken<ApiResponse<VolunteerViewDto>>() {
-        }.getType();
-        try {
-            return httpEngine.getApiHandler(params, VOLUNTEER_DETAIL, typeOft, accessToken);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ApiResponse<>(false, "未知错误");
-    }
-
-    @Override
-    public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update, String accessToken) {
-        Gson gson = new Gson();
-        String params = gson.toJson(update);
-        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
-        }.getType();
-        try {
-            return httpEngine.postApiHandler(params, VOLUNTEER_UPDATE, typeOfT, accessToken);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ApiResponse<>(false, "未知错误");
-    }
 
     @Override
     public ApiResponse<PagedListEntityDto<CompanyListDto>> companyQuery(CompanyQueryOptionDto query, String accessToken) {
@@ -445,6 +390,137 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.postApiHandler(params, CONTENT_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ActivityRecruitListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITYRECRUIT_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> send_phone(String phone, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(phone);
+        Type typeOft = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, SEND_PHONE, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<Boolean> get_verify(String phone, String SMScode, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(phone);
+        params.add(SMScode);
+        Type typeOft = new TypeToken<ApiResponse<Boolean>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, GET_VERYFY, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<VolunteerViewDto> get_volunteerDetail(String id, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(id);
+        Type typeOft = new TypeToken<ApiResponse<VolunteerViewDto>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, VOLUNTEER_DETAIL, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> get_oldPSWD(String id, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(id);
+        Type typeOft = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, GET_OLD_PSWD, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> set_newPSWD(String id, String newPassword, String accessToken) {
+        Gson gson = new Gson();
+        //传空值
+        List<String> update = new ArrayList<>();
+        update.add(id);
+        update.add(newPassword);
+        Type typeOfT = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.PSWDpostApiHandler(update, SET_NEW_PSWD, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> update_portrait(UserPhotoDto portrait, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(portrait);
+        Type typeOfT = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, UPDATE_PORTRAIT, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> get_portrait(String UserID, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(UserID);
+        Type typeOft = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, GET_PORTRAIT, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+
+    }
+
+    @Override
+    public ApiResponse<String> volunteerUpdate(List<VolunteerViewDto> update, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(update);
+        Type typeOfT = new TypeToken<ApiResponse<String>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, VOLUNTEER_UPDATE, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

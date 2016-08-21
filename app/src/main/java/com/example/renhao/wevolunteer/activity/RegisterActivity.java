@@ -191,7 +191,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     public void success(AccessTokenBO accessTokenBO) {
 
 
-                        startActivity(new Intent(RegisterActivity.this, AffiliatedInstitutionActivity.class));
                         showToast("success");
                     }
 

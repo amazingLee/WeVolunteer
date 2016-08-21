@@ -12,17 +12,17 @@ import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
 import com.example.model.activityRecruit.ActivityRecruitDto;
+import com.example.model.PagedListEntityDto;
+import com.example.model.activity.ActivityCreateBO;
+import com.example.model.activity.ActivityListDto;
+import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
 import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
-import com.example.model.PagedListEntityDto;
-import com.example.model.activity.ActivityCreateBO;
-import com.example.model.activity.ActivityListDto;
-import com.example.model.activity.ActivityQueryOptionDto;
-import com.example.model.activity.ActivityViewDto;
 import com.example.model.company.CompanyViewDto;
 import com.example.model.content.ContentListDto;
 import com.example.model.content.ContentQueryOptionDto;
@@ -36,10 +36,10 @@ import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
+import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
-import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 
@@ -234,34 +234,6 @@ public class AppActionImpl implements AppAction {
     }
 
     @Override
-    public void activityRecruitCreat(final List<ActivityRecruitDto> create,
-                                     final ActionCallbackListener<List<String>> listener) {
-        //判断票据是否过期
-        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
-
-        new AsyncTask<Void, Void, ApiResponse<List<String>>>() {
-
-            @Override
-            protected ApiResponse<List<String>> doInBackground(Void... params) {
-                return api.activityRecruitCreate(create, accessToken);
-            }
-
-            @Override
-            protected void onPostExecute(ApiResponse<List<String>> result) {
-                if (result == null) {
-                    listener.onFailure("", "未知错误");
-                    return;
-                }
-                if (result.isSuccess()) {
-                    listener.onSuccess(result.getData());
-                } else {
-                    listener.onFailure("", result.getMessage());
-                }
-            }
-        }.execute();
-    }
-
-    @Override
     public void jobActivityDetail(final String jobActivityId, final ActionCallbackListener<JobActivityViewDto> listener) {
         //判断票据是否过期
         final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
@@ -369,12 +341,12 @@ public class AppActionImpl implements AppAction {
 
     //志愿者（详情信息）
     @Override
-    public void volunteerDetail(final String id, final ActionCallbackListener<VolunteerViewDto> listener) {
+    public void get_volunteerDetail(final String id, final ActionCallbackListener<VolunteerViewDto> listener) {
         final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
         new AsyncTask<Void, Void, ApiResponse<VolunteerViewDto>>() {
             @Override
             protected ApiResponse<VolunteerViewDto> doInBackground(Void... params) {
-                return api.volunteerDetail(id, accessToken);
+                return api.get_volunteerDetail(id, accessToken);
             }
 
             @Override
@@ -390,32 +362,6 @@ public class AppActionImpl implements AppAction {
                 }
             }
         }.execute();
-    }
-
-    @Override
-    public void volunteerEdit(final List<VolunteerEditDto> volunteerEditDto, final ActionCallbackListener<List<String>> listener) {
-        //判断票据是否过期
-        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
-        new AsyncTask<Void, Void, ApiResponse<List<String>>>() {
-            @Override
-            protected ApiResponse<List<String>> doInBackground(Void... params) {
-                return api.volunteerEdit(volunteerEditDto, accessToken);
-            }
-
-            @Override
-            protected void onPostExecute(ApiResponse<List<String>> result) {
-                if (result == null) {
-                    listener.onFailure("", "未知错误");
-                    return;
-                }
-                if (result.isSuccess()) {
-                    listener.onSuccess(result.getData());
-                } else {
-                    listener.onFailure("", result.getMessage());
-                }
-            }
-        }.execute();
-
     }
 
 
@@ -517,6 +463,33 @@ public class AppActionImpl implements AppAction {
                 }
             }
         }.execute();
+    }
+
+    //志愿者更新
+    @Override
+    public void volunteerUpdate(final List<VolunteerViewDto> VolunteerViewDto, final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.volunteerUpdate(VolunteerViewDto, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+
     }
 
     @Override
@@ -737,6 +710,158 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void getVerification(final String phone,
+                                final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.send_phone(phone, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void getverify(final String phone, final String SMScode,
+                          final ActionCallbackListener<Boolean> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<Boolean>>() {
+            @Override
+            protected ApiResponse<Boolean> doInBackground(Void... params) {
+                return api.get_verify(phone, SMScode, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<Boolean> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void getold_PSWD(final String id, final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.get_oldPSWD(id, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void setnew_PSWD(final String id, final String newPassword, final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.set_newPSWD(id, newPassword, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void update_portrait(final UserPhotoDto photo, final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.update_portrait(photo, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void get_portrait(final String UserId, final ActionCallbackListener<String> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<String>>() {
+            @Override
+            protected ApiResponse<String> doInBackground(Void... params) {
+                return api.get_portrait(UserId, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<String> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;

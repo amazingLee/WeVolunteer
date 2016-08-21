@@ -8,6 +8,11 @@ import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
+import com.example.model.PagedListEntityDto;
+import com.example.model.activity.ActivityCreateBO;
+import com.example.model.activity.ActivityListDto;
+import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
@@ -27,10 +32,10 @@ import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
+import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
-import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 
@@ -60,14 +65,6 @@ public interface AppAction {
 
     public void activityQuery(ActivityQueryOptionDto activityQueryOptionDto, ActionCallbackListener<PagedListEntityDto<ActivityListDto>> listener);
 
-    /**
-     * 报名
-     *
-     * @param create
-     * @param listener
-     */
-    public void activityRecruitCreat(List<ActivityRecruitDto> create, ActionCallbackListener<List<String>> listener);
-
     public void jobActivityDetail(String jobActivityId, ActionCallbackListener<JobActivityViewDto> listener);
 
     //用户登录利用票据获取到的username，来获取用户的信息
@@ -88,10 +85,7 @@ public interface AppAction {
     public void volunteerQuery(VolunteerQueryDto volunteerQueryBO, ActionCallbackListener<VolunteerDto> listener);
 
     //志愿者详情信息
-    public void volunteerDetail(String id, ActionCallbackListener<VolunteerViewDto> listener);
-
-    //志愿者（修改）
-    public void volunteerEdit(List<VolunteerEditDto> volunteerEditDto, ActionCallbackListener<List<String>> listener);
+    public void get_volunteerDetail(String id, ActionCallbackListener<VolunteerViewDto> listener);
 
     //company POST 查询
     public void companyQuery(CompanyQueryOptionDto companyQueryOptionDto, ActionCallbackListener<PagedListEntityDto<CompanyListDto>> listener);
@@ -105,6 +99,25 @@ public interface AppAction {
     //company 更新
     public void companyUpdate(List<CompanyListDto> companyListDtos, ActionCallbackListener<List<String>> listener);
 
+    //志愿者（信息修改）
+    public void volunteerUpdate(List<VolunteerViewDto> volunteerEditDto, ActionCallbackListener<String> listener);
+
+    //发送短信验证码功能
+    public void getVerification(String phone, ActionCallbackListener<String> listener);
+
+    //验证短信验证码功能
+    public void getverify(String phone, String SMScode, ActionCallbackListener<Boolean> listener);
+
+    //更改密码
+    public void getold_PSWD(String id, ActionCallbackListener<String> listener);
+
+    public void setnew_PSWD(String id, String newPassword, ActionCallbackListener<String> listener);
+
+    //更改头像
+    public void update_portrait(UserPhotoDto photo, ActionCallbackListener<String> listener);
+
+    //获取头像
+    public void get_portrait(String UserId, ActionCallbackListener<String> listener);
 
     /**
      * dictionary 查询

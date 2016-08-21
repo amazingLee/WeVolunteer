@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,16 @@ public class ServiceTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_time);
         listView = (ListView) findViewById(R.id.listView_service_time);
+
+        //回退按钮
+        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceTimeActivity.this.finish();
+            }
+        });
+
         String[] s = new String[]{
                 "周一",
                 "周二",
@@ -39,7 +50,7 @@ public class ServiceTimeActivity extends AppCompatActivity {
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.service_time_item,R.id.tv_week,actions);
+                this, R.layout.service_time_item, R.id.tv_week, actions);
         listView.setAdapter(arrayAdapter);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);

@@ -3,48 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorDarkWhite"
+    android:orientation="vertical"
     tools:context="com.example.renhao.wevolunteer.activity.ServiceTimeActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_homepage_height"
         android:background="@color/colorCyan">
+
         <ImageView
+            android:id="@+id/imageView_btn_back"
             android:layout_width="@dimen/imageview_homepage_magnifierSize"
             android:layout_height="@dimen/imageview_homepage_magnifierSize"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/actionbar_homepage_margin"
             android:layout_marginStart="@dimen/actionbar_homepage_margin"
-            android:src="@drawable/icon_indicator"
-            android:id="@+id/imageView" />
+            android:src="@drawable/icon_indicator" />
+
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="@string/title_mobile_phone"
-            android:textSize="22sp"
-            android:textColor="@color/colorWhite"
             android:layout_centerInParent="true"
-            android:id="@+id/textView" />
+            android:gravity="center_vertical"
+            android:text="@string/title_service_time"
+            android:textColor="@color/colorWhite"
+            android:textSize="22sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_submit"
-            android:textSize="@dimen/textview_right_titlesize"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorWhite"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/textview_homepage_titlesize"
-            android:layout_marginEnd="@dimen/textview_homepage_titlesize"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/textview_homepage_titlesize"
+            android:layout_marginRight="@dimen/textview_homepage_titlesize"
+            android:gravity="center_vertical"
+            android:text="@string/tv_submit"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/textview_submit_titlesize" />
     </RelativeLayout>
 
     <ListView
+        android:id="@+id/listView_service_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView_service_time"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

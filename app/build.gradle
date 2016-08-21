@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'WeVolunteer'
             keyPassword '15728006904'
-            storeFile file('F:/Android/key/WeVolunteer.jks')
+            storeFile file('Z:/E-signature/WeVolunteer.jks')
             storePassword '15728006904'
         }
     }
@@ -40,6 +40,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile project(':core')
