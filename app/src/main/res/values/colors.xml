@@ -24,5 +24,7 @@
     <color name="color">#05b0ad</color>
 
     <color name="colorLightGray">#DADADA</color>
+    <color name="personal_middle_main_text">#F40755</color>
+
 
 </resources>

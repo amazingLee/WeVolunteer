@@ -25,10 +25,10 @@ import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
+import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
-import com.example.model.volunteer.VolunteerEditDto;
 import com.example.model.volunteer.VolunteerQueryDto;
 import com.example.model.volunteer.VolunteerViewDto;
 
@@ -89,6 +89,19 @@ public interface Api {
     //签到签退
     public static final String ACTIVITYRECRUIT_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/query";
 
+
+    //发送验证码
+    public static final String SEND_PHONE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/smsauth/send/register";
+    public static final String GET_VERYFY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/smsauth/valid/register";
+
+    //密码修改
+    public static final String GET_OLD_PSWD = "Nbcei.Framework.Api.Impl/v1/user/query/password";
+    public static final String SET_NEW_PSWD = "Nbcei.Framework.Api.Impl/v1/user/update/setpassword";
+
+    //头像操作
+    public static final String UPDATE_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/update/photo";
+    public static final String GET_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/query/photo";
+
     /**
      * 获取accessToken
      *
@@ -139,9 +152,6 @@ public interface Api {
 
     public ApiResponse<VolunteerDto> volunteerQuery(VolunteerQueryDto query, String accessToken);
 
-    public ApiResponse<VolunteerViewDto> volunteerDetail(String id, String accessToken);
-
-    public ApiResponse<List<String>> volunteerEdit(List<VolunteerEditDto> update, String accessToken);
 
     public ApiResponse<PagedListEntityDto<CompanyListDto>> companyQuery(CompanyQueryOptionDto query, String accessToken);
 
@@ -150,6 +160,28 @@ public interface Api {
     public ApiResponse<List<String>> companyCreat(List<CompanyListDto> creates, String accessToken);
 
     public ApiResponse<List<String>> companyUpdate(List<CompanyListDto> update, String accessToken);
+
+    //短信验证码
+    public ApiResponse<String> send_phone(String phone, String accessToken);
+
+    public ApiResponse<Boolean> get_verify(String phone, String SMScode, String accessToken);
+
+    //志愿者详细信息查询
+    public ApiResponse<VolunteerViewDto> get_volunteerDetail(String id, String accessToken);
+
+    //志愿者信息修改
+    public ApiResponse<String> volunteerUpdate(List<VolunteerViewDto> update, String accessToken);
+
+    //修改密码
+    public ApiResponse<String> get_oldPSWD(String id, String accessToken);
+
+    public ApiResponse<String> set_newPSWD(String id, String newPassword, String accessToken);
+
+    //头像上传
+    public ApiResponse<String> update_portrait(UserPhotoDto portrait, String accessToken);
+
+    //取得头像
+    public ApiResponse<String> get_portrait(String UserID, String accessToken);
 
     /**
      * @param query

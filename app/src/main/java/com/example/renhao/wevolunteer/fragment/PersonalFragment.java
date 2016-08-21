@@ -1,0 +1,427 @@
+package com.example.renhao.wevolunteer.fragment;
+/*
+ *
+ * Created by Ge on 2016/8/8  10:03.
+ *
+ */
+
+import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Base64;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.core.AppAction;
+import com.example.core.AppActionImpl;
+import com.example.core.listener.AccessTokenListener;
+import com.example.model.AccessTokenBO;
+import com.example.model.ActionCallbackListener;
+import com.example.model.volunteer.VolunteerViewDto;
+import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.activity.AboutUsActivity;
+import com.example.renhao.wevolunteer.activity.ApplyProBonoActivity;
+import com.example.renhao.wevolunteer.activity.FAQActivity;
+import com.example.renhao.wevolunteer.activity.MyORGActivity;
+import com.example.renhao.wevolunteer.activity.MyProjectActivity;
+import com.example.renhao.wevolunteer.activity.PersonalDataActivity;
+import com.example.renhao.wevolunteer.activity.ProfessionalSelectionActivity;
+import com.example.renhao.wevolunteer.activity.ReportProblemActivity;
+
+public class PersonalFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = "PersonalFragment";
+
+    private View mainview;
+    private boolean isCreat = false;
+
+    private AppAction mAction;
+
+    private VolunteerViewDto eventbus_data;
+    private View bottomView;
+    private LinearLayout professional_true;
+    private LinearLayout Professional_false;
+    private TextView tv_true_name, tv_specialty, tv_integral;
+    private View middleView;
+    private TextView tv_AllTime, tv_SchoolTime, tv_InJobTime, tv_RetireTime;
+    private LinearLayout group;
+    private ImageView image_portrait;
+
+    private final int UPDATE_UI = 0;
+    private final int UPDATE_PORTRAIT = 1;
+
+    //onclick TAG
+    private final int PROFESSIONAL_SELECTION = 0;
+    private final int APPLY_PROFESSIONAL = 1;
+    private final int TO_MYPROJECT = 2;
+    private final int TO_ATTENTION = 3;
+    private final int TO_ORG = 4;
+    private final int TO_RANK = 5;
+    private final int TO_INFORMATION = 6;
+    private final int TO_ABOUTUS = 7;
+    private final int TO_WIPE_CACHE = 8;
+    private final int TO_REPORT_PROBLEM = 9;
+    private final int TO_FAQ = 10;
+
+    private boolean isSpeciality;
+    private boolean isShowTrueName;
+    private String true_name;
+    private String nick_name;
+    private String specialty;
+    private String integral;
+    private int LevelType;
+    private String AllServiceTime;
+    private String WorkServiceTime;
+    private String SchoolServiceTime;
+    private String RetireServiceTime;
+    private byte[] my_portrait;
+
+    /*Handler更新UI*/
+    Handler myHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPDATE_UI:
+                    //整体页面更新
+                    repeat_update();
+                    break;
+                case UPDATE_PORTRAIT:
+                    //头像显示
+                    if (my_portrait != null) {
+                        image_portrait.setImageBitmap(getBitmapFromByte(my_portrait));
+                    }
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+
+    private void repeat_update() {
+
+        //判断是否为专业志愿志愿者，显示不同按钮
+        if (isSpeciality) {
+            //专业志愿者
+            tv_specialty.setVisibility(View.VISIBLE);
+            tv_specialty.setText(specialty);
+            professional_true.setVisibility(View.VISIBLE);
+            Professional_false.setVisibility(View.GONE);
+        } else {
+            //普通志愿者
+            tv_specialty.setVisibility(View.INVISIBLE);
+            professional_true.setVisibility(View.GONE);
+            Professional_false.setVisibility(View.VISIBLE);
+        }
+        //头部
+        if (isShowTrueName) {
+            tv_true_name.setText(true_name);
+        } else {
+            tv_true_name.setText(nick_name);
+        }
+        tv_integral.setText(integral + " 分");
+        SetStars();//根据level显示星级
+
+        //中部
+        tv_AllTime.setText(AllServiceTime);
+        tv_SchoolTime.setText(WorkServiceTime);
+        tv_InJobTime.setText(SchoolServiceTime);
+        tv_RetireTime.setText(RetireServiceTime);
+    }
+
+
+    //判断星星是否已经生成
+    private boolean isStarYet = false;
+
+    //根据Level显示星星
+    private void SetStars() {
+        if (LevelType != 0 && !isStarYet) {
+            group = (LinearLayout) mainview.findViewById(R.id.LL_personal_StarsGroup);
+            ImageView[] imageViews = new ImageView[LevelType];
+            int width = (int) getActivity().getResources().getDimension(R.dimen.imageview_stars_width);
+            int heigth = (int) getActivity().getResources().getDimension(R.dimen.imageview_stars_height);
+            for (int i = 0; i < LevelType; i++) {
+                ImageView imageView = new ImageView(getActivity());
+                imageView.setImageResource(R.drawable.star);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, heigth);
+                imageView.setLayoutParams(params);
+                group.addView(imageView);
+                imageViews[i] = imageView;
+            }
+            isStarYet = true;
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mainview = inflater.inflate(R.layout.fragment_personal, container, false);
+
+        /*头部*/
+        image_portrait = (ImageView) mainview.findViewById(R.id.image_personal_portrait);
+
+        /*find UI界面组件
+        include的middle_view*/
+        middleView = mainview.findViewById(R.id.middle_part);
+        tv_AllTime = (TextView) middleView.findViewById(R.id.tv_personal_ServiceAllTime);
+        tv_SchoolTime = (TextView) middleView.findViewById(R.id.tv_personal_ServiceSchoolTime);
+        tv_InJobTime = (TextView) middleView.findViewById(R.id.tv_personal_ServiceWorkTime);
+        tv_RetireTime = (TextView) middleView.findViewById(R.id.tv_personal_ServiceRetireTime);
+        /*include的bottom_view*/
+        bottomView = mainview.findViewById(R.id.bottom_part);
+        tv_true_name = (TextView) mainview.findViewById(R.id.tv_LL_true_name);
+        tv_specialty = (TextView) mainview.findViewById(R.id.tv_LL_specialty);
+        tv_integral = (TextView) mainview.findViewById(R.id.tv_LL_integral);
+        professional_true = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_true);
+        Professional_false = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_false);
+
+
+        //初始化连接
+        mAction = new AppActionImpl(getActivity());
+        initViewsEven();//设置点击事件的监听以及初始化组件
+
+        //初次进入设置UI
+        repeat_update();
+        isCreat = true;
+
+        return mainview;
+    }
+
+    private void initViewsEven() {
+        //初始化组件
+        LinearLayout job = (LinearLayout) bottomView.findViewById(R.id.LL_PF_job);
+        LinearLayout attention = (LinearLayout) bottomView.findViewById(R.id.LL_PF_attention);
+        LinearLayout ORG = (LinearLayout) bottomView.findViewById(R.id.LL_PF_ORG);
+        LinearLayout rank = (LinearLayout) bottomView.findViewById(R.id.LL_PF_rank);
+        LinearLayout Information = (LinearLayout) bottomView.findViewById(R.id.LL_PF_information);
+        LinearLayout aboutUS = (LinearLayout) bottomView.findViewById(R.id.LL_PF_aboutUS);
+        LinearLayout WIPE_CACHE = (LinearLayout) bottomView.findViewById(R.id.LL_PF_WIPE_CACHE);
+        LinearLayout REPORT_PROBLEM = (LinearLayout) bottomView.findViewById(R.id.LL_PF_REPORT_PROBLEM);
+        LinearLayout FAQ = (LinearLayout) bottomView.findViewById(R.id.LL_PF_FAQ);
+
+
+        //添加点击监听
+        professional_true.setOnClickListener(this);
+        Professional_false.setOnClickListener(this);
+        job.setOnClickListener(this);
+        attention.setOnClickListener(this);
+        ORG.setOnClickListener(this);
+        rank.setOnClickListener(this);
+        Information.setOnClickListener(this);
+        aboutUS.setOnClickListener(this);
+        WIPE_CACHE.setOnClickListener(this);
+        REPORT_PROBLEM.setOnClickListener(this);
+        FAQ.setOnClickListener(this);
+
+        //添加点击标签
+        professional_true.setTag(PROFESSIONAL_SELECTION);
+        Professional_false.setTag(APPLY_PROFESSIONAL);
+        job.setTag(TO_MYPROJECT);
+        attention.setTag(TO_ATTENTION);
+        ORG.setTag(TO_ORG);
+        rank.setTag(TO_RANK);
+        Information.setTag(TO_INFORMATION);
+        aboutUS.setTag(TO_ABOUTUS);
+        WIPE_CACHE.setTag(TO_WIPE_CACHE);
+        REPORT_PROBLEM.setTag(TO_REPORT_PROBLEM);
+        FAQ.setTag(TO_FAQ);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int tag = (int) v.getTag();
+        Intent intent = new Intent();
+        switch (tag) {
+            case PROFESSIONAL_SELECTION:
+                intent.setClass(getActivity(), ProfessionalSelectionActivity.class);
+                startActivity(intent);
+                break;
+            case APPLY_PROFESSIONAL:
+                intent.setClass(getActivity(), ApplyProBonoActivity.class);
+                startActivity(intent);
+                break;
+            case TO_MYPROJECT:
+                intent.putExtra("title", this.getResources().getString(R.string.title_myproject));
+                intent.setClass(getActivity(), MyProjectActivity.class);
+                startActivity(intent);
+                break;
+            case TO_ATTENTION:
+                intent.putExtra("title", this.getResources().getString(R.string.title_myattention));
+                intent.setClass(getActivity(), MyProjectActivity.class);
+                startActivity(intent);
+                break;
+            case TO_ORG:
+                intent.setClass(getActivity(), MyORGActivity.class);
+                startActivity(intent);
+                break;
+            case TO_RANK:
+                break;
+            case TO_INFORMATION:
+                if (my_portrait != null) {
+                    intent.putExtra("portrait", my_portrait);
+                }
+                if (eventbus_data != null) {
+                    intent.putExtra("data", eventbus_data);
+                    intent.setClass(getActivity(), PersonalDataActivity.class);
+                    startActivity(intent);
+                } else {
+                    showToast("数据加载中，请稍候");
+                }
+                break;
+            case TO_ABOUTUS:
+                intent.setClass(getActivity(), AboutUsActivity.class);
+                startActivity(intent);
+                break;
+            case TO_WIPE_CACHE:
+                break;
+            case TO_REPORT_PROBLEM:
+                intent.setClass(getActivity(), ReportProblemActivity.class);
+                startActivity(intent);
+                break;
+            case TO_FAQ:
+                intent.setClass(getActivity(), FAQActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        //暂时获取票据
+        mAction.getAccessToken("15728006854", "123456", new AccessTokenListener() {
+            @Override
+            public void success(AccessTokenBO accessTokenBO) {
+
+                //取得头像
+                mAction.get_portrait("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<String>() {
+
+                            @Override
+                            public void onSuccess(String data) {
+                                try {
+                                    my_portrait = Base64.decode(data.getBytes(), Base64.DEFAULT);
+                                    Message message = new Message();
+                                    message.what = UPDATE_PORTRAIT;
+                                    myHandler.sendMessage(message);
+                                } catch (Exception e) {
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(String errorEvent, String message) {
+
+                            }
+                        }
+
+                );
+
+
+            }
+
+            @Override
+            public void fail() {
+                showToast("fail");
+            }
+        });
+
+        mAction.get_volunteerDetail("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<VolunteerViewDto>() {
+
+            @Override
+            public void onSuccess(VolunteerViewDto data) {
+                //EventBus将data传到另一个activity中备用
+                eventbus_data = data;
+
+                isSpeciality = data.getSpeciality();
+                isShowTrueName = data.getShowTrueName();
+
+                //头部
+                true_name = data.getTrueName();
+                nick_name = data.getNickName();
+                integral = data.getScore().toString();
+                LevelType = data.getLevelType();
+                if (specialty != null)
+                    specialty = data.getSpecialty();
+
+                //服务时长
+                SchoolServiceTime = data.getSchoolservicetime() + "小时";
+                WorkServiceTime = data.getWorkservicetime() + "小时";
+                RetireServiceTime = data.getRetireservicetime() + "小时";
+                AllServiceTime = data.getSchoolservicetime() + data.getWorkservicetime()
+                        + data.getRetireservicetime() + "小时";
+
+                //非第一次进入时利用handler更新UI
+                if (isCreat) {
+                    Message message = new Message();
+                    message.what = UPDATE_UI;
+                    myHandler.sendMessage(message);
+                }
+
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+                showToast("网络异常，请检查后重试");
+            }
+        });
+
+
+//        //志愿者信息post查询
+//        VolunteerQueryDto vl_query = new VolunteerQueryDto();
+//
+//        vl_query.setPageIndex(0);
+//
+//
+//        Logger.v(TAG, new Gson().toJson(vl_query));
+//        mAction.volunteerQuery(vl_query, new ActionCallbackListener<PagedListEntityDto<VolunteerListDto>>() {
+//            @Override
+//            public void onSuccess(PagedListEntityDto<VolunteerListDto> data) {
+//                VolunteerListDto personal_data = data.getRows().get(0);
+//                isSpeciality = personal_data.getSpeciality();
+//
+//                true_name=personal_data.getTrueName();
+//                integral=personal_data.getScore().toString();
+//
+//
+//                Message message = new Message();
+//                message.what =UPDATE_UI;
+//                myHandler.sendMessage(message);
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(String errorEvent, String message) {
+//                showToast("fail");
+//            }
+//        });
+
+        super.onResume();
+    }
+
+    //二进制流转换为图片
+    public Bitmap getBitmapFromByte(byte[] temp) {
+        if (temp != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);
+            return bitmap;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if(group!=null)
+        group.removeAllViews();
+        super.onDestroy();
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+}

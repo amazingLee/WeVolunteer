@@ -5,27 +5,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.renhao.wevolunteer.activity.AboutUsActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_homepage_height"
         android:background="@color/colorCyan">
+
         <ImageView
+            android:id="@+id/imageView_btn_back"
             android:layout_width="@dimen/imageview_homepage_magnifierSize"
             android:layout_height="@dimen/imageview_homepage_magnifierSize"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/actionbar_homepage_margin"
             android:layout_marginStart="@dimen/actionbar_homepage_margin"
-            android:src="@drawable/icon_indicator"
-            android:id="@+id/imageView" />
+            android:src="@drawable/icon_indicator" />
+
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center_vertical"
             android:text="@string/title_about_us"
-            android:textSize="22sp"
             android:textColor="@color/colorWhite"
-            android:layout_centerInParent="true"
-            android:id="@+id/textView" />
+            android:textSize="22sp" />
 
 
     </RelativeLayout>
@@ -34,25 +37,29 @@
         android:layout_width="300dp"
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/app_logo"/>
+        android:src="@drawable/app_logo"
+        android:id="@+id/imageView" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/tv_version_number"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:text="@string/tv_Organizer"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:textSize="16sp"
-        android:text="@string/tv_official_website"/>
+        android:text="@string/tv_official_website"
+        android:textSize="16sp" />
 </LinearLayout>

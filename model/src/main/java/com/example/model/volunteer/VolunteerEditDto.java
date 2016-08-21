@@ -3,7 +3,7 @@ package com.example.model.volunteer;
 /**
  * Created by Administrator on 2016/8/4.
  */
-public class VolunteerEditDto {
+public class VolunteerEditDto extends VolunteerViewDto {
     public static final String TAG = "VolunteerEditDto";
 
     private String Id;      // (string, optional): 获取或设置 志愿者标识
@@ -11,8 +11,10 @@ public class VolunteerEditDto {
     private String OrgId;       // (string, optional): 获取或设置 所属机构Id
     private String OrganizationId;      // (string): 获取或设置 所属机构Id
     private String OrganizationName;    // (string, optional): 获取或设置 所属机构
-    private int CardType;    // (integer, optional): 获取或设置 证件类型
+    private Integer CardType;    // (integer, optional): 获取或设置 证件类型
     private String IdNumber;    // (string): 获取或设置 证件号码
+    private String NickName; //(string, optional): 获取或设置 昵称
+    private Boolean IsShowTrueName; //(boolean, optional): 获取或设置 是否显示真实姓名
     private String Nation;      // (string, optional): 获取或设置 国藉
     private String Volk;        // (string, optional): 获取或设置 民族
     private String Polity;      // (string, optional): 获取或设置 政治面貌
@@ -30,557 +32,759 @@ public class VolunteerEditDto {
     private String Telephone;   // (string, optional): 获取或设置 固定电话
     private String Mobile;      // (string): 获取或设置 移动电话
     private String Email;       // (string, optional): 获取或设置 电子邮箱
-    private int JobStatus;      // (integer, optional): 获取或设置 从业状态
-    private double WorkTime;    // (number, optional): 获取或设置 工作年限
+    private Integer JobStatus;      // (integer, optional): 获取或设置 从业状态
+    private Double WorkTime;    // (number, optional): 获取或设置 工作年限
     private String Grade;       // (string, optional): 获取或设置 职称
     private String Job;         // (string, optional): 获取或设置 职务
-    private double ServiceTime; // (number, optional): 获取或设置 服务时间(小时)
-    private double TrainTime;   // (number, optional): 获取或设置 培训时间
+    private Double ServiceTime; // (number, optional): 获取或设置 服务时间(小时)
+    private Double TrainTime;   // (number, optional): 获取或设置 培训时间
     private String Skilled;     // (string, optional): 获取或设置 特长
-    private int LevelType;   // (integer, optional): 获取或设置 志愿者等级
-    private double Score;       // (number, optional): 获取或设置 积分
-    private int ChronographyType;    // (integer, optional): 获取或设置 计时类型
+    private Integer LevelType;   // (integer, optional): 获取或设置 志愿者等级
+    private Double Score;       // (number, optional): 获取或设置 积分
+    private Integer ChronographyType;    // (integer, optional): 获取或设置 计时类型
     private String ChronographyId;  // (string, optional): 获取或设置 计时工具编号
     private String Profession;      // (string, optional): 获取或设置 职业
-    private double Height;      // (number, optional): 获取或设置 身高
+    private Double Height;      // (number, optional): 获取或设置 身高
     private String Workunit;    // (string, optional): 获取或设置 工作单位
-    private double Historytime;     // (number, optional): 获取或设置 历时时数
-    private double Credit;      // (number, optional): 获取或设置 征信
+    private Double Historytime;     // (number, optional): 获取或设置 历时时数
+    private Double Credit;      // (number, optional): 获取或设置 征信
     private String Domicile;    // (string, optional): 获取或设置 现居地
     private String Describe;    // (string, optional): 获取或设置 描述
-    private int LoginCount;     // (integer, optional): 获取或设置 登录次数
+    private Integer LoginCount;     // (integer, optional): 获取或设置 登录次数
     private String LastLoginTime;   // (string, optional): 获取或设置 最后次登录时间
-    private int FailCount;       // (integer, optional): 获取或设置 密码错误次数
+    private Integer FailCount;       // (integer, optional): 获取或设置 密码错误次数
     private String IP;      // (string, optional): 获取或设置 上次登录IP
-    private int IsCompleteInfo;  // (integer, optional): 获取或设置 是否完成信息
+    private Integer IsCompleteInfo;  // (integer, optional): 获取或设置 是否完成信息
     private String ZhLevel;     // (string, optional): 获取或设置 中文水平
     private String EnLevel;     // (string, optional): 获取或设置 外语水平
     private String UnitProperty;    // (string, optional): 获取或设置 单位性质
-    private int SrcScore;    // (integer, optional): 获取或设置 原积分
-    private double Workservicetime; // (number, optional): 获取或设置 在职服务时长
-    private double Schoolservicetime;   // (number, optional): 获取或设置 在校服务时长
-    private double Retireservicetime;   // (number, optional): 获取或设置 退休服务时长
-    private boolean IsSpeciality;       // (boolean, optional): 获取或设置 是否专业志愿者
-    private boolean IsCertification;     // (boolean, optional): 获取或设置 是否认证
+    private Integer SrcScore;    // (integer, optional): 获取或设置 原积分
+    private Double Workservicetime; // (number, optional): 获取或设置 在职服务时长
+    private Double Schoolservicetime;   // (number, optional): 获取或设置 在校服务时长
+    private Double Retireservicetime;   // (number, optional): 获取或设置 退休服务时长
+    private Boolean IsSpeciality;       // (boolean, optional): 获取或设置 是否专业志愿者
+    private Boolean IsCertification;     // (boolean, optional): 获取或设置 是否认证
     private String CertificationTime;   // (string, optional): 获取或设置 认证时间
     private String LanguageType;        // (string, optional): 获取或设置 语种
     private String WeiXinOPENID;        // (string, optional): 获取或设置 微信ID
-    private boolean IsDeleted;       // (boolean, optional): 获取或设置 删除状态
-    private int AuditStatus;     // (integer, optional): 获取或设置 审核状态0未审核 1审核通过 2审核不通过
+    private Boolean IsDeleted;       // (boolean, optional): 获取或设置 删除状态
+    private Integer AuditStatus;     // (integer, optional): 获取或设置 审核状态0未审核 1审核通过 2审核不通过
     private String AuditTime;    // (string, optional): 获取或设置 审核时间
     private String AuditUserId;     // (string, optional): 获取或设置 审核人ID
     private String AuditUserName;   // (string, optional): 获取或设置 审核人用户名
+    private String ServiceTimeIntention;  // (string, optional): 获取或设置 意向服务时间
+    private String ServiceIntention; // (string, optional): 获取或设置 志愿服务意向
+    private String ServiceIntentionOther; // (string, optional): 获取或设置 志愿服务意向其他
+    private String CertificatePic; // (string, optional): 获取或设置 上传证书
+    private Integer IsVerify; // (integer, optional): 认证状态
 
-
-    public String getAcademy() {
-        return Academy;
-    }
-
-    public void setAcademy(String academy) {
-        Academy = academy;
-    }
-
-    public String getAddr() {
-        return Addr;
-    }
-
-    public void setAddr(String addr) {
-        Addr = addr;
-    }
-
-    public String getAreaCode() {
-        return AreaCode;
-    }
-
-    public void setAreaCode(String areaCode) {
-        AreaCode = areaCode;
-    }
-
-    public String getAreaId() {
-        return AreaId;
-    }
-
-    public void setAreaId(String areaId) {
-        AreaId = areaId;
-    }
-
-    public String getAreaName() {
-        return AreaName;
-    }
-
-    public void setAreaName(String areaName) {
-        AreaName = areaName;
-    }
-
-    public int getAuditStatus() {
-        return AuditStatus;
-    }
-
-    public void setAuditStatus(int auditStatus) {
-        AuditStatus = auditStatus;
-    }
-
-    public String getAuditTime() {
-        return AuditTime;
-    }
-
-    public void setAuditTime(String auditTime) {
-        AuditTime = auditTime;
-    }
-
-    public String getAuditUserId() {
-        return AuditUserId;
-    }
-
-    public void setAuditUserId(String auditUserId) {
-        AuditUserId = auditUserId;
-    }
-
-    public String getAuditUserName() {
-        return AuditUserName;
-    }
-
-    public void setAuditUserName(String auditUserName) {
-        AuditUserName = auditUserName;
-    }
-
-    public String getBlood() {
-        return Blood;
-    }
-
-    public void setBlood(String blood) {
-        Blood = blood;
-    }
-
-    public int getCardType() {
-        return CardType;
-    }
-
-    public void setCardType(int cardType) {
-        CardType = cardType;
-    }
-
-    public String getCertificationTime() {
-        return CertificationTime;
-    }
-
-    public void setCertificationTime(String certificationTime) {
-        CertificationTime = certificationTime;
-    }
-
-    public String getChronographyId() {
-        return ChronographyId;
-    }
-
-    public void setChronographyId(String chronographyId) {
-        ChronographyId = chronographyId;
-    }
-
-    public int getChronographyType() {
-        return ChronographyType;
-    }
-
-    public void setChronographyType(int chronographyType) {
-        ChronographyType = chronographyType;
-    }
-
-    public double getCredit() {
-        return Credit;
-    }
-
-    public void setCredit(double credit) {
-        Credit = credit;
-    }
-
-    public String getDegree() {
-        return Degree;
-    }
-
-    public void setDegree(String degree) {
-        Degree = degree;
-    }
-
-    public String getDescribe() {
-        return Describe;
-    }
-
-    public void setDescribe(String describe) {
-        Describe = describe;
-    }
-
-    public String getDomicile() {
-        return Domicile;
-    }
-
-    public void setDomicile(String domicile) {
-        Domicile = domicile;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
-
-    public String getEnLevel() {
-        return EnLevel;
-    }
-
-    public void setEnLevel(String enLevel) {
-        EnLevel = enLevel;
-    }
-
-    public int getFailCount() {
-        return FailCount;
-    }
-
-    public void setFailCount(int failCount) {
-        FailCount = failCount;
-    }
-
-    public String getGrade() {
-        return Grade;
-    }
-
-    public void setGrade(String grade) {
-        Grade = grade;
-    }
-
-    public double getHeight() {
-        return Height;
-    }
-
-    public void setHeight(double height) {
-        Height = height;
-    }
-
-    public double getHistorytime() {
-        return Historytime;
-    }
-
-    public void setHistorytime(double historytime) {
-        Historytime = historytime;
-    }
-
+    @Override
     public String getId() {
         return Id;
     }
 
+    @Override
     public void setId(String id) {
         Id = id;
     }
 
-    public String getIdNumber() {
-        return IdNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        IdNumber = idNumber;
-    }
-
-    public String getIP() {
-        return IP;
-    }
-
-    public void setIP(String IP) {
-        this.IP = IP;
-    }
-
-    public boolean isCertification() {
-        return IsCertification;
-    }
-
-    public void setIsCertification(boolean isCertification) {
-        IsCertification = isCertification;
-    }
-
-    public int getIsCompleteInfo() {
-        return IsCompleteInfo;
-    }
-
-    public void setIsCompleteInfo(int isCompleteInfo) {
-        IsCompleteInfo = isCompleteInfo;
-    }
-
-    public boolean isDeleted() {
-        return IsDeleted;
-    }
-
-    public void setIsDeleted(boolean isDeleted) {
-        IsDeleted = isDeleted;
-    }
-
-    public boolean isSpeciality() {
-        return IsSpeciality;
-    }
-
-    public void setIsSpeciality(boolean isSpeciality) {
-        IsSpeciality = isSpeciality;
-    }
-
-    public String getJob() {
-        return Job;
-    }
-
-    public void setJob(String job) {
-        Job = job;
-    }
-
-    public int getJobStatus() {
-        return JobStatus;
-    }
-
-    public void setJobStatus(int jobStatus) {
-        JobStatus = jobStatus;
-    }
-
-    public String getLanguageType() {
-        return LanguageType;
-    }
-
-    public void setLanguageType(String languageType) {
-        LanguageType = languageType;
-    }
-
-    public String getLastLoginTime() {
-        return LastLoginTime;
-    }
-
-    public void setLastLoginTime(String lastLoginTime) {
-        LastLoginTime = lastLoginTime;
-    }
-
-    public int getLevelType() {
-        return LevelType;
-    }
-
-    public void setLevelType(int levelType) {
-        LevelType = levelType;
-    }
-
-    public int getLoginCount() {
-        return LoginCount;
-    }
-
-    public void setLoginCount(int loginCount) {
-        LoginCount = loginCount;
-    }
-
-    public String getMobile() {
-        return Mobile;
-    }
-
-    public void setMobile(String mobile) {
-        Mobile = mobile;
-    }
-
-    public String getNation() {
-        return Nation;
-    }
-
-    public void setNation(String nation) {
-        Nation = nation;
-    }
-
-    public String getOrganizationId() {
-        return OrganizationId;
-    }
-
-    public void setOrganizationId(String organizationId) {
-        OrganizationId = organizationId;
-    }
-
-    public String getOrganizationName() {
-        return OrganizationName;
-    }
-
-    public void setOrganizationName(String organizationName) {
-        OrganizationName = organizationName;
-    }
-
-    public String getOrgId() {
-        return OrgId;
-    }
-
-    public void setOrgId(String orgId) {
-        OrgId = orgId;
-    }
-
-    public String getOrigin() {
-        return Origin;
-    }
-
-    public void setOrigin(String origin) {
-        Origin = origin;
-    }
-
-    public String getPolity() {
-        return Polity;
-    }
-
-    public void setPolity(String polity) {
-        Polity = polity;
-    }
-
-    public String getPostCode() {
-        return PostCode;
-    }
-
-    public void setPostCode(String postCode) {
-        PostCode = postCode;
-    }
-
-    public String getProfession() {
-        return Profession;
-    }
-
-    public void setProfession(String profession) {
-        Profession = profession;
-    }
-
-    public double getRetireservicetime() {
-        return Retireservicetime;
-    }
-
-    public void setRetireservicetime(double retireservicetime) {
-        Retireservicetime = retireservicetime;
-    }
-
-    public double getSchoolservicetime() {
-        return Schoolservicetime;
-    }
-
-    public void setSchoolservicetime(double schoolservicetime) {
-        Schoolservicetime = schoolservicetime;
-    }
-
-    public double getScore() {
-        return Score;
-    }
-
-    public void setScore(double score) {
-        Score = score;
-    }
-
-    public double getServiceTime() {
-        return ServiceTime;
-    }
-
-    public void setServiceTime(double serviceTime) {
-        ServiceTime = serviceTime;
-    }
-
-    public String getSkilled() {
-        return Skilled;
-    }
-
-    public void setSkilled(String skilled) {
-        Skilled = skilled;
-    }
-
-    public String getSpecialty() {
-        return Specialty;
-    }
-
-    public void setSpecialty(String specialty) {
-        Specialty = specialty;
-    }
-
-    public String getSpecialtyType() {
-        return SpecialtyType;
-    }
-
-    public void setSpecialtyType(String specialtyType) {
-        SpecialtyType = specialtyType;
-    }
-
-    public int getSrcScore() {
-        return SrcScore;
-    }
-
-    public void setSrcScore(int srcScore) {
-        SrcScore = srcScore;
-    }
-
-    public String getTelephone() {
-        return Telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        Telephone = telephone;
-    }
-
-    public double getTrainTime() {
-        return TrainTime;
-    }
-
-    public void setTrainTime(double trainTime) {
-        TrainTime = trainTime;
-    }
-
+    @Override
     public String getTrueName() {
         return TrueName;
     }
 
+    @Override
     public void setTrueName(String trueName) {
         TrueName = trueName;
     }
 
-    public String getUnitProperty() {
-        return UnitProperty;
+    @Override
+    public String getOrgId() {
+        return OrgId;
     }
 
-    public void setUnitProperty(String unitProperty) {
-        UnitProperty = unitProperty;
+    @Override
+    public void setOrgId(String orgId) {
+        OrgId = orgId;
     }
 
+    @Override
+    public String getOrganizationId() {
+        return OrganizationId;
+    }
+
+    @Override
+    public void setOrganizationId(String organizationId) {
+        OrganizationId = organizationId;
+    }
+
+    @Override
+    public String getOrganizationName() {
+        return OrganizationName;
+    }
+
+    @Override
+    public void setOrganizationName(String organizationName) {
+        OrganizationName = organizationName;
+    }
+
+    @Override
+    public Integer getCardType() {
+        return CardType;
+    }
+
+    @Override
+    public void setCardType(Integer cardType) {
+        CardType = cardType;
+    }
+
+    @Override
+    public String getIdNumber() {
+        return IdNumber;
+    }
+
+    @Override
+    public void setIdNumber(String idNumber) {
+        IdNumber = idNumber;
+    }
+
+    @Override
+    public String getNickName() {
+        return NickName;
+    }
+
+    @Override
+    public void setNickName(String nickName) {
+        NickName = nickName;
+    }
+
+    @Override
+    public Boolean getShowTrueName() {
+        return IsShowTrueName;
+    }
+
+    @Override
+    public void setShowTrueName(Boolean showTrueName) {
+        IsShowTrueName = showTrueName;
+    }
+
+    @Override
+    public String getNation() {
+        return Nation;
+    }
+
+    @Override
+    public void setNation(String nation) {
+        Nation = nation;
+    }
+
+    @Override
     public String getVolk() {
         return Volk;
     }
 
+    @Override
     public void setVolk(String volk) {
         Volk = volk;
     }
 
-    public String getWeiXinOPENID() {
-        return WeiXinOPENID;
+    @Override
+    public String getPolity() {
+        return Polity;
     }
 
-    public void setWeiXinOPENID(String weiXinOPENID) {
-        WeiXinOPENID = weiXinOPENID;
+    @Override
+    public void setPolity(String polity) {
+        Polity = polity;
     }
 
-    public double getWorkservicetime() {
-        return Workservicetime;
+    @Override
+    public String getAcademy() {
+        return Academy;
     }
 
-    public void setWorkservicetime(double workservicetime) {
-        Workservicetime = workservicetime;
+    @Override
+    public void setAcademy(String academy) {
+        Academy = academy;
     }
 
-    public double getWorkTime() {
+    @Override
+    public String getSpecialtyType() {
+        return SpecialtyType;
+    }
+
+    @Override
+    public void setSpecialtyType(String specialtyType) {
+        SpecialtyType = specialtyType;
+    }
+
+    @Override
+    public String getSpecialty() {
+        return Specialty;
+    }
+
+    @Override
+    public void setSpecialty(String specialty) {
+        Specialty = specialty;
+    }
+
+    @Override
+    public String getDegree() {
+        return Degree;
+    }
+
+    @Override
+    public void setDegree(String degree) {
+        Degree = degree;
+    }
+
+    @Override
+    public String getBlood() {
+        return Blood;
+    }
+
+    @Override
+    public void setBlood(String blood) {
+        Blood = blood;
+    }
+
+    @Override
+    public String getOrigin() {
+        return Origin;
+    }
+
+    @Override
+    public void setOrigin(String origin) {
+        Origin = origin;
+    }
+
+    @Override
+    public String getAreaCode() {
+        return AreaCode;
+    }
+
+    @Override
+    public void setAreaCode(String areaCode) {
+        AreaCode = areaCode;
+    }
+
+    @Override
+    public String getAreaId() {
+        return AreaId;
+    }
+
+    @Override
+    public void setAreaId(String areaId) {
+        AreaId = areaId;
+    }
+
+    @Override
+    public String getAreaName() {
+        return AreaName;
+    }
+
+    @Override
+    public void setAreaName(String areaName) {
+        AreaName = areaName;
+    }
+
+    @Override
+    public String getAddr() {
+        return Addr;
+    }
+
+    @Override
+    public void setAddr(String addr) {
+        Addr = addr;
+    }
+
+    @Override
+    public String getPostCode() {
+        return PostCode;
+    }
+
+    @Override
+    public void setPostCode(String postCode) {
+        PostCode = postCode;
+    }
+
+    @Override
+    public String getTelephone() {
+        return Telephone;
+    }
+
+    @Override
+    public void setTelephone(String telephone) {
+        Telephone = telephone;
+    }
+
+    @Override
+    public String getMobile() {
+        return Mobile;
+    }
+
+    @Override
+    public void setMobile(String mobile) {
+        Mobile = mobile;
+    }
+
+    @Override
+    public String getEmail() {
+        return Email;
+    }
+
+    @Override
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    @Override
+    public Integer getJobStatus() {
+        return JobStatus;
+    }
+
+    @Override
+    public void setJobStatus(Integer jobStatus) {
+        JobStatus = jobStatus;
+    }
+
+    @Override
+    public Double getWorkTime() {
         return WorkTime;
     }
 
-    public void setWorkTime(double workTime) {
+    @Override
+    public void setWorkTime(Double workTime) {
         WorkTime = workTime;
     }
 
+    @Override
+    public String getGrade() {
+        return Grade;
+    }
+
+    @Override
+    public void setGrade(String grade) {
+        Grade = grade;
+    }
+
+    @Override
+    public String getJob() {
+        return Job;
+    }
+
+    @Override
+    public void setJob(String job) {
+        Job = job;
+    }
+
+    @Override
+    public Double getServiceTime() {
+        return ServiceTime;
+    }
+
+    @Override
+    public void setServiceTime(Double serviceTime) {
+        ServiceTime = serviceTime;
+    }
+
+    @Override
+    public Double getTrainTime() {
+        return TrainTime;
+    }
+
+    @Override
+    public void setTrainTime(Double trainTime) {
+        TrainTime = trainTime;
+    }
+
+    @Override
+    public String getSkilled() {
+        return Skilled;
+    }
+
+    @Override
+    public void setSkilled(String skilled) {
+        Skilled = skilled;
+    }
+
+    @Override
+    public Integer getLevelType() {
+        return LevelType;
+    }
+
+    @Override
+    public void setLevelType(Integer levelType) {
+        LevelType = levelType;
+    }
+
+    @Override
+    public Double getScore() {
+        return Score;
+    }
+
+    @Override
+    public void setScore(Double score) {
+        Score = score;
+    }
+
+    @Override
+    public Integer getChronographyType() {
+        return ChronographyType;
+    }
+
+    @Override
+    public void setChronographyType(Integer chronographyType) {
+        ChronographyType = chronographyType;
+    }
+
+    @Override
+    public String getChronographyId() {
+        return ChronographyId;
+    }
+
+    @Override
+    public void setChronographyId(String chronographyId) {
+        ChronographyId = chronographyId;
+    }
+
+    @Override
+    public String getProfession() {
+        return Profession;
+    }
+
+    @Override
+    public void setProfession(String profession) {
+        Profession = profession;
+    }
+
+    @Override
+    public Double getHeight() {
+        return Height;
+    }
+
+    @Override
+    public void setHeight(Double height) {
+        Height = height;
+    }
+
+    @Override
     public String getWorkunit() {
         return Workunit;
     }
 
+    @Override
     public void setWorkunit(String workunit) {
         Workunit = workunit;
     }
 
+    @Override
+    public Double getHistorytime() {
+        return Historytime;
+    }
+
+    @Override
+    public void setHistorytime(Double historytime) {
+        Historytime = historytime;
+    }
+
+    @Override
+    public Double getCredit() {
+        return Credit;
+    }
+
+    @Override
+    public void setCredit(Double credit) {
+        Credit = credit;
+    }
+
+    @Override
+    public String getDomicile() {
+        return Domicile;
+    }
+
+    @Override
+    public void setDomicile(String domicile) {
+        Domicile = domicile;
+    }
+
+    @Override
+    public String getDescribe() {
+        return Describe;
+    }
+
+    @Override
+    public void setDescribe(String describe) {
+        Describe = describe;
+    }
+
+    @Override
+    public Integer getLoginCount() {
+        return LoginCount;
+    }
+
+    @Override
+    public void setLoginCount(Integer loginCount) {
+        LoginCount = loginCount;
+    }
+
+    @Override
+    public String getLastLoginTime() {
+        return LastLoginTime;
+    }
+
+    @Override
+    public void setLastLoginTime(String lastLoginTime) {
+        LastLoginTime = lastLoginTime;
+    }
+
+    @Override
+    public Integer getFailCount() {
+        return FailCount;
+    }
+
+    @Override
+    public void setFailCount(Integer failCount) {
+        FailCount = failCount;
+    }
+
+    @Override
+    public String getIP() {
+        return IP;
+    }
+
+    @Override
+    public void setIP(String IP) {
+        this.IP = IP;
+    }
+
+    @Override
+    public Integer getIsCompleteInfo() {
+        return IsCompleteInfo;
+    }
+
+    @Override
+    public void setIsCompleteInfo(Integer isCompleteInfo) {
+        IsCompleteInfo = isCompleteInfo;
+    }
+
+    @Override
     public String getZhLevel() {
         return ZhLevel;
     }
 
+    @Override
     public void setZhLevel(String zhLevel) {
         ZhLevel = zhLevel;
+    }
+
+    @Override
+    public String getEnLevel() {
+        return EnLevel;
+    }
+
+    @Override
+    public void setEnLevel(String enLevel) {
+        EnLevel = enLevel;
+    }
+
+    @Override
+    public String getUnitProperty() {
+        return UnitProperty;
+    }
+
+    @Override
+    public void setUnitProperty(String unitProperty) {
+        UnitProperty = unitProperty;
+    }
+
+    @Override
+    public Integer getSrcScore() {
+        return SrcScore;
+    }
+
+    @Override
+    public void setSrcScore(Integer srcScore) {
+        SrcScore = srcScore;
+    }
+
+    @Override
+    public Double getWorkservicetime() {
+        return Workservicetime;
+    }
+
+    @Override
+    public void setWorkservicetime(Double workservicetime) {
+        Workservicetime = workservicetime;
+    }
+
+    @Override
+    public Double getSchoolservicetime() {
+        return Schoolservicetime;
+    }
+
+    @Override
+    public void setSchoolservicetime(Double schoolservicetime) {
+        Schoolservicetime = schoolservicetime;
+    }
+
+    @Override
+    public Double getRetireservicetime() {
+        return Retireservicetime;
+    }
+
+    @Override
+    public void setRetireservicetime(Double retireservicetime) {
+        Retireservicetime = retireservicetime;
+    }
+
+    @Override
+    public Boolean getSpeciality() {
+        return IsSpeciality;
+    }
+
+    @Override
+    public void setSpeciality(Boolean speciality) {
+        IsSpeciality = speciality;
+    }
+
+    @Override
+    public Boolean getCertification() {
+        return IsCertification;
+    }
+
+    @Override
+    public void setCertification(Boolean certification) {
+        IsCertification = certification;
+    }
+
+    @Override
+    public String getCertificationTime() {
+        return CertificationTime;
+    }
+
+    @Override
+    public void setCertificationTime(String certificationTime) {
+        CertificationTime = certificationTime;
+    }
+
+    @Override
+    public String getLanguageType() {
+        return LanguageType;
+    }
+
+    @Override
+    public void setLanguageType(String languageType) {
+        LanguageType = languageType;
+    }
+
+    @Override
+    public String getWeiXinOPENID() {
+        return WeiXinOPENID;
+    }
+
+    @Override
+    public void setWeiXinOPENID(String weiXinOPENID) {
+        WeiXinOPENID = weiXinOPENID;
+    }
+
+    @Override
+    public Boolean getDeleted() {
+        return IsDeleted;
+    }
+
+    @Override
+    public void setDeleted(Boolean deleted) {
+        IsDeleted = deleted;
+    }
+
+    @Override
+    public Integer getAuditStatus() {
+        return AuditStatus;
+    }
+
+    @Override
+    public void setAuditStatus(Integer auditStatus) {
+        AuditStatus = auditStatus;
+    }
+
+    @Override
+    public String getAuditTime() {
+        return AuditTime;
+    }
+
+    @Override
+    public void setAuditTime(String auditTime) {
+        AuditTime = auditTime;
+    }
+
+    @Override
+    public String getAuditUserId() {
+        return AuditUserId;
+    }
+
+    @Override
+    public void setAuditUserId(String auditUserId) {
+        AuditUserId = auditUserId;
+    }
+
+    @Override
+    public String getAuditUserName() {
+        return AuditUserName;
+    }
+
+    @Override
+    public void setAuditUserName(String auditUserName) {
+        AuditUserName = auditUserName;
+    }
+
+    @Override
+    public String getServiceTimeIntention() {
+        return ServiceTimeIntention;
+    }
+
+    @Override
+    public void setServiceTimeIntention(String serviceTimeIntention) {
+        ServiceTimeIntention = serviceTimeIntention;
+    }
+
+    @Override
+    public String getServiceIntention() {
+        return ServiceIntention;
+    }
+
+    @Override
+    public void setServiceIntention(String serviceIntention) {
+        ServiceIntention = serviceIntention;
+    }
+
+    @Override
+    public String getServiceIntentionOther() {
+        return ServiceIntentionOther;
+    }
+
+    @Override
+    public void setServiceIntentionOther(String serviceIntentionOther) {
+        ServiceIntentionOther = serviceIntentionOther;
+    }
+
+    @Override
+    public String getCertificatePic() {
+        return CertificatePic;
+    }
+
+    @Override
+    public void setCertificatePic(String certificatePic) {
+        CertificatePic = certificatePic;
+    }
+
+    @Override
+    public Integer getIsVerify() {
+        return IsVerify;
+    }
+
+    @Override
+    public void setIsVerify(Integer isVerify) {
+        IsVerify = isVerify;
     }
 }

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +18,8 @@ import java.util.List;
 /**
  * 所属机构界面
  */
-public class AffiliatedInstitutionActivity extends AppCompatActivity {
-    private static final String TAG = "AffiliatedInstitutionActivity";
+public class MyORGActivity extends AppCompatActivity {
+    private static final String TAG = "MyORGActivity";
 
     private List<String> actions;
     private ListView listView;
@@ -26,8 +27,18 @@ public class AffiliatedInstitutionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_affiliated_institution);
-        listView = (ListView) findViewById(R.id.listView_affiliated_institution);
+        setContentView(R.layout.activity_myorg);
+        listView = (ListView) findViewById(R.id.listView_myORG);
+
+        //回退按钮
+        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyORGActivity.this.finish();
+            }
+        });
+
         String[] s = new String[]{
                 "海曙区志愿协会",
                 "江东区志愿协会",
@@ -43,7 +54,7 @@ public class AffiliatedInstitutionActivity extends AppCompatActivity {
         };
         actions = Arrays.asList(s);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.affiliated_institution_item,R.id.tv_Institution,actions);
+                this, R.layout.myorg_item, R.id.tv_Institution, actions);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
