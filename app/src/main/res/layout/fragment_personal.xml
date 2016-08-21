@@ -20,9 +20,8 @@
                 android:id="@+id/image_personal_portrait"
                 android:layout_width="@dimen/circleImageView_portrait_width"
                 android:layout_height="@dimen/circleImageView_portrait_height"
-                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/top_item_margeintop"
+                android:layout_marginTop="@dimen/top_portrait_margeintop"
                 android:src="@drawable/personal_no_portrait" />
 
             <LinearLayout
@@ -33,23 +32,23 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_LL_true_name"
+                    android:id="@+id/tv_PersonalTop_true_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/image_personal_portrait"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:layout_marginTop="@dimen/top_textview_margeintop"
                     android:gravity="center"
                     android:text="xxx"
                     android:textColor="#fff"
                     android:textSize="@dimen/textview_personal_name_size" />
 
                 <TextView
-                    android:id="@+id/tv_LL_specialty"
+                    android:id="@+id/tv_PersonalTop_specialty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:layout_marginTop="@dimen/top_textview_margeintop"
                     android:gravity="center"
                     android:text="XXXX"
                     android:textColor="#fff"
@@ -59,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:layout_marginTop="@dimen/top_textview_margeintop"
                     android:orientation="horizontal">
 
                     <TextView
@@ -71,7 +70,7 @@
                         android:textSize="@dimen/textview_personal_integral_size" />
 
                     <TextView
-                        android:id="@+id/tv_LL_integral"
+                        android:id="@+id/tv_PersonalTop_integral"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -84,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/top_item_margeintop"
+                    android:layout_marginTop="@dimen/top_textview_margeintop"
                     android:orientation="horizontal"></LinearLayout>
 
             </LinearLayout>

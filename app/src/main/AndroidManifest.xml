@@ -132,6 +132,10 @@
             android:name=".activity.MajorAbilityActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <activity
+            android:name=".activity.ProfessionalSelectionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
 
     </application>
 
