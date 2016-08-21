@@ -82,7 +82,7 @@ public class IndexActivity extends BaseActivity {
 
     private int fragmentPosition = -1;
 
-    public static Boolean flag = false;//地图签到按钮的判断
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,7 +92,6 @@ public class IndexActivity extends BaseActivity {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-
         initActionBar();
         setFragment(HOME);
 
@@ -203,7 +202,6 @@ public class IndexActivity extends BaseActivity {
 
                     if (mFindPageFragment == null) {
                         mFindPageFragment = new FindPageFragment();
-                        System.out.println("1");
                     }
                     Bundle data = new Bundle();
                     data.putString("Tag", "false");
@@ -223,7 +221,6 @@ public class IndexActivity extends BaseActivity {
 
                     if (mFindPageFragment == null) {
                         mFindPageFragment = new FindPageFragment();
-                        System.out.println("2");
                     }
                     Bundle data = new Bundle();
                     data.putString("Tag", "true");

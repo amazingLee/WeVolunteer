@@ -20,6 +20,7 @@ import com.example.core.listener.AccessTokenListener;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
 import com.example.model.user.UserListDto;
+import com.example.renhao.wevolunteer.IndexActivity;
 import com.example.renhao.wevolunteer.R;
 
 /**
@@ -98,16 +99,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_login:
-                mAction.getAccessToken(username, password, new AccessTokenListener() {
-                    @Override
-                    public void success(AccessTokenBO accessTokenBO) {
-                        showToast("success");
-                        onSaveContent();
-                        if (TextUtils.isEmpty(username)) {
-                            showToast("账号不能为空");
-                        } else if (TextUtils.isEmpty(password)) {
-                            showToast("密码不能为空");
-                        } else {
+                username = et_username.getText().toString();
+                password = et_password.getText().toString();
+                if (TextUtils.isEmpty(username)) {
+                    showToast("账号不能为空");
+                    return;
+                } else if (TextUtils.isEmpty(password)) {
+                    showToast("密码不能为空");
+                    return;
+                } else {
+                    onSaveContent();
+                    mAction.getAccessToken(username, password, new AccessTokenListener() {
+                        @Override
+                        public void success(AccessTokenBO accessTokenBO) {
+                            showToast("success");
+                            //测试用的跳转
+                            startActivity(new Intent(LoginActivity.this, IndexActivity.class));
+
                             mAction.userNameLogin(username, new ActionCallbackListener<UserListDto>() {
                                 @Override
                                 public void onSuccess(UserListDto data) {
@@ -120,19 +128,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             });
                         }
-                    }
+                        @Override
+                        public void fail() {
+                            showToast("fail");
+                        }
+                    });
 
-                    @Override
-                    public void fail() {
-                        showToast("fail");
-                    }
-                });
-
-
+                }
                 break;
             case R.id.btn_register:
                 createAlertDialog();
-                showToast("点击注册");
                 break;
             case R.id.imageView_btn_back:
                 finish();

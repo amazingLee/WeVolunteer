@@ -20,9 +20,12 @@ import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerEditDto;
@@ -370,4 +373,46 @@ public class ApiImpl implements Api {
 
         return new ApiResponse<>(false,"未知错误");
     }
+
+    @Override
+    public ApiResponse<List<OrganizationListDto>> organizationQueryChild(String parentId, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(parentId);
+        Type typeOft = new TypeToken<ApiResponse<List<OrganizationListDto>>>(){}.getType();
+        try {
+            return httpEngine.getApiHandler(params,ORGANIZATION_QUERY_CHILD,typeOft,accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<VolunteerBaseListDto>> volunteerBaseQuery(VolunteerBaseQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String  params = gson.toJson(query);
+        Type typeOft = new TypeToken<ApiResponse<PagedListEntityDto<VolunteerBaseListDto>>>(){}.getType();
+        try {
+            return httpEngine.postApiHandler(params,VOLUNTEER_BASE_QUERY,typeOft,accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> signRecordCreate(List<SignInOutDto> creates, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(creates);
+        Type typeOft = new TypeToken<ApiResponse<List<String>>>(){}.getType();
+        try {
+            return httpEngine.postApiHandler(params,SIGNRECORD_CREATE,typeOft,accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
+    }
+
+
 }

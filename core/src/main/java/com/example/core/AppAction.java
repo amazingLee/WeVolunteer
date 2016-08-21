@@ -18,9 +18,12 @@ import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerEditDto;
@@ -111,12 +114,15 @@ public interface AppAction {
     public void dictionaryTypeQuery(DictionaryTypeQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<DictionaryTypeListDto>> listener);
 
     /**
-     * 组织查询
+     * 所属机构查询
      *
      * @param query
      * @param listener
      */
     public void organizationQuery(OrganizationQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<OrganizationListDto>> listener);
+
+
+    public void organizationQueryChild(String parentId,ActionCallbackListener<List<OrganizationListDto>> listener);
 
     /**
      * 所在区域  get
@@ -125,5 +131,15 @@ public interface AppAction {
      * @param listener
      */
     public void AreaQuery(String parentId,ActionCallbackListener<List<AreaListDto>> listener);
+
+    /**
+     * 志愿者服务站点
+     */
+    public void volunteerBaseQuery(VolunteerBaseQueryOptionDto query,ActionCallbackListener<PagedListEntityDto<VolunteerBaseListDto>> listener);
+
+    /**
+     * 签到签退明细
+     */
+    public void signRecordCreate(List<SignInOutDto> signInOutDtos,ActionCallbackListener<List<String>> listener);
 
 }

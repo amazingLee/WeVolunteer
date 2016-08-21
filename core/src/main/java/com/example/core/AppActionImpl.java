@@ -27,9 +27,12 @@ import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerEditDto;
@@ -588,6 +591,32 @@ public class AppActionImpl implements AppAction {
     }
 
     @Override
+    public void organizationQueryChild(final String parentId, final ActionCallbackListener<List<OrganizationListDto>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<List<OrganizationListDto>>>() {
+            @Override
+            protected ApiResponse<List<OrganizationListDto>> doInBackground(Void... params) {
+                return api.organizationQueryChild(parentId, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<List<OrganizationListDto>> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getData());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+
+            }
+        }.execute();
+    }
+
+    @Override
     public void AreaQuery(final String parentId, final ActionCallbackListener<List<AreaListDto>> listener) {
         //判断票据是否过期
         final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
@@ -599,6 +628,56 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<List<AreaListDto>> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getData());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void volunteerBaseQuery(final VolunteerBaseQueryOptionDto query, final ActionCallbackListener<PagedListEntityDto<VolunteerBaseListDto>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<PagedListEntityDto<VolunteerBaseListDto>>>() {
+            @Override
+            protected ApiResponse<PagedListEntityDto<VolunteerBaseListDto>> doInBackground(Void... params) {
+                return api.volunteerBaseQuery(query,accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<PagedListEntityDto<VolunteerBaseListDto>> result) {
+                if (result == null){
+                    listener.onFailure("","未知错误");
+                    return;
+                }
+                if (result.isSuccess()){
+                    listener.onSuccess(result.getData());
+                }else {
+                    listener.onFailure("",result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void signRecordCreate(final List<SignInOutDto> signInOutDtos, final ActionCallbackListener<List<String>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<List<String>>>() {
+            @Override
+            protected ApiResponse<List<String>> doInBackground(Void... params) {
+                return api.signRecordCreate(signInOutDtos,accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<List<String>> result) {
                 if (result == null){
                     listener.onFailure("","未知错误");
                     return;

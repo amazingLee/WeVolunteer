@@ -26,6 +26,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
      
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!--添加震动权限-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name=".application.BaseApplication"
@@ -80,6 +82,8 @@
         <activity
             android:name=".activity.AreaSelectionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".activity.AffiliatedInstitutionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".activity.ForgotPasswordActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
