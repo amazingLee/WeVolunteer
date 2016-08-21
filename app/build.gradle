@@ -5,12 +5,12 @@ android {
         config {
             keyAlias 'WeVolunteer'
             keyPassword '15728006904'
-            storeFile file('F:/Android/key/WeVolunteer.jks')
+            storeFile file('E:/android_java/WeVolunteer.jks')
             storePassword '15728006904'
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '23.0.3'
     defaultConfig {
         applicationId "com.example.renhao.wevolunteer"
         minSdkVersion 15
@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.jakewharton:butterknife:7.0.0'

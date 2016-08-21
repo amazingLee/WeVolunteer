@@ -18,7 +18,8 @@ import com.example.core.listener.AccessTokenListener;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
 import com.example.model.area.AreaListDto;
-import com.example.model.dictionary.DictionaryViewDto;
+import com.example.model.dictionary.DictionaryListDto;
+import com.example.model.organization.OrganizationListDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.renhao.wevolunteer.R;
 import com.google.gson.Gson;
@@ -51,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     LinearLayout ll_area;
     LinearLayout ll_org;
 
-    private String isCheck_text;
+    private int isCheck_Code;
     private String isCheck_register_agree;
     private String nickname;
     private String truename;
@@ -62,6 +63,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private String verification_code;
 
     private AppAction mAction;
+
+    private List<String> typeCode = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 showToast("fail");
             }
         });
+
+        getPersonAttribute();//个人属性接口
 
         initView();
         initViewListener();
@@ -137,10 +143,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (((CheckBox)v).isChecked()){
                     cb_job.setChecked(false);
                     cb_retire.setChecked(false);
-                    isCheck_text = cb_school.getHint().toString();
-                    showToast(isCheck_text);
+                    isCheck_Code = 0;
+                    showToast(String.valueOf(isCheck_Code));
                 }else {
-                    isCheck_text = null;
+                    isCheck_Code = -1;
                     showToast("已取消");
                 }
                 break;
@@ -149,10 +155,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (((CheckBox)v).isChecked()){
                     cb_school.setChecked(false);
                     cb_retire.setChecked(false);
-                    isCheck_text = cb_job.getHint().toString();
-                    showToast(isCheck_text);
+                    isCheck_Code = 1;
+                    showToast(String.valueOf(isCheck_Code));
                 }else {
-                    isCheck_text = null;
+                    isCheck_Code = -1;
                     showToast("已取消");
                 }
                 break;
@@ -161,47 +167,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (((CheckBox)v).isChecked()){
                     cb_job.setChecked(false);
                     cb_school.setChecked(false);
-                    isCheck_text = cb_retire.getHint().toString();
-                    showToast(isCheck_text);
+                    isCheck_Code = 2;
+                    showToast(String.valueOf(isCheck_Code));
                 }else {
-                    isCheck_text = null;
-                    showToast("已取消");
+                    isCheck_Code = -1;
+                    showToast("已取消"+isCheck_Code);
                 }
                 break;
             case R.id.LL_apply_area:
-
-                mAction.getAccessToken(null, null, new AccessTokenListener() {
-                    @Override
-                    public void success(AccessTokenBO accessTokenBO) {
-                        AreaQuery();
-                        startActivity(new Intent(RegisterActivity.this, AreaSelectionActivity.class));
-                        showToast("success");
-                    }
-
-                    @Override
-                    public void fail() {
-                        showToast("fail");
-                    }
-                });
-
+                AreaQuery();
+                startActivity(new Intent(RegisterActivity.this, AreaSelectionActivity.class));
                 break;
             case R.id.LL_apply_ORG:
-                mAction.getAccessToken("AndroidUser", "8NDVQX", new AccessTokenListener() {
-                    @Override
-                    public void success(AccessTokenBO accessTokenBO) {
-
-
-                        startActivity(new Intent(RegisterActivity.this, AffiliatedInstitutionActivity.class));
-                        showToast("success");
-                    }
-
-                    @Override
-                    public void fail() {
-                        showToast("fail");
-                    }
-                });
-
-
+                organizationQueryChild();
+                startActivity(new Intent(RegisterActivity.this, AffiliatedInstitutionActivity.class));
                 break;
             case R.id.cb_register_agree:
                 if (((CheckBox)v).isChecked()){
@@ -218,7 +197,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btn_register_volunteer:
                 registerInfo();
                 RegisterSubmit();
-                showToast("提交注册成功," +isCheck_text+","+isCheck_register_agree+
+                showToast("提交注册成功," +isCheck_Code+","+isCheck_register_agree+
                         ","+truename+","+id_number+","+phone+","+verification_code);
                 break;
             case R.id.btn_back_login:
@@ -245,6 +224,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         vl_create.setMobile("15728006853");
         vl_create.setOrgId("011de0b0-9c25-4002-98be-29df51bd2fbe");
         vl_create.setEmail("750954284@qq.com");
+        vl_create.setJobStatus(0);//个人属性
         Logger.v(TAG, new Gson().toJson(vl_create));
         List<VolunteerCreateDto> vl_creates = new ArrayList<>();
         vl_creates.add(vl_create);
@@ -261,16 +241,34 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+    //个人属性
     private void getPersonAttribute(){
-        AppActionImpl.getInstance(getApplicationContext()).dictionaryQueryDetailDefault("PersonAttribute", "1b87202f-9174-4191-b104-1af9a70e8639", new ActionCallbackListener<DictionaryViewDto>() {
-            @Override
-            public void onSuccess(DictionaryViewDto data) {
+        AppActionImpl.getInstance(this).dictionaryQueryDefault("CardType", "",
+                new ActionCallbackListener<List<DictionaryListDto>>() {
+                    @Override
+                    public void onSuccess(List<DictionaryListDto> data) {
+                        for (int i=0;i<data.size();i++){
 
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+    }
+
+    private void organizationQueryChild(){
+        mAction.organizationQueryChild("00000000-0000-0000-0000-000000000000", new ActionCallbackListener<List<OrganizationListDto>>() {
+            @Override
+            public void onSuccess(List<OrganizationListDto> data) {
+                showToast("success");
             }
 
             @Override
             public void onFailure(String errorEvent, String message) {
-
+                showToast("fail");
             }
         });
     }
