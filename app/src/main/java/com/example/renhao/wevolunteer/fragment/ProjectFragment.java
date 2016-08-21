@@ -17,6 +17,7 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.area.AreaListDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
@@ -66,11 +67,12 @@ public class ProjectFragment extends BaseFragment {
     private List<String> type = new ArrayList<>();
     private List<String> typeCode = new ArrayList<>();
     private int typeSelect = -1;
-    private String[] state = {"状态", "招募中", "已结束"};
-    private List<Integer> stateInt = Arrays.asList(0, 1);
+    private String[] state = {"状态", "招募中", "进行中", "已结束"};
+    private List<String> stateCode = Arrays.asList("1", "2", "3");
     private int stateSelect = -1;
-    private String[] area = {"区域"};
-    private List<Integer> areaInt = new ArrayList<>();
+    private List<String> area = new ArrayList<>();
+    private List<String> areaCode = new ArrayList<>();
+    private int areaSelect = -1;
     private String[] smart = {"智能筛选", "最新发布", "热门报名", "距离最近"};
     private List<Integer> smartInt = Arrays.asList(0, 1, 2);
 
@@ -132,7 +134,7 @@ public class ProjectFragment extends BaseFragment {
     }
 
     public void setDropDownMenuList(int position) {
-        if (position == 0) {
+        if (position == 0) {//类型
             AppActionImpl.getInstance(getActivity()).dictionaryQueryDefault("ActivityType", "",
                     new ActionCallbackListener<List<DictionaryListDto>>() {
                         @Override
@@ -152,7 +154,41 @@ public class ProjectFragment extends BaseFragment {
 
                         }
                     });
-        } else if (position == 2) {
+        } else if (position == 2) {//区域
+     /*       AppActionImpl.getInstance(getActivity()).activityDetail("330200",
+                    new ActionCallbackListener<ActivityViewDto>() {
+                        @Override
+                        public void onSuccess(ActivityViewDto data) {
+                            if (data == null)
+                                return;*/
+            AppActionImpl.getInstance(getActivity()).AreaQuery("ac689592-5a3e-4015-8609-cdeed42df6ab",
+                    new ActionCallbackListener<List<AreaListDto>>() {
+                        @Override
+                        public void onSuccess(List<AreaListDto> data) {
+                            if (data == null)
+                                return;
+                            area = new ArrayList<String>();
+                            area.add("区域");
+                            areaCode = new ArrayList<String>();
+                            for (int i = 0; i < data.size(); i++) {
+                                area.add(data.get(i).getName());
+                                areaCode.add(data.get(i).getCode());
+                            }
+                            areaAdapter.setDate(area);
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+
+                        }
+                    });
+               /*         }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+
+                        }
+                    });*/
 
         }
     }
@@ -164,7 +200,10 @@ public class ProjectFragment extends BaseFragment {
             dto.setActivityType(typeCode.get(typeSelect));
         }
         if (stateSelect > -1) {
-            dto.setStatus(stateInt.get(stateSelect));
+            dto.setActivityState(stateCode.get(stateSelect));
+        }
+        if (areaSelect > -1) {
+            dto.setAreaCode(areaCode.get(areaSelect));
         }
         if (type == ADD) {
             dto.setPageIndex(PageIndex + 1);
@@ -178,12 +217,12 @@ public class ProjectFragment extends BaseFragment {
                             list = new ArrayList<HomePageListItem>();
                             dates = new ArrayList<ActivityListDto>();
                         }
-                        dates = data.getRows();
-                        for (int i = 0; i < dates.size(); i++) {
-                            ActivityListDto listDto = dates.get(i);
+                        for (int i = 0; i < data.getRows().size(); i++) {
+                            dates.add(data.getRows().get(i));
+                            ActivityListDto listDto = data.getRows().get(i);
                             HomePageListItem item = new HomePageListItem();
                             item.setType(listDto.getType());
-                            item.setState(listDto.getStatus());
+                            item.setState(listDto.getOperationState());
                             item.setTitle(listDto.getActivityName());
                             item.setNum(listDto.getRecruited());
                             item.setMaxNum(listDto.getRecruitNumber());
@@ -199,10 +238,6 @@ public class ProjectFragment extends BaseFragment {
                         EndPosition = data.getEndPosition();
                         HasPreviousPage = data.getHasPreviousPage();
                         HasNextPage = data.getHasNextPage();
-
-                        if (!HasNextPage) {
-                            showToast("到底了");
-                        }
 
                         adapter.setDate(list);
                     }
@@ -302,15 +337,18 @@ public class ProjectFragment extends BaseFragment {
             }
         });
         //区域
+        area.add("区域");
         final ListView areaView = new ListView(getActivity());
-        areaAdapter = new ListDropDownAdapter(getActivity(), Arrays.asList(area));
+        areaAdapter = new ListDropDownAdapter(getActivity(), area);
         areaView.setDividerHeight(0);
         areaView.setAdapter(areaAdapter);
         areaView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                areaSelect = position - 1;
+                initDate(REFRESH);
                 areaAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[2] : area[position]);
+                mDropDownMenu.setTabText(position == 0 ? headers[2] : area.get(position));
                 mDropDownMenu.closeMenu();
             }
         });

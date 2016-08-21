@@ -1,60 +1,62 @@
-package com.example.model.activity;
+package com.example.model.jobActivity;
 
+import com.example.model.activity.ActivityTimeSimpleDto;
 import com.example.model.user.CreateOperationDto;
 import com.example.model.user.ModifyOperationDto;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * 项目名称：WeVolunteer
  * 类描述：
  * 创建人：renhao
- * 创建时间：2016/8/16 15:01
+ * 创建时间：2016/8/20 16:46
  * 修改备注：
  */
-public class ActivityViewDto implements Serializable {
+public class JobActivityViewDto {
     private CreateOperationDto CreateOperation;//(CreateOperationDto, optional): 登记信息
-    private String ActivityCode;//(string, optional): 获取或设置 活动编码
     private ModifyOperationDto ModifyOperation;//(ModifyOperationDto, optional): 更新信息
+    private String ActivityCode;// (string, optional): 获取或设置 活动编码
     private String ActivityTypeId;//(string, optional),
-    private String ActivityTypeName;// (string, optional),
-    private String PeriodType;//(string): 获取或设置 周期
+    private String ActivityTypeName;//(string, optional),
     private String DaySTime;//(string, optional): 获取或设置 区间开始时间
     private String DayETime;//(string, optional): 获取或设置 区间结束时间
-    private Number LengthTime;// (number, optional): 获取或设置 活动时长(分钟)
-    private String OtherServiceTypeName;//(string, optional): 获取或设置 务方式其他服内容
+    private Number LengthTime;//(number, optional): 获取或设置 活动时长(分钟)
+    private String OtherServiceTypeName;// (string, optional): 获取或设置 务方式其他服内容
     private String AreaName;//(string, optional): 区域名称
     private String AreaId;//(string, optional): 区域标识
-    private String AreaCode;// (string, optional): 获取或设置 区域编号
-    private String Addr;//(string, optional): 获取或设置 地址
+    private String AreaCode;//(string, optional): 获取或设置 区域编号
+    private String Addr;// (string, optional): 获取或设置 地址
     private Integer PersonNum;//(integer, optional): 获取或设置 计划服务人数
-    private String Summary;// (string, optional): 获取或设置 活动摘要
-    private String Text;// (string, optional): 获取或设置 活动详情
+    private String Summary;//(string, optional): 获取或设置 活动摘要
+    private String Text;//(string, optional): 获取或设置 活动详情
+    private String JobText;//(string, optional): 获取或设置 岗位要求
+    private String JobTextName;//(string, optional): 获取或设置 岗位要求
     private Integer RecruitNumber;//(integer, optional): 获取或设置 招募人数
-    private Integer Score;// (integer, optional): 获取或设置 获取积分
+    private Integer Score;//(integer, optional): 获取或设置 获取积分
     private String Linker;//(string, optional): 获取或设置 活动联系人
     private String Tel;//(string, optional): 获取或设置 活动联电话
-    private String Mobile;// (string, optional): 获取或设置 活动联系手机
+    private String Mobile;//(string, optional): 获取或设置 活动联系手机
     private String Email;//(string, optional): 获取或设置 活动联系邮箱
     private String BeginTime;//(string, optional): 获取或设置 报名开始时间
-    private String BMeals;//(number, optional): 获取或设置 是否提供餐补
-    private String Safe;//(number, optional),
-    private String Traffic;//(number, optional): 获取或设置 供交通补贴
-    private String BMealsName;//(string, optional): 获取或设置 是否提供餐补
-    private String SafeName;//(string, optional),
-    private String TrafficName;// (string, optional): 获取或设置 供交通补贴
-    private String BMealsType;//(number, optional): 获取或设置 提供餐补类型
-    private String SafeType;// (number, optional): 获取或设置 是否提供保险 类型
-    private String TrafficType;//(number, optional): 获取或设置 供交通补贴类型
-    private String ScopeType;// (number, optional): 获取或设置 签到范围
-    private String EndTimeChoiceName;// (string, optional),
+    private Number BMeals;// (number, optional): 获取或设置 是否提供餐补
+    private Number Safe;//(number, optional),
+    private Number Traffic;// (number, optional): 获取或设置 供交通补贴
+    private Integer BMealsType;//(integer, optional): 获取或设置 提供餐补类型
+    private Integer SafeType;//(integer, optional): 获取或设置 是否提供保险 类型
+    private Integer TrafficType;// (integer, optional): 获取或设置 供交通补贴类型
+    private String BMealsName;//(string, optional): 获取或设置 提供餐补类型
+    private String SafeName;// (string, optional): 获取或设置 是否提供保险 类型
+    private String TrafficName;//(string, optional): 获取或设置 供交通补贴类型
+    private Number ScopeType;// (number, optional): 获取或设置 签到范围
+    private String PeriodType;// (string, optional): 获取或设置 周期
     private Integer EndTimeChoice;// (integer, optional),
-    private String EndTime;//(string, optional),
-    private Integer Stick;// (integer, optional): 获取或设置 是否置顶
+    private String EndTimeChoiceName;//(string, optional),
+    private String EndTime;//(string, optional): 获取或设置 报名结束时间
+    private Integer Stick;//(integer, optional): 获取或设置 是否置顶
     private String StickName;//(string, optional): 获取或设置 是否置顶
     private String StickTime;//(string, optional): 获取或设置 置顶开始时间
-    private String StickendTime;//(string, optional): 获取或设置 置顶结束时间
+    private String StickendTime;// (string, optional): 获取或设置 置顶结束时间
     private Integer StickHistory;//(integer, optional): 获取或设置 是否有过置顶
     private String StickHistoryName;//(string, optional): 获取或设置 是否有过置顶
     private Integer Hits;//(integer, optional): 获取或设置 浏览次数
@@ -64,27 +66,31 @@ public class ActivityViewDto implements Serializable {
     private Integer JoinNum;//(integer, optional): 获取或设置 报名人数
     private Integer IisTrain;//(integer, optional): 获取或设置 是否培训
     private String IisTrainName;//(string, optional): 获取或设置 是否培训
-    private Integer Status;// (integer, optional): 获取或设置 状态
+    private Integer Status;//(integer, optional): 获取或设置 状态
     private String StatusName;//(string, optional): 获取或设置 状态
     private Integer RunStatus;//(integer, optional): 获取或设置 执行状态
-    private String Lng;//(number, optional): 获取或设置 经度
-    private String Lat;//(number, optional): 获取或设置 纬度
+    private Number Lng;//(number, optional): 获取或设置 经度
+    private Number Lat;//(number, optional): 获取或设置 纬度
     private String Keywords;//(string, optional): 获取或设置 关键词
-    private String AppImgUrl;//(string, optional): 获取或设置 app图片列表
+    private String AppImgUrl;// (string, optional): 获取或设置 app图片列表
+    private Integer IsSpecify;//(integer, optional): 获取或设置 是否指定专业愿者
+    private String IsSpecifyName;// (string, optional): 获取或设置 是否指定专业愿者
     private Integer Recruited;//(integer, optional): 获取或设置 已招募
     private Integer SingleRecruit;//(integer, optional): 获取或设置 单次招募
     private String LanguageType;//(string, optional): 获取或设置 语种
     private String LanguageTypeName;//(string, optional): 获取或设置 语种
-    private Boolean IsDeleted;// (boolean, optional): 获取或设置 删除状态
-    private List<ActivityTimeSimpleDto> ActivityTimes;//(Array[ActivityTimeSimpleDto], optional): 岗位时间列表
-    private String CompanyId;//(string, optional): 获取或设置 CompanyId
+    private Boolean IsDeleted;//(boolean, optional): 获取或设置 删除状态
+    private List<ActivityTimeSimpleDto> ActivityTimes;// (Array[ActivityTimeSimpleDto], optional): 岗位时间列表
+    private String CompanyId;//(string, optional): 获取或设置 单位Id
+    private String SpecialityType;//(string, optional): 志愿者专业要求
     private String Id;//(string, optional): 获取或设置 活动标识
     private String ActivityName;//(string, optional): 获取或设置 活动名称
     private String StartTime;//(string, optional): 获取或设置 活动开始时间
     private String FinishTime;//(string, optional): 获取或设置 活动结束时间
-    private String JobText;//(string, optional): 获取或设置 岗位要求
-    private Integer Type;//(integer, optional): 获取或设置 类型0 活动1 岗位
-    private String CompanyName;//(string, optional): 单位名称
+    private String CompanyName;//(string, optional),
+    private String AttachName;//(string, optional): 图片名称
+    private String PcLstUrl;//(string, optional): Pc图片
+    private String AppLstUrl;// (string, optional): App图片
     private String OperationState;//(string, optional): 当前项目运行状态
 
     public String getOperationState() {
@@ -151,6 +157,14 @@ public class ActivityViewDto implements Serializable {
         AppImgUrl = appImgUrl;
     }
 
+    public String getAppLstUrl() {
+        return AppLstUrl;
+    }
+
+    public void setAppLstUrl(String appLstUrl) {
+        AppLstUrl = appLstUrl;
+    }
+
     public String getAreaCode() {
         return AreaCode;
     }
@@ -175,6 +189,14 @@ public class ActivityViewDto implements Serializable {
         AreaName = areaName;
     }
 
+    public String getAttachName() {
+        return AttachName;
+    }
+
+    public void setAttachName(String attachName) {
+        AttachName = attachName;
+    }
+
     public String getBeginTime() {
         return BeginTime;
     }
@@ -183,11 +205,11 @@ public class ActivityViewDto implements Serializable {
         BeginTime = beginTime;
     }
 
-    public String getBMeals() {
+    public Number getBMeals() {
         return BMeals;
     }
 
-    public void setBMeals(String BMeals) {
+    public void setBMeals(Number BMeals) {
         this.BMeals = BMeals;
     }
 
@@ -199,11 +221,11 @@ public class ActivityViewDto implements Serializable {
         this.BMealsName = BMealsName;
     }
 
-    public String getBMealsType() {
+    public Integer getBMealsType() {
         return BMealsType;
     }
 
-    public void setBMealsType(String BMealsType) {
+    public void setBMealsType(Integer BMealsType) {
         this.BMealsType = BMealsType;
     }
 
@@ -335,12 +357,36 @@ public class ActivityViewDto implements Serializable {
         IsDeleted = deleted;
     }
 
+    public Integer getIsSpecify() {
+        return IsSpecify;
+    }
+
+    public void setIsSpecify(Integer isSpecify) {
+        IsSpecify = isSpecify;
+    }
+
+    public String getIsSpecifyName() {
+        return IsSpecifyName;
+    }
+
+    public void setIsSpecifyName(String isSpecifyName) {
+        IsSpecifyName = isSpecifyName;
+    }
+
     public String getJobText() {
         return JobText;
     }
 
     public void setJobText(String jobText) {
         JobText = jobText;
+    }
+
+    public String getJobTextName() {
+        return JobTextName;
+    }
+
+    public void setJobTextName(String jobTextName) {
+        JobTextName = jobTextName;
     }
 
     public Integer getJoinNum() {
@@ -375,11 +421,11 @@ public class ActivityViewDto implements Serializable {
         LanguageTypeName = languageTypeName;
     }
 
-    public String getLat() {
+    public Number getLat() {
         return Lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Number lat) {
         Lat = lat;
     }
 
@@ -399,11 +445,11 @@ public class ActivityViewDto implements Serializable {
         Linker = linker;
     }
 
-    public String getLng() {
+    public Number getLng() {
         return Lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Number lng) {
         Lng = lng;
     }
 
@@ -437,6 +483,14 @@ public class ActivityViewDto implements Serializable {
 
     public void setOtherServiceTypeName(String otherServiceTypeName) {
         OtherServiceTypeName = otherServiceTypeName;
+    }
+
+    public String getPcLstUrl() {
+        return PcLstUrl;
+    }
+
+    public void setPcLstUrl(String pcLstUrl) {
+        PcLstUrl = pcLstUrl;
     }
 
     public String getPeriodType() {
@@ -487,11 +541,11 @@ public class ActivityViewDto implements Serializable {
         RunStatus = runStatus;
     }
 
-    public String getSafe() {
+    public Number getSafe() {
         return Safe;
     }
 
-    public void setSafe(String safe) {
+    public void setSafe(Number safe) {
         Safe = safe;
     }
 
@@ -503,19 +557,19 @@ public class ActivityViewDto implements Serializable {
         SafeName = safeName;
     }
 
-    public String getSafeType() {
+    public Integer getSafeType() {
         return SafeType;
     }
 
-    public void setSafeType(String safeType) {
+    public void setSafeType(Integer safeType) {
         SafeType = safeType;
     }
 
-    public String getScopeType() {
+    public Number getScopeType() {
         return ScopeType;
     }
 
-    public void setScopeType(String scopeType) {
+    public void setScopeType(Number scopeType) {
         ScopeType = scopeType;
     }
 
@@ -533,6 +587,14 @@ public class ActivityViewDto implements Serializable {
 
     public void setSingleRecruit(Integer singleRecruit) {
         SingleRecruit = singleRecruit;
+    }
+
+    public String getSpecialityType() {
+        return SpecialityType;
+    }
+
+    public void setSpecialityType(String specialityType) {
+        SpecialityType = specialityType;
     }
 
     public String getStartTime() {
@@ -631,11 +693,11 @@ public class ActivityViewDto implements Serializable {
         Text = text;
     }
 
-    public String getTraffic() {
+    public Number getTraffic() {
         return Traffic;
     }
 
-    public void setTraffic(String traffic) {
+    public void setTraffic(Number traffic) {
         Traffic = traffic;
     }
 
@@ -647,19 +709,11 @@ public class ActivityViewDto implements Serializable {
         TrafficName = trafficName;
     }
 
-    public String getTrafficType() {
+    public Integer getTrafficType() {
         return TrafficType;
     }
 
-    public void setTrafficType(String trafficType) {
+    public void setTrafficType(Integer trafficType) {
         TrafficType = trafficType;
-    }
-
-    public Integer getType() {
-        return Type;
-    }
-
-    public void setType(Integer type) {
-        Type = type;
     }
 }

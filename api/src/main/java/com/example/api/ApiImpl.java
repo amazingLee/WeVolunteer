@@ -9,15 +9,21 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.activityRecruit.ActivityRecruitListDto;
+import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
+import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.company.CompanyViewDto;
+import com.example.model.content.ContentListDto;
+import com.example.model.content.ContentQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.dictionary.DictionaryViewDto;
+import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -77,13 +83,14 @@ public class ApiImpl implements Api {
     public ApiResponse<UserListDto> userNameLogin(String username, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(username);
-        Type typeOft = new TypeToken<ApiResponse<UserListDto>>(){}.getType();
+        Type typeOft = new TypeToken<ApiResponse<UserListDto>>() {
+        }.getType();
         try {
             return httpEngine.getApiHandler(params, USERNAME_LOGIN, typeOft, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
     }
 
 
@@ -161,6 +168,20 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, ACTIVITY_DETAIL, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<JobActivityViewDto> jobActivityDetail(String jobActivityId, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(jobActivityId);
+        Type typeOfT = new TypeToken<ApiResponse<JobActivityViewDto>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, JOBACTIVITY_DETAIL, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -361,13 +382,59 @@ public class ApiImpl implements Api {
     public ApiResponse<List<AreaListDto>> AreaQuery(String parentId, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(parentId);
-        Type typeOft = new TypeToken<ApiResponse<List<AreaListDto>>>(){}.getType();
+        Type typeOft = new TypeToken<ApiResponse<List<AreaListDto>>>() {
+        }.getType();
         try {
             return httpEngine.getApiHandler(params, AREA_QUERY, typeOft, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return new ApiResponse<>(false,"未知错误");
+        return new ApiResponse<>(false, "未知错误");
     }
+
+    @Override
+    public ApiResponse<AreaViewDto> areaDetails(String code, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(code);
+        Type typeOft = new TypeToken<ApiResponse<AreaViewDto>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, AREA_DETAILS, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<ContentListDto>> contentQuery(ContentQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ContentListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, CONTENT_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ActivityRecruitListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITYRECRUIT_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+
 }

@@ -2,7 +2,10 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
+import com.example.model.activityRecruit.ActivityRecruitListDto;
+import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
+import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.PagedListEntityDto;
@@ -11,11 +14,14 @@ import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
 import com.example.model.company.CompanyViewDto;
+import com.example.model.content.ContentListDto;
+import com.example.model.content.ContentQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.dictionary.DictionaryViewDto;
+import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -53,8 +59,10 @@ public interface AppAction {
 
     public void activityQuery(ActivityQueryOptionDto activityQueryOptionDto, ActionCallbackListener<PagedListEntityDto<ActivityListDto>> listener);
 
+    public void jobActivityDetail(String jobActivityId, ActionCallbackListener<JobActivityViewDto> listener);
+
     //用户登录利用票据获取到的username，来获取用户的信息
-    public void userNameLogin(String username,ActionCallbackListener<UserListDto> listener);
+    public void userNameLogin(String username, ActionCallbackListener<UserListDto> listener);
 
     /**
      * activity 详细查询方法
@@ -120,10 +128,24 @@ public interface AppAction {
 
     /**
      * 所在区域  get
-     *一级一级展开查询
+     * 一级一级展开查询
+     *
      * @param parentId
      * @param listener
      */
-    public void AreaQuery(String parentId,ActionCallbackListener<List<AreaListDto>> listener);
+    public void AreaQuery(String parentId, ActionCallbackListener<List<AreaListDto>> listener);
 
+    public void areaDetails(String code, ActionCallbackListener<AreaViewDto> listener);
+
+
+    /**
+     * 新闻的分页查询
+     *
+     * @param query
+     * @param listener
+     */
+    public void contentQuery(ContentQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<ContentListDto>> listener);
+
+
+    public void activityRecruitQuery(ActivityRecruitQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>> listener);
 }

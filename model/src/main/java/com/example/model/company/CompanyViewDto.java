@@ -56,6 +56,25 @@ public class CompanyViewDto {
     private String ServiceTypeOther;// (string, optional): 获取或设置 服务类型(其他)
     private String LanguageType;// (string, optional): 获取或设置 语种类型
     private Boolean IsDeleted;//  (boolean, optional): 获取或设置 删除状态
+    private String AppLstUrl ;//(string, optional): App图片
+    private String Honors ;//(string, optional): 组织荣誉
+
+
+    public String getHonors() {
+        return Honors;
+    }
+
+    public void setHonors(String honors) {
+        Honors = honors;
+    }
+
+    public String getAppLstUrl() {
+        return AppLstUrl;
+    }
+
+    public void setAppLstUrl(String appLstUrl) {
+        AppLstUrl = appLstUrl;
+    }
 
     public Integer getActivityNum() {
         return ActivityNum;

@@ -6,15 +6,21 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.activityRecruit.ActivityRecruitListDto;
+import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
+import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.company.CompanyViewDto;
+import com.example.model.content.ContentListDto;
+import com.example.model.content.ContentQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.dictionary.DictionaryViewDto;
+import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -41,9 +47,13 @@ public interface Api {
     public static final String USER_CREATE = "Nbcei.Framework.Api.Impl/v1/user/create";
     public static final String USER_LOGIN = "Nbcei.Framework.Api.Impl/v1/user/get";
 
+    //活动
     public static final String ACTIVITY_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/create";
     public static final String ACTIVITY_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/query";
     public static final String ACTIVITY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/details";
+
+    //岗位
+    public static final String JOBACTIVITY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/jobactivity/details";
 
     //志愿者
     public static final String VOLUNTEER_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteer/create";
@@ -69,9 +79,16 @@ public interface Api {
     public static final String ORGANIZATION_QUERY = "Nbcei.Framework.Api.Impl/v1/organization/query";
     public static final String ORGANIZATION_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
 
-
     //所在区域
     public static final String AREA_QUERY = "Nbcei.Framework.Api.Impl/v1/area/query/child";
+    public static final String AREA_DETAILS = "Nbcei.Framework.Api.Impl/v1/area/details";
+
+    //新闻
+    public static final String CONTENT_QUERY = "Nbcei.Plugin.CMS.Api.Impl/v1/Content/query";
+
+    //签到签退
+    public static final String ACTIVITYRECRUIT_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/query";
+
     /**
      * 获取accessToken
      *
@@ -98,7 +115,8 @@ public interface Api {
     public ApiResponse<PagedListEntityDto<ActivityListDto>> activityQuery(ActivityQueryOptionDto query, String accessToken);
 
     //利用用户票据获得的username，来获取用户信息
-    public ApiResponse<UserListDto> userNameLogin(String username,String accessToken);
+    public ApiResponse<UserListDto> userNameLogin(String username, String accessToken);
+
     /**
      * activity 详细信息查询方法
      *
@@ -107,6 +125,15 @@ public interface Api {
      * @return
      */
     public ApiResponse<ActivityViewDto> activityDetail(String activityId, String accessToken);
+
+    /**
+     * 岗位详细查询
+     *
+     * @param jobActivityId
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<JobActivityViewDto> jobActivityDetail(String jobActivityId, String accessToken);
 
     public ApiResponse<List<String>> volunteerCreate(List<VolunteerCreateDto> creates, String accessToken);
 
@@ -143,7 +170,7 @@ public interface Api {
      */
     public ApiResponse<List<DictionaryListDto>> dictionaryQueryDefault(String typeCode, String parentId, String accessToken);
 
-    public ApiResponse<DictionaryViewDto> dictionaryQueryDetailDefault(String typeCode,String code,String accessToken);
+    public ApiResponse<DictionaryViewDto> dictionaryQueryDetailDefault(String typeCode, String code, String accessToken);
 
     /**
      * 组织查询
@@ -164,8 +191,28 @@ public interface Api {
 
     /**
      * 所在区域查询
-     *
      */
-    public ApiResponse<List<AreaListDto>> AreaQuery(String parentId,String accessToken);
+    public ApiResponse<List<AreaListDto>> AreaQuery(String parentId, String accessToken);
 
+    public ApiResponse<AreaViewDto> areaDetails(String code, String accessToken);
+
+
+    /**
+     * 新闻查询 分页
+     *
+     * @param query
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<PagedListEntityDto<ContentListDto>> contentQuery(ContentQueryOptionDto query, String accessToken);
+
+
+    /**
+     * 获取活动岗位报名的状态，也可用于签到签退
+     *
+     * @param query
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken);
 }

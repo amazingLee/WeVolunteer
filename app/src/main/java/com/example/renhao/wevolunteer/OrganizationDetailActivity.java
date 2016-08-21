@@ -1,11 +1,11 @@
 package com.example.renhao.wevolunteer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,14 +18,11 @@ import com.example.renhao.wevolunteer.adapter.OrganizationDetailAdapter;
 import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.event.OrganizationDetailEvent;
 import com.example.renhao.wevolunteer.view.SlidingTabLayout;
-import com.orhanobut.logger.Logger;
-import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * 项目名称：WeVolunteer
@@ -36,12 +33,16 @@ import butterknife.OnClick;
  */
 public class OrganizationDetailActivity extends BaseActivity {
     private static final String TAG = "OrganizationDetailActivity";
-    @Bind(R.id.imageview_organization_icon)
-    ImageView mOrganizationIcon;
+    /*    @Bind(R.id.imageview_organization_icon)
+        ImageView mOrganizationIcon;*/
     @Bind(R.id.slidtab_organization_tabs)
     SlidingTabLayout mSlidtabTabs;
     @Bind(R.id.viewpage_organization_pager)
     ViewPager mViewpage;
+    @Bind(R.id.tv_orgination_name)
+    TextView mTvOrginationName;
+    @Bind(R.id.tv_orgination_addr)
+    TextView mTvOrginationAddr;
 
     private View mCustomView;//actionbar的自定义视图
     private ImageView indicatorImg;
@@ -49,6 +50,7 @@ public class OrganizationDetailActivity extends BaseActivity {
     private ImageView magnifierImg;
 
     private String companyId;
+    private int origin;
 
     private CharSequence titles[] = {"组织介绍", "已发布 岗位/活动"};
     private OrganizationDetailAdapter adapter;
@@ -62,16 +64,15 @@ public class OrganizationDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_organizationdetail);
         ButterKnife.bind(this);
 
+        origin = getIntent().getIntExtra("origin", 0);
+
         initActionBar();
 
         companyId = getIntent().getStringExtra("id");
         initView();
         initOrganizationDetail();
 
-        Picasso.with(this)
-                .load(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(mOrganizationIcon);
+        //mOrganizationIcon.setImageResource(R.drawable.img_unload);
 
     }
 
@@ -105,17 +106,18 @@ public class OrganizationDetailActivity extends BaseActivity {
                     @Override
                     public void onSuccess(CompanyViewDto data) {
                         //获得组织图片并显示
-                        if (TextUtils.isEmpty(data.getListurl())) {
+                        /*if (!TextUtils.isEmpty(data.getAppLstUrl())) {
                             Picasso.with(getApplicationContext())
-                                    .load(data.getListurl())
-                                    .error(R.mipmap.ic_launcher)
+                                    .load(data.getAppLstUrl())
+                                    .placeholder(R.drawable.img_unload)
+                                    .error(R.drawable.img_unload)
                                     .into(mOrganizationIcon);
                         } else {
-                            Picasso.with(getApplicationContext())
-                                    .load(R.mipmap.ic_launcher)
-                                    .error(R.mipmap.ic_launcher)
-                                    .into(mOrganizationIcon);
-                        }
+                            mOrganizationIcon.setImageResource(R.drawable.img_unload);
+                        }*/
+
+                        mTvOrginationName.setText(data.getCompanyName());
+                        mTvOrginationAddr.setText(data.getAddr());
 
                         //组织介绍
                         //已发布岗位/活动
@@ -154,12 +156,17 @@ public class OrganizationDetailActivity extends BaseActivity {
         magnifierImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.v(TAG, "magnifierImg");
+                if (origin == 1)
+                    finish();
+                else {
+                    Intent intent = new Intent(OrganizationDetailActivity.this, SearchActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
 
-    @OnClick(R.id.imageview_organization_icon)
+/*    @OnClick(R.id.imageview_organization_icon)
     public void onClick() {
-    }
+    }*/
 }

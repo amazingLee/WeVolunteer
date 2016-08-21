@@ -93,7 +93,7 @@ public class IndexActivity extends BaseActivity {
         setFragment(HOME);
 
         //判断用户是否登录
-        boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", true);
+        boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);
         if (isLogin) {
             Logger.v(TAG, "user is login");
             SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
@@ -186,7 +186,7 @@ public class IndexActivity extends BaseActivity {
                 break;
             case FIND:
                 mChangrTvIndexFind.setIconColor(getResources().getColor(R.color.colorCyan));
-                if(fragmentPosition!=SIGNIN){
+                if (fragmentPosition != SIGNIN) {
 
                     if (mFindPageFragment == null) {
                         mFindPageFragment = new FindPageFragment();
@@ -197,7 +197,7 @@ public class IndexActivity extends BaseActivity {
                     mFindPageFragment.setArguments(data);
                     setFractionTranslate(transaction, FIND);
                     transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
-                }else {
+                } else {
                     //发送消息，隐藏签到按钮控件
                     EventBus.getDefault().post(new FlagEvent("find"));
                 }
@@ -206,7 +206,7 @@ public class IndexActivity extends BaseActivity {
                 break;
             case SIGNIN:
                 mChangrTvIndexSignin.setIconColor(getResources().getColor(R.color.colorCyan));
-                if (fragmentPosition !=FIND){
+                if (fragmentPosition != FIND) {
 
                     if (mFindPageFragment == null) {
                         mFindPageFragment = new FindPageFragment();
@@ -217,7 +217,7 @@ public class IndexActivity extends BaseActivity {
                     mFindPageFragment.setArguments(data);
                     setFractionTranslate(transaction, FIND);
                     transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
-                }else {
+                } else {
                     //发送消息，显示签到按钮控件
                     EventBus.getDefault().post(new FlagEvent("sign_in"));
                 }

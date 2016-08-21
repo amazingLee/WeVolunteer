@@ -11,7 +11,10 @@ import com.example.core.listener.AccessTokenListener;
 import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
+import com.example.model.activityRecruit.ActivityRecruitListDto;
+import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
+import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.PagedListEntityDto;
@@ -20,11 +23,14 @@ import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
 import com.example.model.company.CompanyViewDto;
+import com.example.model.content.ContentListDto;
+import com.example.model.content.ContentQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.dictionary.DictionaryQueryOptionDto;
 import com.example.model.dictionary.DictionaryTypeListDto;
 import com.example.model.dictionary.DictionaryTypeQueryOptionDto;
 import com.example.model.dictionary.DictionaryViewDto;
+import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
 import com.example.model.user.UserDto;
@@ -105,13 +111,13 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<UserListDto> result) {
-                if (result == null){
-                    listener.onFailure("","未知错误");
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
                     return;
                 }
-                if (result.isSuccess()){
+                if (result.isSuccess()) {
                     listener.onSuccess(result.getData());
-                }else {
+                } else {
                     listener.onFailure("", result.getMessage());
                 }
             }
@@ -213,6 +219,33 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<PagedListEntityDto<ActivityListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void jobActivityDetail(final String jobActivityId, final ActionCallbackListener<JobActivityViewDto> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+
+        new AsyncTask<Void, Void, ApiResponse<JobActivityViewDto>>() {
+
+            @Override
+            protected ApiResponse<JobActivityViewDto> doInBackground(Void... params) {
+                return api.jobActivityDetail(jobActivityId, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<JobActivityViewDto> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;
@@ -599,14 +632,90 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<List<AreaListDto>> result) {
-                if (result == null){
-                    listener.onFailure("","未知错误");
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
                     return;
                 }
-                if (result.isSuccess()){
+                if (result.isSuccess()) {
                     listener.onSuccess(result.getData());
-                }else {
-                    listener.onFailure("",result.getMessage());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void areaDetails(final String code, final ActionCallbackListener<AreaViewDto> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<AreaViewDto>>() {
+            @Override
+            protected ApiResponse<AreaViewDto> doInBackground(Void... params) {
+                return api.areaDetails(code, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<AreaViewDto> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void contentQuery(final ContentQueryOptionDto query, final ActionCallbackListener<PagedListEntityDto<ContentListDto>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<PagedListEntityDto<ContentListDto>>>() {
+            @Override
+            protected ApiResponse<PagedListEntityDto<ContentListDto>> doInBackground(Void... params) {
+                return api.contentQuery(query, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<PagedListEntityDto<ContentListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void activityRecruitQuery(final ActivityRecruitQueryOptionDto query,
+                                     final ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<PagedListEntityDto<ActivityRecruitListDto>>>() {
+            @Override
+            protected ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> doInBackground(Void... params) {
+                return api.activityRecuitQuery(query, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
                 }
             }
         }.execute();

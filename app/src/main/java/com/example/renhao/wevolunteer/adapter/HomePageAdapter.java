@@ -81,9 +81,11 @@ public class HomePageAdapter extends BaseAdapter {
             Logger.v(TAG, mContext.getResources().getString(R.string.url) + item.getImg());
             Picasso.with(mContext)
                     .load(mContext.getResources().getString(R.string.url) + item.getImg())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.img_unload)
+                    .error(R.drawable.img_unload)
                     .into(viewHolder.imageView);//加载图片
+        } else {
+            viewHolder.imageView.setImageResource(R.drawable.img_unload);
         }
 
 
@@ -105,11 +107,7 @@ public class HomePageAdapter extends BaseAdapter {
             viewHolder.timeNameTv.setText("单次服务时长");
         }
 
-        if (item.getState() == 0) {
-            viewHolder.stateTv.setText("招募中");
-        } else {
-            viewHolder.stateTv.setText("已结束");
-        }
+        viewHolder.stateTv.setText(item.getState());
 
         return convertView;
     }

@@ -54,6 +54,7 @@ public class SearchActivity extends BaseActivity {
 
     private int searchType = 0;
     private String keyWords;
+    public int origin;
 
     public String getKeyWords() {
         return keyWords;
@@ -76,6 +77,8 @@ public class SearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
+        origin = getIntent().getIntExtra("origin", 0);
 
         initHistoryDate();
 

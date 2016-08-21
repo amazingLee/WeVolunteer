@@ -11,7 +11,7 @@ public class HomePageListItem {
     private static final String TAG = "HomePageItem";
 
     private int type;//0活动，1岗位
-    private int state;//0招募中,1已结束
+    private String state;//0招募中,1已结束
     private String title;
     private int num;
     private int maxNum;
@@ -21,54 +21,14 @@ public class HomePageListItem {
     public HomePageListItem() {
     }
 
-    public HomePageListItem(int type, int state, String title, int num, int maxNum, String time, String img) {
-        this.type = type;
-        this.state = state;
-        this.title = title;
-        this.num = num;
-        this.maxNum = maxNum;
-        this.time = time;
+    public HomePageListItem(String img, int maxNum, int num, String state, String time, String title, int type) {
         this.img = img;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
-    }
-
-    public int getMaxNum() {
-        return maxNum;
-    }
-
-    public void setMaxNum(int maxNum) {
         this.maxNum = maxNum;
+        this.num = num;
+        this.state = state;
+        this.time = time;
+        this.title = title;
+        this.type = type;
     }
 
     public String getImg() {
@@ -79,11 +39,55 @@ public class HomePageListItem {
         this.img = img;
     }
 
+    public int getMaxNum() {
+        return maxNum;
+    }
+
+    public void setMaxNum(int maxNum) {
+        this.maxNum = maxNum;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public static String getTAG() {
+        return TAG;
+    }
+
     public String getTime() {
         return time;
     }
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

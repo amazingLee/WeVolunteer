@@ -1,6 +1,7 @@
 package com.example.renhao.wevolunteer;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -138,7 +139,8 @@ public class ProjectActivity extends AppCompatActivity implements RadioGroup.OnC
         magnifierImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.v(TAG, "magnifierImg");
+                Intent intent = new Intent(ProjectActivity.this, SearchActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -189,7 +191,7 @@ public class ProjectActivity extends AppCompatActivity implements RadioGroup.OnC
 
     @OnClick({R.id.changrTv_project_homepage, R.id.changrTv_project_find, R.id.changrTv_project_signin, R.id.changrTv_project_myself})
     public void onClick(View view) {
-        Logger.v(TAG,"click");
+        Logger.v(TAG, "click");
         switch (view.getId()) {
             case R.id.changrTv_project_homepage:
                 setResult(IndexActivity.HOME);

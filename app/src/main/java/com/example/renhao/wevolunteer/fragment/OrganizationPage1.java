@@ -79,10 +79,11 @@ public class OrganizationPage1 extends Fragment {
         CompanyViewDto dto = event.getCompanyViewDto();
         mTvAddress.setText(TextUtils.isEmpty(dto.getAddr()) ? "" : dto.getAddr());
         mTvCharge.setText(TextUtils.isEmpty(dto.getPerson()) ? "" : dto.getPerson());
-        String phone = (TextUtils.isEmpty(dto.getTel()) ? "" : (dto.getTel() + "\n"))
-                + (TextUtils.isEmpty(dto.getMobile()) ? "" : dto.getMobile());
+        String phone = (TextUtils.isEmpty(dto.getTel()) ? "" : (dto.getTel()))
+                + (TextUtils.isEmpty(dto.getMobile()) ? "" : ("\n" + dto.getMobile()));
         mTvPhone.setText(phone);
-        //组织荣耀?????????????????????
+        //组织荣耀
+        mTvHonour.setText(dto.getHonors());
 
         mTvCreate.setText(dto.getCreateTime());
 

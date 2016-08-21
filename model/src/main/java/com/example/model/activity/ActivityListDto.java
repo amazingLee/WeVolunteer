@@ -35,6 +35,15 @@ public class ActivityListDto implements Serializable {
     private String LstUrl;//(string, optional): 图片Id
     private String PcLstUrl;//(string, optional): Pc图片
     private String AppLstUrl;//(string, optional): App图片
+    private String OperationState;//(string, optional): 当前项目运行状态
+
+    public String getOperationState() {
+        return OperationState;
+    }
+
+    public void setOperationState(String operationState) {
+        OperationState = operationState;
+    }
 
     public String getActivityName() {
         return ActivityName;

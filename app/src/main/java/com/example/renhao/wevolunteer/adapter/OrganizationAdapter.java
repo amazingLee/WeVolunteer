@@ -72,13 +72,11 @@ public class OrganizationAdapter extends BaseAdapter {
 
         if (!TextUtils.isEmpty(item.getIconUrl())) {
             Picasso.with(mContext).load(item.getIconUrl())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.img_unload)
+                    .error(R.drawable.img_unload)
                     .into(viewHolder.mIcon);//加载图片
         } else {
-            Picasso.with(mContext).load(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(viewHolder.mIcon);//加载图片
+            viewHolder.mIcon.setImageResource(R.drawable.img_unload);
         }
 
         viewHolder.mName.setText(item.getName());

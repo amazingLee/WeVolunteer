@@ -1,6 +1,8 @@
 package com.example.renhao.wevolunteer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -19,13 +21,15 @@ import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.activity.ActivityTimeSimpleDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.dictionary.DictionaryListDto;
+import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.orhanobut.logger.Logger;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -33,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -152,7 +157,10 @@ public class ProjectDetailActivity extends BaseActivity {
     private TextView titleTv;
     private ImageView magnifierImg;
 
-    private ActivityViewDto mDate;
+    private int origin;
+
+    private ActivityViewDto mActivityViewDto;
+    private JobActivityViewDto mJobActivityViewDto;
     private String id;
     private int type;
     private Map<String, String> notes = new HashMap<>();
@@ -165,80 +173,37 @@ public class ProjectDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         type = getIntent().getIntExtra("type", 0);
+        origin = getIntent().getIntExtra("origin", 0);
 
         initActionBar();
 
-        mDate = (ActivityViewDto) getIntent().getSerializableExtra("date");//获取活动或岗位的数据
         id = getIntent().getStringExtra("id");
-        if (mDate == null && !TextUtils.isEmpty(id)) {
-            getDetail();
-        } else if (mDate != null) {
-            initView();
-        }
+        initView();
+        getDetail();
+
     }
 
-
+    /**
+     * 加载数据
+     */
     public void getDetail() {
-
         showNormalDialog("正在加载数据...");
+        if (type == 0) {
+            getActivityDetail();
+        } else if (type == 1) {
+            getJobActivityDetail();
+        }
 
+    }
+
+    private void getActivityDetail() {
         AppActionImpl.getInstance(this).activityDetail(id, new ActionCallbackListener<ActivityViewDto>() {
             @Override
             public void onSuccess(ActivityViewDto data) {
-                mDate = data;
-                initView();
-
                 dissMissNormalDialog();
+                mActivityViewDto = data;
 
-                String imagUrl = "";
-                if (data.getAppImgUrl() != null) {
-                    imagUrl = data.getAppImgUrl();
-                    Picasso.with(getApplicationContext()).load(imagUrl)
-                            .error(R.mipmap.ic_launcher)
-                            .into(mImageview);
-                } else {
-                    Picasso.with(getApplicationContext()).load(R.mipmap.ic_launcher)
-                            .error(R.mipmap.ic_launcher)
-                            .into(mImageview);
-                }
-
-                //岗位类型 可能有多个
-                String[] activityTypeName = data.getActivityTypeName().split(",");
-                String typeName = "";
-
-                Pattern pattern;
-                Matcher matcher;
-                pattern = Pattern.compile("^[\\u4E00-\\u9FA5]+$");
-                for (int i = 0; i < activityTypeName.length; i++) {
-                    matcher = pattern.matcher(activityTypeName[i]);
-                    if (matcher.matches()) {
-                        typeName += activityTypeName[i] + "   ";
-                    }
-                }
-                mTvType.setText(typeName);//
-
-                mTvRegisterTime.setText(data.getBeginTime() + "-\n" + mDate.getEndTime());
-
-                String contactStr = "";
-                contactStr += TextUtils.isEmpty(data.getLinker()) ? "" : data.getLinker() + "\n";
-                contactStr += TextUtils.isEmpty(data.getTel()) ? "" : data.getTel() + "\n";
-                contactStr += TextUtils.isEmpty(data.getMobile()) ? "" : data.getMobile();
-                mTvContact.setText(contactStr);
-
-                mTvSkill.setText(data.getJobText());
-
-                mTvDetail.setText(data.getText());
-
-
-                for (int i = 0; i < data.getActivityTimes().size(); i++) {
-                    ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
-                    try {
-                        Date date = format.parse(dto.getSTime());
-                        notes.put(new CalendarDay(date).toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
+                setActivityDetail(data);
             }
 
             @Override
@@ -248,52 +213,178 @@ public class ProjectDetailActivity extends BaseActivity {
         });
     }
 
-    private void initView() {
-        mTvTilte.setText(mDate.getActivityName());
-        mTvNum.setText(mDate.getRecruited() + "/" + mDate.getRecruitNumber() + "人");
+    private void setActivityDetail(ActivityViewDto data) {
+        mTvTilte.setText(data.getActivityName());
 
-        float h = Float.parseFloat(mDate.getLengthTime()) / 60;
+        mTvNum.setText(data.getRecruited() + "/" + data.getRecruitNumber() + "人");
+
+        float h = data.getLengthTime().floatValue() / 60;
         DecimalFormat df = new DecimalFormat("#.##");
         mTvTime.setText(df.format(h) + "小时");
 
-        mTvEffectiveTime.setText(mDate.getStartTime() + "-\n" + mDate.getFinishTime());
+        mTvState.setText(data.getOperationState());
 
-        mTvLocation.setText(mDate.getAddr());
+        String imagUrl = "";
+        if (TextUtils.isEmpty(data.getAppImgUrl())) {
+            imagUrl = data.getAppImgUrl();
+            Picasso.with(getApplicationContext()).load(imagUrl)
+                    .placeholder(R.drawable.img_unload)
+                    .error(R.drawable.img_unload)
+                    .into(mImageview);
+        } else {
+            mImageview.setImageResource(R.drawable.img_unload);
+        }
 
-        mTvFounders.setText(mDate.getCompanyName());
+        //岗位类型 可能有多个
+        String[] activityTypeName = data.getActivityTypeName().split(",");
+        String typeName = "";
 
-      /*  //通过CompanyId获取联系人和联系方式
-        CompanyQueryOptionDto queryOptionDto = new CompanyQueryOptionDto();
-        queryOptionDto.setOrganizationId(mDate.getCompanyId());
-        Logger.v(TAG, mDate.getCompanyId());
-        AppActionImpl.getInstance(this).companyQuery(queryOptionDto, new ActionCallbackListener<PagedListEntityDto<CompanyListDto>>() {
+        Pattern pattern;
+        Matcher matcher;
+        pattern = Pattern.compile("^[\\u4E00-\\u9FA5]+$");
+        for (int i = 0; i < activityTypeName.length; i++) {
+            matcher = pattern.matcher(activityTypeName[i]);
+            if (matcher.matches()) {
+                typeName += activityTypeName[i] + "   ";
+            }
+        }
+        mTvType.setText(typeName);//
+
+        mTvRegisterTime.setText(data.getBeginTime() + "-\n" + data.getEndTime());
+
+        mTvEffectiveTime.setText(data.getStartTime() + " - \n" + data.getEndTime());
+
+        mTvLocation.setText(data.getAddr());
+
+        mTvFounders.setText(data.getCompanyName());
+
+        String contactStr = "";
+        contactStr += TextUtils.isEmpty(data.getLinker()) ? "" : data.getLinker() + "\n";
+        contactStr += TextUtils.isEmpty(data.getTel()) ? "" : data.getTel() + "\n";
+        contactStr += TextUtils.isEmpty(data.getMobile()) ? "" : data.getMobile();
+        mTvContact.setText(contactStr);
+
+        mTvDetail.setText(data.getJobText());
+
+        mTvSignedNum.setText(data.getRecruited() + "");
+
+        mTvMaxNum.setText("/" + data.getRecruitNumber());
+
+        for (int i = 0; i < data.getActivityTimes().size(); i++) {
+            ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
+            try {
+                Date date = format.parse(dto.getSTime());
+                notes.put(new CalendarDay(date).toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
+            ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
+            view.setVisibility(View.VISIBLE);
+            //设置图片
+            view.setImageResource(R.mipmap.ic_launcher);
+        }
+    }
+
+    private void getJobActivityDetail() {
+        AppActionImpl.getInstance(this).jobActivityDetail(id, new ActionCallbackListener<JobActivityViewDto>() {
             @Override
-            public void onSuccess(PagedListEntityDto<CompanyListDto> data) {
-                if (data.getRows().size() <= 0)
-                    return;
-                CompanyListDto companyListDto = data.getRows().get(0);
-                mTvContact.setText(companyListDto.getPerson() +
-                        "/" + companyListDto.getTel() +
-                        "/" + companyListDto.getMobile());
+            public void onSuccess(JobActivityViewDto data) {
+                mJobActivityViewDto = data;
+                dissMissNormalDialog();
+
+                setJobActivityDetail(data);
             }
 
             @Override
             public void onFailure(String errorEvent, String message) {
-
+                dissMissNormalDialog();
             }
-        });*/
+        });
+    }
 
-        mTvSignedNum.setText(mDate.getRecruited() + "");
+    private void setJobActivityDetail(JobActivityViewDto data) {
+        mTvTilte.setText(data.getActivityName());
 
-        mTvMaxNum.setText("/" + mDate.getRecruitNumber());
+        mTvNum.setText(data.getRecruited() + "/" + data.getRecruitNumber() + "人");
 
-        if (mDate.getStatus() == 0) {
-            mTvState.setText("招募中");
-        } else if (mDate.getStatus() == 1) {
-            mTvState.setText("已结束");
+        float h = data.getLengthTime().floatValue() / 60;
+        DecimalFormat df = new DecimalFormat("#.##");
+        mTvTime.setText(df.format(h) + "小时");
+
+        mTvState.setText(data.getOperationState());
+
+        String imagUrl = "";
+        if (TextUtils.isEmpty(data.getAppImgUrl())) {
+            imagUrl = data.getAppImgUrl();
+            Picasso.with(getApplicationContext()).load(imagUrl)
+                    .placeholder(R.drawable.img_unload)
+                    .error(R.drawable.img_unload)
+                    .into(mImageview);
+        } else {
+            mImageview.setImageResource(R.drawable.img_unload);
         }
 
-        if (mDate.getType() == 0) {
+        //岗位类型 可能有多个
+        String[] activityTypeName = data.getActivityTypeName().split(",");
+        String typeName = "";
+
+        Pattern pattern;
+        Matcher matcher;
+        pattern = Pattern.compile("^[\\u4E00-\\u9FA5]+$");
+        for (int i = 0; i < activityTypeName.length; i++) {
+            matcher = pattern.matcher(activityTypeName[i]);
+            if (matcher.matches()) {
+                typeName += activityTypeName[i] + "   ";
+            }
+        }
+        mTvType.setText(typeName);//
+
+        mTvRegisterTime.setText(data.getBeginTime() + "-\n" + data.getEndTime());
+
+        mTvEffectiveTime.setText(data.getStartTime());
+
+        mTvLocation.setText(data.getAddr());
+
+        mTvFounders.setText(data.getCompanyName());
+
+        String contactStr = "";
+        contactStr += TextUtils.isEmpty(data.getLinker()) ? "" : data.getLinker() + "\n";
+        contactStr += TextUtils.isEmpty(data.getTel()) ? "" : data.getTel() + "\n";
+        contactStr += TextUtils.isEmpty(data.getMobile()) ? "" : data.getMobile();
+        mTvContact.setText(contactStr);
+
+        getSpecialType(data.getSpecialityType());
+
+        mTvDetail.setText(data.getJobText());
+
+
+        for (int i = 0; i < data.getActivityTimes().size(); i++) {
+            ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
+            try {
+                Date date = format.parse(dto.getSTime());
+                notes.put(new CalendarDay(date).toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        mTvSignedNum.setText(data.getRecruited() + "");
+
+        mTvMaxNum.setText("/" + data.getRecruitNumber());
+
+        for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
+            ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
+            view.setVisibility(View.VISIBLE);
+            //设置图片
+            view.setImageResource(R.mipmap.ic_launcher);
+        }
+    }
+
+    private void initView() {
+        if (type == 0) {
             //活动
             mTvSkill.setVisibility(View.GONE);
             mTvInfuse.setVisibility(View.GONE);
@@ -311,27 +402,27 @@ public class ProjectDetailActivity extends BaseActivity {
             mTvSignedName.setText("活动详情");
             mTvNumName.setText("活动招募人数");
             mTvTimeName.setText("活动服务时长");
-        } else if (mDate.getType() == 1) {
+        } else if (type == 1) {
             //岗位
-            mTvTypeName.setText("岗位类型");
-            mTvRegisterTimeName.setText("岗位报名时间");
-            mTvEffectiveTimeName.setText("岗位有效时间");
-            mTvLocationName.setText("岗位服务地址");
-            mTvFoundersName.setText("岗位发起单位");
+            mTvTypeName.setText("岗位类型:");
+            mTvRegisterTimeName.setText("岗位报名时间:");
+            mTvEffectiveTimeName.setText("岗位起始时间:");
+            mTvLocationName.setText("岗位服务地址:");
+            mTvFoundersName.setText("岗位发起单位:");
             mTvDetailName.setText("岗位详情");
             mTvSignedName.setText("岗位详情");
             mTvNumName.setText("岗位招募人数");
             mTvTimeName.setText("岗位服务时长");
 
-            mTvSkill.setText("");
+            /*mTvSkill.setText("");*/
         }
 
-        for (int i = (mDate.getRecruited() > 5 ? 5 : mDate.getRecruited()) - 1; i >= 0; i--) {
+/*        for (int i = (mDate.getRecruited() > 5 ? 5 : mDate.getRecruited()) - 1; i >= 0; i--) {
             ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
             view.setVisibility(View.VISIBLE);
             //设置图片
             view.setImageResource(R.mipmap.ic_launcher);
-        }
+        }*/
 
     }
 
@@ -365,12 +456,56 @@ public class ProjectDetailActivity extends BaseActivity {
         magnifierImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.v(TAG, "magnifierImg");
+                if (origin == 1)
+                    finish();
+                else {
+                    Intent intent = new Intent(ProjectDetailActivity.this, SearchActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
 
-    @OnClick({R.id.btn_projectdetail_share, R.id.btn_projectdetail_apply, R.id.btn_projectdetail_focuson, R.id.imageview_projectdetail_itemImage, R.id.tv_projectDetail_contactName, R.id.tv_projectDetail_contact})
+    private void getSpecialType(String typeCodes) {
+
+        if (typeCodes == null)
+            return;
+
+        final String[] types = typeCodes.split(",");
+
+        AppActionImpl.getInstance(this).dictionaryQueryDefault("SPECIALITY", "",
+                new ActionCallbackListener<List<DictionaryListDto>>() {
+                    @Override
+                    public void onSuccess(List<DictionaryListDto> data) {
+                        if (data == null)
+                            return;
+                        String specialType = "";
+
+                        for (int i = 0; i < data.size(); i++) {
+                            for (int j = 0; j < types.length; j++) {
+                                if (data.get(i).getCode().equals(types[j])) {
+                                    specialType += data.get(i).getName() + "  ";
+                                }
+                            }
+                        }
+
+                        mTvSkill.setText(specialType);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+    }
+
+    @OnClick({R.id.btn_projectdetail_share,
+            R.id.btn_projectdetail_apply,
+            R.id.btn_projectdetail_focuson,
+            R.id.relative_projectDetail_detailName,
+            R.id.imageview_projectdetail_itemImage,
+            R.id.tv_projectDetail_contactName,
+            R.id.tv_projectDetail_contact})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_projectdetail_share:
@@ -384,13 +519,28 @@ public class ProjectDetailActivity extends BaseActivity {
                 break;
             case R.id.btn_projectdetail_apply:
                 Holder holder = new ViewHolder(R.layout.dialog_caldroid);
-                DialogPlus dialogPlus = DialogPlus.newDialog(this)
+                final DialogPlus dialogPlus = DialogPlus.newDialog(this)
                         .setContentHolder(holder)
                         .setCancelable(true)
                         .setGravity(Gravity.BOTTOM)
                         .create();
+                final TextView selsecTv = (TextView) dialogPlus.getHolderView().findViewById(R.id.tv_dialogCaldroid_dateSelect);
                 MaterialCalendarView calendarView = (MaterialCalendarView) dialogPlus.getHolderView().findViewById(R.id.calendarView);
+                calendarView.setTileHeightDp(44);
+                calendarView.setArrowColor(getResources().getColor(R.color.colorCyan));
                 calendarView.setNotes(notes);
+                calendarView.setOnClickListener(new MaterialCalendarView.CloseListener() {
+                    @Override
+                    public void close(View view) {
+                        dialogPlus.dismiss();
+                    }
+                });
+                calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+                    @Override
+                    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                        selsecTv.setText(date.getYear() + "-" + (date.getMonth() + 1) + "-" + date.getDay());
+                    }
+                });
                 dialogPlus.show();
                 break;
             case R.id.btn_projectdetail_focuson:
@@ -401,6 +551,25 @@ public class ProjectDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_projectDetail_contact:
                 break;
+            case R.id.relative_projectDetail_detailName:
+                Intent intent = new Intent(ProjectDetailActivity.this, JobDetailActivity.class);
+                if (type == 0) {
+                    intent.putExtra("jobText", mActivityViewDto.getJobText());
+                    intent.putExtra("text", mActivityViewDto.getText());
+                    intent.putExtra("origin", origin);
+                } else if (type == 1) {
+                    intent.putExtra("jobText", mJobActivityViewDto.getJobText());
+                    intent.putExtra("text", mJobActivityViewDto.getText());
+                    intent.putExtra("origin", origin);
+                }
+                startActivityForResult(intent, 0);
+                break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 0)
+            finish();
     }
 }

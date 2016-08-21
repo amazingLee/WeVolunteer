@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
+import com.example.model.area.AreaListDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
@@ -74,7 +75,9 @@ public class OrganizationActivity extends BaseActivity {
     private List<String> type = new ArrayList<>();
     private List<String> typeCode = new ArrayList<>();
     private int typeSelect = -1;
-    private String[] area = {"区域", "全市", "海曙区", "江东区"};
+    private List<String> area = new ArrayList<>();
+    private List<String> areaCode = new ArrayList<>();
+    private int areaSelect = -1;
 
     private ArrayList<OrganizationListItem> list = new ArrayList<>();
     private List<CompanyListDto> dates = new ArrayList<>();
@@ -130,7 +133,7 @@ public class OrganizationActivity extends BaseActivity {
      * @param position
      */
     private void setDropDownMenuList(int position) {
-        if (position == 0) {
+        if (position == 0) {//类型
             AppActionImpl.getInstance(this).dictionaryQueryDefault("ActivityType", "",
                     new ActionCallbackListener<List<DictionaryListDto>>() {
                         @Override
@@ -150,8 +153,28 @@ public class OrganizationActivity extends BaseActivity {
 
                         }
                     });
-        } else if (position == 1) {
+        } else if (position == 1) {//区域
+            AppActionImpl.getInstance(this).AreaQuery("ac689592-5a3e-4015-8609-cdeed42df6ab",
+                    new ActionCallbackListener<List<AreaListDto>>() {
+                        @Override
+                        public void onSuccess(List<AreaListDto> data) {
+                            if (data == null)
+                                return;
+                            area = new ArrayList<String>();
+                            area.add("区域");
+                            areaCode = new ArrayList<String>();
+                            for (int i = 0; i < data.size(); i++) {
+                                area.add(data.get(i).getName());
+                                areaCode.add(data.get(i).getCode());
+                            }
+                            areaAdapter.setDate(area);
+                        }
 
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+
+                        }
+                    });
         }
     }
 
@@ -183,7 +206,8 @@ public class OrganizationActivity extends BaseActivity {
         magnifierImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.v(TAG, "magnifierImg");
+                Intent intent = new Intent(OrganizationActivity.this, SearchActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -196,6 +220,9 @@ public class OrganizationActivity extends BaseActivity {
         if (typeSelect > -1) {
             companyQueryOptionDto.setServiceType(typeCode.get(typeSelect));
         }
+        if (areaSelect > -1) {
+            companyQueryOptionDto.setAreaCode(areaCode.get(areaSelect));
+        }
         AppActionImpl.getInstance(this).companyQuery(companyQueryOptionDto,
                 new ActionCallbackListener<PagedListEntityDto<CompanyListDto>>() {
                     @Override
@@ -205,12 +232,12 @@ public class OrganizationActivity extends BaseActivity {
                             list = new ArrayList<OrganizationListItem>();
                             dates = new ArrayList<CompanyListDto>();
                         }
-                        dates = data.getRows();
-                        for (int i = 0; i < dates.size(); i++) {
+                        for (int i = 0; i < data.getRows().size(); i++) {
+                            dates.add(data.getRows().get(i));
                             OrganizationListItem item = new OrganizationListItem();
-                            item.setName(dates.get(i).getCompanyName());
-                            item.setAddress(dates.get(i).getAddr());
-                            item.setIconUrl(dates.get(i).getListurl());
+                            item.setName(data.getRows().get(i).getCompanyName());
+                            item.setAddress(data.getRows().get(i).getAddr());
+                            item.setIconUrl(data.getRows().get(i).getAppLstUrl());
                             list.add(item);
                         }
                         PageIndex = data.getPageIndex();
@@ -291,15 +318,18 @@ public class OrganizationActivity extends BaseActivity {
             }
         });
         //区域
+        area.add("区域");
         final ListView areaView = new ListView(this);
-        areaAdapter = new ListDropDownAdapter(this, Arrays.asList(area));
+        areaAdapter = new ListDropDownAdapter(this, area);
         areaView.setDividerHeight(0);
         areaView.setAdapter(areaAdapter);
         areaView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                areaSelect = position - 1;
+                initDate(REFRESH);
                 areaAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[1] : area[position]);
+                mDropDownMenu.setTabText(position == 0 ? headers[1] : area.get(position));
                 mDropDownMenu.closeMenu();
             }
         });

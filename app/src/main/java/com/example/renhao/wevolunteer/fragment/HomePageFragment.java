@@ -26,6 +26,8 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.content.ContentListDto;
+import com.example.model.content.ContentQueryOptionDto;
 import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.OrganizationActivity;
@@ -50,7 +52,6 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -107,6 +108,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 getDate();
+                getSliderDate();
             }
         });
         mPtrListviewHomapageList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);//设置头部下拉刷新
@@ -145,7 +147,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                     ActivityListDto dto = dates.get(i);
                     HomePageListItem item = new HomePageListItem();
                     item.setType(dto.getType());
-                    item.setState(dto.getStatus());
+                    item.setState(dto.getOperationState());
                     item.setTitle(dto.getActivityName());
                     item.setNum(dto.getRecruited());
                     item.setMaxNum(dto.getRecruitNumber());
@@ -253,32 +255,47 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private void initImageSliderView() {
         this.imageSliderView = LayoutInflater.from(getActivity()).inflate(R.layout.view_imageslider, null);
         mSliderHomepageImgslider = (SliderLayout) imageSliderView.findViewById(R.id.slider_homepage_imgslider);
-        HashMap<String, String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal",
-                "http://img5.imgtn.bdimg.com/it/u=773976410,3208791615&fm=11&gp=0.jpg");
-        url_maps.put("Big Bang Theory",
-                "http://img2.imgtn.bdimg.com/it/u=1688175549,654537977&fm=21&gp=0.jpg");
-        url_maps.put("House of Cards",
-                "http://img2.imgtn.bdimg.com/it/u=2456952410,3637246060&fm=21&gp=0.jpg");
-        url_maps.put("Game of Thrones",
-                "http://img0.imgtn.bdimg.com/it/u=636093399,3331762473&fm=21&gp=0.jpg");
 
-        for (String name : url_maps.keySet()) {
-            TextSliderView textSliderView = new TextSliderView(getActivity());
-            // initialize a SliderLayout
-            textSliderView
-                    //.description(name)
-                    .image(url_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
+        getSliderDate();
+    }
 
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra", name);
+    private void getSliderDate() {
+        ContentQueryOptionDto queryOptionDto = new ContentQueryOptionDto();
+        queryOptionDto.setPic(true);
+        queryOptionDto.setTop(true);
+        queryOptionDto.setPageSize(4);
+        AppActionImpl.getInstance(getActivity()).contentQuery(queryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<ContentListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<ContentListDto> data) {
+                        if (data == null)
+                            return;
+                        if (data.getRows() == null)
+                            return;
+                        mSliderHomepageImgslider.removeAllSliders();
+                        for (int i = 0; i < data.getRows().size(); i++) {
+                            TextSliderView textSliderView = new TextSliderView(getActivity());
+                            // initialize a SliderLayout
+                            textSliderView
+                                    .description(data.getRows().get(i).getContentName())
+                                    .image(data.getRows().get(i).getOutsideUrl())
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            //.setOnSliderClickListener(this);
 
-            mSliderHomepageImgslider.addSlider(textSliderView);
-        }
+                            //add your extra information
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra", data.getRows().get(i).getOutsideUrl());
+
+                            mSliderHomepageImgslider.addSlider(textSliderView);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
     }
 
 

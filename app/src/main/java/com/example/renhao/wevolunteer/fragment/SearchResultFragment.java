@@ -251,7 +251,7 @@ public class SearchResultFragment extends Fragment {
                             ActivityListDto listDto = data.getRows().get(i);
                             HomePageListItem item = new HomePageListItem();
                             item.setType(listDto.getType());
-                            item.setState(listDto.getStatus());
+                            item.setState(listDto.getOperationState());
                             item.setTitle(listDto.getActivityName());
                             item.setNum(listDto.getRecruited());
                             item.setMaxNum(listDto.getRecruitNumber());
