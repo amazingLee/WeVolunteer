@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- portrait popupwindow -->
+    <style name="PopupAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/portrait_ppwd_push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/portrait_ppwd_push_bottom_out</item>
+    </style>
+
 </resources>

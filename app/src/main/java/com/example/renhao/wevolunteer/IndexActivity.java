@@ -24,7 +24,7 @@ import com.example.renhao.wevolunteer.event.FlagEvent;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
 import com.example.renhao.wevolunteer.fragment.FindPageFragment;
 import com.example.renhao.wevolunteer.fragment.HomePageFragment;
-import com.example.renhao.wevolunteer.fragment.MySelfFragment;
+import com.example.renhao.wevolunteer.fragment.PersonalFragment;
 import com.example.renhao.wevolunteer.fragment.SigninPageFragment;
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
 import com.orhanobut.logger.Logger;
@@ -73,7 +73,7 @@ public class IndexActivity extends BaseActivity {
     private HomePageFragment mHomePageFragment;
     private FindPageFragment mFindPageFragment;
     private SigninPageFragment mSigninPageFragment;
-    private MySelfFragment mMySelfFragment;
+    private PersonalFragment mPersonalFragment;
 
 
     private int fragmentPosition = -1;
@@ -225,11 +225,11 @@ public class IndexActivity extends BaseActivity {
                 break;
             case MYSELF:
                 mChangrTvIndexMyself.setIconColor(getResources().getColor(R.color.colorCyan));
-                if (mMySelfFragment == null) {
-                    mMySelfFragment = new MySelfFragment();
+                if (mPersonalFragment == null) {
+                    mPersonalFragment = new PersonalFragment();
                 }
                 setFractionTranslate(transaction, MYSELF);
-                transaction.replace(R.id.framelayout_index_content, mMySelfFragment);
+                transaction.replace(R.id.framelayout_index_content, mPersonalFragment);
                 fragmentPosition = MYSELF;
                 break;
 
