@@ -45,11 +45,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
     private AppAction mAction;
 
-    private VolunteerViewDto eventbus_data;
+    private VolunteerViewDto personal_data;
     private View bottomView;
     private LinearLayout professional_true;
     private LinearLayout Professional_false;
-    private TextView tv_true_name, tv_specialty, tv_integral;
+    private TextView tv_true_name, tv_top_specialty, tv_item_specialty, tv_integral;
     private View middleView;
     private TextView tv_AllTime, tv_SchoolTime, tv_InJobTime, tv_RetireTime;
     private LinearLayout group;
@@ -109,13 +109,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         //判断是否为专业志愿志愿者，显示不同按钮
         if (isSpeciality) {
             //专业志愿者
-            tv_specialty.setVisibility(View.VISIBLE);
-            tv_specialty.setText(specialty);
+            tv_top_specialty.setVisibility(View.VISIBLE);
+            tv_top_specialty.setText(specialty);
+            tv_item_specialty.setText(specialty);
             professional_true.setVisibility(View.VISIBLE);
             Professional_false.setVisibility(View.GONE);
         } else {
             //普通志愿者
-            tv_specialty.setVisibility(View.INVISIBLE);
+            tv_top_specialty.setVisibility(View.INVISIBLE);
             professional_true.setVisibility(View.GONE);
             Professional_false.setVisibility(View.VISIBLE);
         }
@@ -175,9 +176,10 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         tv_RetireTime = (TextView) middleView.findViewById(R.id.tv_personal_ServiceRetireTime);
         /*include的bottom_view*/
         bottomView = mainview.findViewById(R.id.bottom_part);
-        tv_true_name = (TextView) mainview.findViewById(R.id.tv_LL_true_name);
-        tv_specialty = (TextView) mainview.findViewById(R.id.tv_LL_specialty);
-        tv_integral = (TextView) mainview.findViewById(R.id.tv_LL_integral);
+        tv_true_name = (TextView) mainview.findViewById(R.id.tv_PersonalTop_true_name);
+        tv_top_specialty = (TextView) mainview.findViewById(R.id.tv_PersonalTop_specialty);
+        tv_item_specialty = (TextView) bottomView.findViewById(R.id.tv_personalItem_specialtytype);
+        tv_integral = (TextView) mainview.findViewById(R.id.tv_PersonalTop_integral);
         professional_true = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_true);
         Professional_false = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_false);
 
@@ -267,8 +269,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 if (my_portrait != null) {
                     intent.putExtra("portrait", my_portrait);
                 }
-                if (eventbus_data != null) {
-                    intent.putExtra("data", eventbus_data);
+                if (personal_data != null) {
+                    intent.putExtra("data", personal_data);
                     intent.setClass(getActivity(), PersonalDataActivity.class);
                     startActivity(intent);
                 } else {
@@ -335,7 +337,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(VolunteerViewDto data) {
                 //EventBus将data传到另一个activity中备用
-                eventbus_data = data;
+                personal_data = data;
 
                 isSpeciality = data.getSpeciality();
                 isShowTrueName = data.getShowTrueName();
@@ -345,7 +347,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 nick_name = data.getNickName();
                 integral = data.getScore().toString();
                 LevelType = data.getLevelType();
-                if (specialty != null)
+                if (data.getSpecialty() != null)
                     specialty = data.getSpecialty();
 
                 //服务时长
@@ -416,8 +418,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        if(group!=null)
-        group.removeAllViews();
+        if (group != null)
+            group.removeAllViews();
         super.onDestroy();
     }
 

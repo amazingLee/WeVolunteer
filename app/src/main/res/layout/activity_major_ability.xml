@@ -59,10 +59,12 @@
         android:paddingTop="15dp" />
 
     <LinearLayout
+        android:id="@+id/LL_major_CertificatePic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:background="@color/colorWhite"
+        android:background="@drawable/linearlayout_select"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <TextView
@@ -71,7 +73,6 @@
             android:layout_weight="1"
             android:padding="15dp"
             android:text="@string/tv_certificate_uoload"
-
             android:textSize="18sp" />
 
         <ImageView

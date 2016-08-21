@@ -45,6 +45,19 @@ public class MajorAbilityActivity extends AppCompatActivity {
             edit_major.setText(my_major);
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
         tv_submit= (TextView) findViewById(R.id.tv_major_submit);
         tv_submit.setOnClickListener(new View.OnClickListener() {
             @Override
