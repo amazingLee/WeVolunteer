@@ -6,6 +6,7 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
@@ -52,6 +53,10 @@ public interface Api {
     public static final String ACTIVITY_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/query";
     public static final String ACTIVITY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activity/details";
 
+    //报名
+    public static final String ACTIVITY_RECRUIT_CREAT = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/create";
+    public static final String ACTIVITY_RECRUIT_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/query";
+
     //岗位
     public static final String JOBACTIVITY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/jobactivity/details";
 
@@ -86,8 +91,8 @@ public interface Api {
     //新闻
     public static final String CONTENT_QUERY = "Nbcei.Plugin.CMS.Api.Impl/v1/Content/query";
 
-    //签到签退
-    public static final String ACTIVITYRECRUIT_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/query";
+    //
+
 
     /**
      * 获取accessToken
@@ -125,6 +130,24 @@ public interface Api {
      * @return
      */
     public ApiResponse<ActivityViewDto> activityDetail(String activityId, String accessToken);
+
+    /**
+     * 报名
+     *
+     * @param create
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<List<String>> activityRecruitCreate(List<ActivityRecruitDto> create, String accessToken);
+
+    /**
+     * 获取报名状态
+     *
+     * @param query
+     * @param accessToken
+     * @return
+     */
+    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken);
 
     /**
      * 岗位详细查询
@@ -206,13 +229,4 @@ public interface Api {
      */
     public ApiResponse<PagedListEntityDto<ContentListDto>> contentQuery(ContentQueryOptionDto query, String accessToken);
 
-
-    /**
-     * 获取活动岗位报名的状态，也可用于签到签退
-     *
-     * @param query
-     * @param accessToken
-     * @return
-     */
-    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken);
 }

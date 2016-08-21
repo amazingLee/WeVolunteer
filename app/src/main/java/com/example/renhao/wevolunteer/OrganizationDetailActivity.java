@@ -105,6 +105,9 @@ public class OrganizationDetailActivity extends BaseActivity {
                 new ActionCallbackListener<CompanyViewDto>() {
                     @Override
                     public void onSuccess(CompanyViewDto data) {
+
+                        if (data == null)
+                            return;
                         //获得组织图片并显示
                         /*if (!TextUtils.isEmpty(data.getAppLstUrl())) {
                             Picasso.with(getApplicationContext())

@@ -32,6 +32,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_dialogCaldroid_signUp"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"

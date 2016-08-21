@@ -18,26 +18,37 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.core.AppActionImpl;
+import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
+import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityTimeSimpleDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.activityRecruit.ActivityRecruitDto;
+import com.example.model.activityRecruit.ActivityRecruitListDto;
+import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.orhanobut.logger.Logger;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -161,6 +172,10 @@ public class ProjectDetailActivity extends BaseActivity {
 
     private ActivityViewDto mActivityViewDto;
     private JobActivityViewDto mJobActivityViewDto;
+
+    private List<ActivityTimeSimpleDto> times = new ArrayList<>();
+    private List<String> sTime = new ArrayList<>();
+
     private String id;
     private int type;
     private Map<String, String> notes = new HashMap<>();
@@ -202,7 +217,7 @@ public class ProjectDetailActivity extends BaseActivity {
             public void onSuccess(ActivityViewDto data) {
                 dissMissNormalDialog();
                 mActivityViewDto = data;
-
+                times = data.getActivityTimes();
                 setActivityDetail(data);
             }
 
@@ -270,11 +285,16 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvMaxNum.setText("/" + data.getRecruitNumber());
 
+        sTime = new ArrayList<>();
         for (int i = 0; i < data.getActivityTimes().size(); i++) {
             ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
+
+
             try {
                 Date date = format.parse(dto.getSTime());
-                notes.put(new CalendarDay(date).toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+                CalendarDay temp = new CalendarDay(date);
+                notes.put(temp.toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+                sTime.add(i, temp.getYear() + "-" + (temp.getMonth() + 1) + "-" + temp.getDay());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -294,7 +314,7 @@ public class ProjectDetailActivity extends BaseActivity {
             public void onSuccess(JobActivityViewDto data) {
                 mJobActivityViewDto = data;
                 dissMissNormalDialog();
-
+                times = data.getActivityTimes();
                 setJobActivityDetail(data);
             }
 
@@ -360,12 +380,15 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvDetail.setText(data.getJobText());
 
-
+        sTime = new ArrayList<>();
         for (int i = 0; i < data.getActivityTimes().size(); i++) {
             ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
+
             try {
                 Date date = format.parse(dto.getSTime());
-                notes.put(new CalendarDay(date).toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+                CalendarDay temp = new CalendarDay(date);
+                notes.put(temp.toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+                sTime.add(i, temp.getYear() + "-" + (temp.getMonth() + 1) + "-" + temp.getDay());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -518,30 +541,7 @@ public class ProjectDetailActivity extends BaseActivity {
                 dialogShare.show();
                 break;
             case R.id.btn_projectdetail_apply:
-                Holder holder = new ViewHolder(R.layout.dialog_caldroid);
-                final DialogPlus dialogPlus = DialogPlus.newDialog(this)
-                        .setContentHolder(holder)
-                        .setCancelable(true)
-                        .setGravity(Gravity.BOTTOM)
-                        .create();
-                final TextView selsecTv = (TextView) dialogPlus.getHolderView().findViewById(R.id.tv_dialogCaldroid_dateSelect);
-                MaterialCalendarView calendarView = (MaterialCalendarView) dialogPlus.getHolderView().findViewById(R.id.calendarView);
-                calendarView.setTileHeightDp(44);
-                calendarView.setArrowColor(getResources().getColor(R.color.colorCyan));
-                calendarView.setNotes(notes);
-                calendarView.setOnClickListener(new MaterialCalendarView.CloseListener() {
-                    @Override
-                    public void close(View view) {
-                        dialogPlus.dismiss();
-                    }
-                });
-                calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-                    @Override
-                    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                        selsecTv.setText(date.getYear() + "-" + (date.getMonth() + 1) + "-" + date.getDay());
-                    }
-                });
-                dialogPlus.show();
+                siginIn();
                 break;
             case R.id.btn_projectdetail_focuson:
                 break;
@@ -567,9 +567,163 @@ public class ProjectDetailActivity extends BaseActivity {
         }
     }
 
+    private void siginIn() {
+        //判断是否已经登录
+        boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);
+        final String volunteerId = LocalDate.getInstance(this).getLocalDate("volunteerId", "");
+                /*if (!isLogin || TextUtils.isEmpty(volunteerId)) {
+                    showToast("请先登录");
+                    return;
+                }*/
+
+        Holder holder = new ViewHolder(R.layout.dialog_caldroid);
+        final DialogPlus dialogPlus = DialogPlus.newDialog(this)
+                .setContentHolder(holder)
+                .setCancelable(true)
+                .setGravity(Gravity.BOTTOM)
+                .create();
+        final TextView selsecTv = (TextView) dialogPlus.getHolderView().findViewById(R.id.tv_dialogCaldroid_dateSelect);
+        Button signUpBtn = (Button) dialogPlus.getHolderView().findViewById(R.id.btn_dialogCaldroid_signUp);
+        MaterialCalendarView calendarView = (MaterialCalendarView) dialogPlus.getHolderView().findViewById(R.id.calendarView);
+        calendarView.setTileHeightDp(44);
+        calendarView.setArrowColor(getResources().getColor(R.color.colorCyan));
+        calendarView.setNotes(notes);
+        calendarView.setOnClickListener(new MaterialCalendarView.CloseListener() {
+            @Override
+            public void close(View view) {
+                dialogPlus.dismiss();
+            }
+        });
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                selsecTv.setText(date.getYear() + "-" + (date.getMonth() + 1) + "-" + date.getDay());
+            }
+        });
+
+        signUpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(selsecTv.getText())) {
+                    showToast("请选择一个日期");
+                    return;
+                }
+                //筛选出选择了哪个日期
+                int select = -1;
+                for (int i = 0; i < sTime.size(); i++) {
+                    if (sTime.get(i).equals(selsecTv.getText().toString())) {
+                        select = i;
+                        break;
+                    }
+                }
+                //判断是否还有剩余
+                final ActivityTimeSimpleDto dto = times.get(select);
+                if (dto.getRecruitedNum().intValue() == dto.getAllowNum().intValue()) {
+                    showToast("报名人数已满");
+                    return;
+                }
+
+                showNormalDialog("请稍后...");
+                //判断是否已经报名
+                ActivityRecruitQueryOptionDto queryOptionDto = new ActivityRecruitQueryOptionDto();
+                queryOptionDto.setActivityId(id);
+                queryOptionDto.setVolunteerId(volunteerId);
+                queryOptionDto.setActivityTimeId(dto.getId());
+                AppActionImpl.getInstance(getApplicationContext()).activityRecruitQuery(queryOptionDto,
+                        new ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>>() {
+                            @Override
+                            public void onSuccess(PagedListEntityDto<ActivityRecruitListDto> data) {
+                                if (data.getRows() == null) {
+                                    //报名
+                                    List<ActivityRecruitDto> recruitDtos = new ArrayList<ActivityRecruitDto>();
+                                    ActivityRecruitDto recruitDto = new ActivityRecruitDto();
+                                    recruitDto.setActivityId(id);
+                                    recruitDto.setVolunteerId(volunteerId);
+                                    recruitDto.setActivityTimeId(dto.getId());
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+                                    recruitDto.setBaoMingDate(format.format(new Date()));
+                                    recruitDto.setAuditStatus(0);
+                                    recruitDto.setSign(0);
+                                    recruitDto.setSignout(0);
+                                    recruitDto.setSource(0);
+                                    //获取Mac地址
+                                    recruitDto.setIP(getMac());
+                                    recruitDto.setDeleted(false);
+                                    recruitDtos.add(recruitDto);
+
+                                    AppActionImpl.getInstance(getApplicationContext()).activityRecruitCreat(recruitDtos,
+                                            new ActionCallbackListener<List<String>>() {
+                                                @Override
+                                                public void onSuccess(List<String> data) {
+                                                    if (data != null) {
+                                                        showToast("报名成功");
+                                                        dialogPlus.dismiss();
+                                                    } else {
+                                                        showToast("报名失败");
+                                                    }
+                                                    dissMissNormalDialog();
+                                                }
+
+                                                @Override
+                                                public void onFailure(String errorEvent, String message) {
+                                                    dissMissNormalDialog();
+                                                }
+                                            });
+
+                                } else {
+                                    dissMissNormalDialog();
+                                    showToast("您已报名");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(String errorEvent, String message) {
+                                dissMissNormalDialog();
+                            }
+                        });
+            }
+        });
+
+        dialogPlus.show();
+    }
+
+    private void isSignUp() {
+        //判断是否已经报名
+        ActivityRecruitQueryOptionDto queryOptionDto = new ActivityRecruitQueryOptionDto();
+        if (type == 0) {
+            queryOptionDto.setActivityId(mActivityViewDto.getId());
+        } else if (type == 1) {
+            queryOptionDto.setActivityId(mJobActivityViewDto.getId());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 0)
             finish();
+    }
+
+    private String getMac() {
+        String macSerial = null;
+        String str = "";
+
+        try {
+            Process pp = Runtime.getRuntime().exec("cat /sys/class/net/wlan0/address ");
+            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
+            LineNumberReader input = new LineNumberReader(ir);
+
+            for (; null != str; ) {
+                str = input.readLine();
+                if (str != null) {
+                    macSerial = str.trim();// 去空格
+                    break;
+                }
+            }
+        } catch (IOException ex) {
+            // 赋予默认值
+            ex.printStackTrace();
+        }
+        Logger.v(TAG, macSerial);
+        return macSerial;
     }
 }

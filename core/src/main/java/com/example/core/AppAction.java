@@ -2,17 +2,18 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
+import com.example.model.PagedListEntityDto;
+import com.example.model.activity.ActivityCreateBO;
+import com.example.model.activity.ActivityListDto;
+import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.activity.ActivityViewDto;
+import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
 import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
 import com.example.model.company.CompanyQueryOptionDto;
-import com.example.model.PagedListEntityDto;
-import com.example.model.activity.ActivityCreateBO;
-import com.example.model.activity.ActivityListDto;
-import com.example.model.activity.ActivityQueryOptionDto;
-import com.example.model.activity.ActivityViewDto;
 import com.example.model.company.CompanyViewDto;
 import com.example.model.content.ContentListDto;
 import com.example.model.content.ContentQueryOptionDto;
@@ -58,6 +59,14 @@ public interface AppAction {
     public void activityCreate(List<ActivityCreateBO> activityCreateBOs, ActionCallbackListener<List<String>> listener);
 
     public void activityQuery(ActivityQueryOptionDto activityQueryOptionDto, ActionCallbackListener<PagedListEntityDto<ActivityListDto>> listener);
+
+    /**
+     * 报名
+     *
+     * @param create
+     * @param listener
+     */
+    public void activityRecruitCreat(List<ActivityRecruitDto> create, ActionCallbackListener<List<String>> listener);
 
     public void jobActivityDetail(String jobActivityId, ActionCallbackListener<JobActivityViewDto> listener);
 

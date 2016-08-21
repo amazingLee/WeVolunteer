@@ -9,6 +9,7 @@ import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
+import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
 import com.example.model.area.AreaListDto;
@@ -168,6 +169,34 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, ACTIVITY_DETAIL, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> activityRecruitCreate(List<ActivityRecruitDto> create, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(create);
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITY_RECRUIT_CREAT, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ActivityRecruitListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITY_RECRUIT_QUERY, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -421,20 +450,4 @@ public class ApiImpl implements Api {
         }
         return new ApiResponse<>(false, "未知错误");
     }
-
-    @Override
-    public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken) {
-        Gson gson = new Gson();
-        String params = gson.toJson(query);
-        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ActivityRecruitListDto>>>() {
-        }.getType();
-        try {
-            return httpEngine.postApiHandler(params, ACTIVITYRECRUIT_QUERY, typeOfT, accessToken);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ApiResponse<>(false, "未知错误");
-    }
-
-
 }

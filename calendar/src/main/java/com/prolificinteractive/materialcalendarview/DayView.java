@@ -69,6 +69,7 @@ class DayView extends FrameLayout {
         itemRe = (RelativeLayout) findViewById(R.id.calendar_day_item);
 
         if (!TextUtils.isEmpty(note)) {
+            isEmpty = false;
             noteTv.setText(note);
         }
         //setGravity(Gravity.CENTER);
@@ -310,5 +311,15 @@ class DayView extends FrameLayout {
 
     public void setTextAppearance(Context context, int tagId) {
         dayTv.setTextAppearance(context, tagId);
+    }
+
+    private boolean isEmpty = true;
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public void setEmpty(boolean empty) {
+        isEmpty = empty;
     }
 }
