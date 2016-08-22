@@ -1,6 +1,7 @@
 package com.example.renhao.wevolunteer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,21 +27,21 @@ import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityattention.ActivityAttentionDto;
+import com.example.model.activityattention.ActivityAttentionListDto;
+import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.orhanobut.logger.Logger;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -181,11 +182,18 @@ public class ProjectDetailActivity extends BaseActivity {
     private Map<String, String> notes = new HashMap<>();
     private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
+    private boolean isAttention = false;
+    private boolean isInitAttention = false;
+    private String volunteerId;
+    private String attentionId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projectdetail);
         ButterKnife.bind(this);
+
+        volunteerId = LocalDate.getInstance(this).getLocalDate("volunteerId", "");
 
         type = getIntent().getIntExtra("type", 0);
         origin = getIntent().getIntExtra("origin", 0);
@@ -196,6 +204,67 @@ public class ProjectDetailActivity extends BaseActivity {
         initView();
         getDetail();
 
+        isAttention();
+
+        getSiginInVolunteer();
+
+    }
+
+    /**
+     * 获取已经报名的志愿者，并获取其头像显示
+     */
+    private void getSiginInVolunteer() {
+        ActivityRecruitQueryOptionDto queryOptionDto = new ActivityRecruitQueryOptionDto();
+        queryOptionDto.setActivityId(id);
+        AppActionImpl.getInstance(this).activityRecruitQuery(queryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<ActivityRecruitListDto> data) {
+                        if (data.getRows() == null || data.getRows().size() < 1)
+                            return;
+                        setVolunteerPhoto(data.getRows(), 0);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+    }
+
+    /**
+     * 利用迭代的方法获取并显示用户的头像
+     *
+     * @param list
+     * @param position
+     */
+    private void setVolunteerPhoto(final List<ActivityRecruitListDto> list, final int position) {
+        if (list == null || list.size() < (position + 1))
+            return;
+        //取得头像
+        AppActionImpl.getInstance(this).get_portrait(list.get(position).getVolunteerId(),
+                new ActionCallbackListener<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        if (data == null)
+                            return;
+                        Bitmap bitmap = Util.getBitmapFromByte(data);
+                        ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(position);
+                        view.setVisibility(View.VISIBLE);
+                        //设置图片
+                        view.setImageBitmap(bitmap);
+                        setVolunteerPhoto(list, position + 1);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(position);
+                        view.setVisibility(View.VISIBLE);
+                        //设置图片
+                        view.setImageResource(R.drawable.personal_no_portrait);
+                        setVolunteerPhoto(list, position + 1);
+                    }
+                });
     }
 
     /**
@@ -300,12 +369,12 @@ public class ProjectDetailActivity extends BaseActivity {
             }
         }
 
-        for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
+        /*for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
             ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
             view.setVisibility(View.VISIBLE);
             //设置图片
             view.setImageResource(R.mipmap.ic_launcher);
-        }
+        }*/
     }
 
     private void getJobActivityDetail() {
@@ -398,12 +467,12 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvMaxNum.setText("/" + data.getRecruitNumber());
 
-        for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
+       /* for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
             ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
             view.setVisibility(View.VISIBLE);
             //设置图片
             view.setImageResource(R.mipmap.ic_launcher);
-        }
+        }*/
     }
 
     private void initView() {
@@ -544,6 +613,14 @@ public class ProjectDetailActivity extends BaseActivity {
                 siginIn();
                 break;
             case R.id.btn_projectdetail_focuson:
+                if (TextUtils.isEmpty(volunteerId)) {
+                    showToast("请先登录");
+                    return;
+                }
+                if (isInitAttention)
+                    setOrCelAttention();
+                else
+                    isAttention();
                 break;
             case R.id.imageview_projectdetail_itemImage:
                 break;
@@ -570,11 +647,10 @@ public class ProjectDetailActivity extends BaseActivity {
     private void siginIn() {
         //判断是否已经登录
         boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);
-        final String volunteerId = LocalDate.getInstance(this).getLocalDate("volunteerId", "");
-                /*if (!isLogin || TextUtils.isEmpty(volunteerId)) {
-                    showToast("请先登录");
-                    return;
-                }*/
+        if (!isLogin || TextUtils.isEmpty(volunteerId)) {
+            showToast("请先登录");
+            return;
+        }
 
         Holder holder = new ViewHolder(R.layout.dialog_caldroid);
         final DialogPlus dialogPlus = DialogPlus.newDialog(this)
@@ -633,25 +709,24 @@ public class ProjectDetailActivity extends BaseActivity {
                         new ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>>() {
                             @Override
                             public void onSuccess(PagedListEntityDto<ActivityRecruitListDto> data) {
-                                if (data.getRows() == null) {
+                                if (data.getRows() == null || data.getRows().size() == 0) {
                                     //报名
                                     List<ActivityRecruitDto> recruitDtos = new ArrayList<ActivityRecruitDto>();
                                     ActivityRecruitDto recruitDto = new ActivityRecruitDto();
                                     recruitDto.setActivityId(id);
                                     recruitDto.setVolunteerId(volunteerId);
                                     recruitDto.setActivityTimeId(dto.getId());
-                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-                                    recruitDto.setBaoMingDate(format.format(new Date()));
+                                    recruitDto.setBaoMingDate(Util.getNowDate());
                                     recruitDto.setAuditStatus(0);
                                     recruitDto.setSign(0);
                                     recruitDto.setSignout(0);
                                     recruitDto.setSource(0);
                                     //获取Mac地址
-                                    recruitDto.setIP(getMac());
+                                    recruitDto.setIP(Util.getMac());
                                     recruitDto.setDeleted(false);
                                     recruitDtos.add(recruitDto);
 
-                                    AppActionImpl.getInstance(getApplicationContext()).activityRecruitCreat(recruitDtos,
+                                    AppActionImpl.getInstance(getApplicationContext()).activityRecruitCreate(recruitDtos,
                                             new ActionCallbackListener<List<String>>() {
                                                 @Override
                                                 public void onSuccess(List<String> data) {
@@ -687,13 +762,82 @@ public class ProjectDetailActivity extends BaseActivity {
         dialogPlus.show();
     }
 
-    private void isSignUp() {
-        //判断是否已经报名
-        ActivityRecruitQueryOptionDto queryOptionDto = new ActivityRecruitQueryOptionDto();
-        if (type == 0) {
-            queryOptionDto.setActivityId(mActivityViewDto.getId());
-        } else if (type == 1) {
-            queryOptionDto.setActivityId(mJobActivityViewDto.getId());
+    /**
+     * 查看用户是否已经关注此项目，是为已关注，否为关注
+     */
+    private void isAttention() {
+        if (TextUtils.isEmpty(volunteerId))
+            return;
+        ActivityAttentionQueryOptionDto queryOptionDto = new ActivityAttentionQueryOptionDto();
+        queryOptionDto.setActivityId(id);
+        queryOptionDto.setUserId(volunteerId);
+        AppActionImpl.getInstance(this).activityAttentionQuery(queryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<ActivityAttentionListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<ActivityAttentionListDto> data) {
+                        if (data.getRows() != null && data.getRows().size() > 0) {
+                            isAttention = true;
+                            attentionId = data.getRows().get(0).getId();
+                        } else {
+                            isAttention = false;
+
+                        }
+                        isInitAttention = true;
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+    }
+
+    /**
+     * 关注或取消关注
+     */
+    private void setOrCelAttention() {
+        if (isAttention) {
+            if (TextUtils.isEmpty(attentionId))
+                return;
+            List<String> id = new ArrayList<>();
+            id.add(attentionId);
+            AppActionImpl.getInstance(this).activityAttentionDelete(id, new ActionCallbackListener<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    mBtnFocuson.setText("关注");
+                    isAttention = false;
+                }
+
+                @Override
+                public void onFailure(String errorEvent, String message) {
+
+                }
+            });
+        } else {
+            List<ActivityAttentionDto> dtos = new ArrayList<>();
+            ActivityAttentionDto dto = new ActivityAttentionDto();
+            dto.setActivityId(id);
+            dto.setUserId(volunteerId);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+            dto.setAttentionTime(format.format(new Date()));
+            dtos.add(dto);
+
+            AppActionImpl.getInstance(this).activityAttentionCreate(dtos,
+                    new ActionCallbackListener<List<String>>() {
+                        @Override
+                        public void onSuccess(List<String> data) {
+                            if (data == null)
+                                return;
+                            attentionId = data.get(0);
+                            mBtnFocuson.setText("已关注");
+                            isAttention = true;
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+                            showToast("关注失败，请稍后再试");
+                        }
+                    });
         }
     }
 
@@ -703,27 +847,5 @@ public class ProjectDetailActivity extends BaseActivity {
             finish();
     }
 
-    private String getMac() {
-        String macSerial = null;
-        String str = "";
 
-        try {
-            Process pp = Runtime.getRuntime().exec("cat /sys/class/net/wlan0/address ");
-            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
-            LineNumberReader input = new LineNumberReader(ir);
-
-            for (; null != str; ) {
-                str = input.readLine();
-                if (str != null) {
-                    macSerial = str.trim();// 去空格
-                    break;
-                }
-            }
-        } catch (IOException ex) {
-            // 赋予默认值
-            ex.printStackTrace();
-        }
-        Logger.v(TAG, macSerial);
-        return macSerial;
-    }
 }

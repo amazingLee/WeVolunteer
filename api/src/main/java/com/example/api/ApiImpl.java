@@ -12,6 +12,9 @@ import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityattention.ActivityAttentionDto;
+import com.example.model.activityattention.ActivityAttentionListDto;
+import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
 import com.example.model.area.AreaListDto;
 import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
@@ -169,6 +172,20 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, ACTIVITY_DETAIL, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> activityRecruitCreate(List<ActivityRecruitDto> create, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(create);
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITY_RECRUIT_CREAT, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -403,7 +420,49 @@ public class ApiImpl implements Api {
         Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ActivityRecruitListDto>>>() {
         }.getType();
         try {
-            return httpEngine.postApiHandler(params, ACTIVITYRECRUIT_QUERY, typeOfT, accessToken);
+            return httpEngine.postApiHandler(params, ACTIVITY_RECRUIT_QUERY, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> activityAttentionCreate(List<ActivityAttentionDto> create, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(create);
+        Type typeOfT = new TypeToken<ApiResponse<List<String>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITY_ATTENTION_CREATE, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<String> activityAttentionDelete(List<String> id, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(id);
+        Type typeOfT = new TypeToken<ApiResponse<Object>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITY_ATTENTION_DELETE, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<ActivityAttentionListDto>> activityAttentionQuery(ActivityAttentionQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOfT = new TypeToken<ApiResponse<PagedListEntityDto<ActivityAttentionListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, ACTIVITY_ATTENTION_QUERY, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -9,6 +9,9 @@ import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityattention.ActivityAttentionDto;
+import com.example.model.activityattention.ActivityAttentionListDto;
+import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
 import com.example.model.area.AreaListDto;
 import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
@@ -57,6 +60,11 @@ public interface Api {
     public static final String ACTIVITY_RECRUIT_CREAT = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/create";
     public static final String ACTIVITY_RECRUIT_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/query";
 
+    //关注
+    public static final String ACTIVITY_ATTENTION_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityattention/create";
+    public static final String ACTIVITY_ATTENTION_DELETE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityattention/delete";
+    public static final String ACTIVITY_ATTENTION_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityattention/query";
+
     //岗位
     public static final String JOBACTIVITY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/jobactivity/details";
 
@@ -92,7 +100,6 @@ public interface Api {
     public static final String CONTENT_QUERY = "Nbcei.Plugin.CMS.Api.Impl/v1/Content/query";
 
     //
-
 
 
     //发送验证码
@@ -161,6 +168,12 @@ public interface Api {
      * @return
      */
     public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken);
+
+    public ApiResponse<List<String>> activityAttentionCreate(List<ActivityAttentionDto> create, String accessToken);
+
+    public ApiResponse<String> activityAttentionDelete(List<String> id, String accessToken);
+
+    public ApiResponse<PagedListEntityDto<ActivityAttentionListDto>> activityAttentionQuery(ActivityAttentionQueryOptionDto query, String accessToken);
 
     /**
      * 岗位详细查询

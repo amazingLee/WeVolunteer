@@ -304,6 +304,10 @@ public class IndexActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String qrcodeMsg = data.getExtras().getString("result");
+        if (qrcodeMsg == null)
+            return;
+        if (qrcodeMsg.equals("0"))
+            return;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(qrcodeMsg);
         builder.setTitle("二维码内容");

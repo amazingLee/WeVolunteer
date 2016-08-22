@@ -7,12 +7,8 @@ package com.example.renhao.wevolunteer.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Base64;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
-import com.example.core.listener.AccessTokenListener;
-import com.example.model.AccessTokenBO;
+import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
@@ -36,14 +30,13 @@ import com.example.renhao.wevolunteer.activity.MyProjectActivity;
 import com.example.renhao.wevolunteer.activity.PersonalDataActivity;
 import com.example.renhao.wevolunteer.activity.ProfessionalSelectionActivity;
 import com.example.renhao.wevolunteer.activity.ReportProblemActivity;
+import com.example.renhao.wevolunteer.utils.Util;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "PersonalFragment";
 
     private View mainview;
     private boolean isCreat = false;
-
-    private AppAction mAction;
 
     private VolunteerViewDto eventbus_data;
     private View bottomView;
@@ -85,7 +78,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     private byte[] my_portrait;
 
     /*Handler更新UI*/
-    Handler myHandler = new Handler() {
+   /* Handler myHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case UPDATE_UI:
@@ -95,13 +88,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 case UPDATE_PORTRAIT:
                     //头像显示
                     if (my_portrait != null) {
-                        image_portrait.setImageBitmap(getBitmapFromByte(my_portrait));
+                        image_portrait.setImageBitmap(Util.getBitmapFromByte(my_portrait));
                     }
                     break;
             }
             super.handleMessage(msg);
         }
-    };
+    };*/
 
 
     private void repeat_update() {
@@ -182,8 +175,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         Professional_false = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_false);
 
 
-        //初始化连接
-        mAction = new AppActionImpl(getActivity());
         initViewsEven();//设置点击事件的监听以及初始化组件
 
         //初次进入设置UI
@@ -294,13 +285,84 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onResume() {
-        //暂时获取票据
-        mAction.getAccessToken("15728006854", "123456", new AccessTokenListener() {
+        //注册登录时需写的
+       /* LocalDate.getInstance(getActivity()).setLocalDate("volunteerId", "ecb8263d-4559-4dff-8db5-13be1059d6fa");
+        LocalDate.getInstance(getActivity()).setLocalDate("isLogin", true);
+        LocalDate.getInstance(getActivity()).setLocalDate("username", "15728006854");
+        LocalDate.getInstance(getActivity()).setLocalDate("password", "123456");*/
+        super.onResume();
+        String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
+        if (TextUtils.isEmpty(volunteerId))
+            return;
+        //获取头像
+        AppActionImpl.getInstance(getActivity()).get_portrait(volunteerId,
+                new ActionCallbackListener<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        if (!TextUtils.isEmpty(data)) {
+                            image_portrait.setImageBitmap(Util.getBitmapFromByte(data));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+        //获取志愿者的信息
+        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
+                new ActionCallbackListener<VolunteerViewDto>() {
+
+                    @Override
+                    public void onSuccess(VolunteerViewDto data) {
+
+                        if (data == null)
+                            return;
+
+                        //EventBus将data传到另一个activity中备用
+                        eventbus_data = data;
+
+                        isSpeciality = data.getSpeciality();
+                        isShowTrueName = data.getShowTrueName();
+
+                        //头部
+                        true_name = data.getTrueName();
+                        nick_name = data.getNickName();
+                        integral = data.getScore().toString();
+                        LevelType = data.getLevelType();
+                        if (specialty != null)
+                            specialty = data.getSpecialty();
+
+                        //服务时长
+                        SchoolServiceTime = data.getSchoolservicetime() + "小时";
+                        WorkServiceTime = data.getWorkservicetime() + "小时";
+                        RetireServiceTime = data.getRetireservicetime() + "小时";
+                        AllServiceTime = data.getSchoolservicetime() + data.getWorkservicetime()
+                                + data.getRetireservicetime() + "小时";
+
+                        //非第一次进入时利用handler更新UI
+                        if (isCreat) {
+                           /* Message message = new Message();
+                            message.what = UPDATE_UI;
+                            myHandler.sendMessage(message);*/
+                            repeat_update();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("网络异常，请检查后重试");
+                    }
+                });
+
+/*        //暂时获取票据
+        AppActionImpl.getInstance(getActivity()).getAccessToken("15728006854", "123456", new AccessTokenListener() {
             @Override
             public void success(AccessTokenBO accessTokenBO) {
 
                 //取得头像
-                mAction.get_portrait("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<String>() {
+                AppActionImpl.getInstance(getActivity()).get_portrait("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<String>() {
 
                             @Override
                             public void onSuccess(String data) {
@@ -328,48 +390,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             public void fail() {
                 showToast("fail");
             }
-        });
-
-        mAction.get_volunteerDetail("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<VolunteerViewDto>() {
-
-            @Override
-            public void onSuccess(VolunteerViewDto data) {
-                //EventBus将data传到另一个activity中备用
-                eventbus_data = data;
-
-                isSpeciality = data.getSpeciality();
-                isShowTrueName = data.getShowTrueName();
-
-                //头部
-                true_name = data.getTrueName();
-                nick_name = data.getNickName();
-                integral = data.getScore().toString();
-                LevelType = data.getLevelType();
-                if (specialty != null)
-                    specialty = data.getSpecialty();
-
-                //服务时长
-                SchoolServiceTime = data.getSchoolservicetime() + "小时";
-                WorkServiceTime = data.getWorkservicetime() + "小时";
-                RetireServiceTime = data.getRetireservicetime() + "小时";
-                AllServiceTime = data.getSchoolservicetime() + data.getWorkservicetime()
-                        + data.getRetireservicetime() + "小时";
-
-                //非第一次进入时利用handler更新UI
-                if (isCreat) {
-                    Message message = new Message();
-                    message.what = UPDATE_UI;
-                    myHandler.sendMessage(message);
-                }
-
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("网络异常，请检查后重试");
-            }
-        });
-
+        });*/
 
 //        //志愿者信息post查询
 //        VolunteerQueryDto vl_query = new VolunteerQueryDto();
@@ -401,23 +422,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 //            }
 //        });
 
-        super.onResume();
-    }
 
-    //二进制流转换为图片
-    public Bitmap getBitmapFromByte(byte[] temp) {
-        if (temp != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);
-            return bitmap;
-        } else {
-            return null;
-        }
     }
 
     @Override
     public void onDestroy() {
-        if(group!=null)
-        group.removeAllViews();
+        if (group != null)
+            group.removeAllViews();
         super.onDestroy();
     }
 

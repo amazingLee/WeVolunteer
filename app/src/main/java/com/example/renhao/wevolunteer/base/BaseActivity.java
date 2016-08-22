@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
+import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.orhanobut.logger.Logger;
 
@@ -65,7 +66,11 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected void getAccessToken() {
         showNormalDialog("正在连接服务器");
-        AppActionImpl.getInstance(this).getAccessToken(null, null, new AccessTokenListener() {
+
+        String username = LocalDate.getInstance(this).getLocalDate("username", "");
+        String password = LocalDate.getInstance(this).getLocalDate("password", "");
+
+        AppActionImpl.getInstance(this).getAccessToken(username, password, new AccessTokenListener() {
             @Override
             public void success(AccessTokenBO accessTokenBO) {
                 Logger.v(TAG, "get token success");
