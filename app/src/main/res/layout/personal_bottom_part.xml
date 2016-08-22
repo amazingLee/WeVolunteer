@@ -27,7 +27,7 @@
             android:textSize="@dimen/textview_bottom_left_size" />
 
         <TextView
-            android:id="@+id/tv_personal_specialtytype"
+            android:id="@+id/tv_personalItem_specialtytype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

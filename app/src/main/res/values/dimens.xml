@@ -73,12 +73,13 @@
 
     <!--PersonalFragment 一些margin在我的资料中有共用-->
     <dimen name="top_height">180dp</dimen>
-    <dimen name="textview_personal_name_size">24sp</dimen>
+    <dimen name="textview_personal_name_size">20sp</dimen>
     <dimen name="textview_personal_specialty_size">12sp</dimen>
     <dimen name="textview_personal_integral_size">12sp</dimen>
-    <dimen name="top_item_margeintop">8dp</dimen>
-    <dimen name="circleImageView_portrait_height">48dp</dimen>
-    <dimen name="circleImageView_portrait_width">48dp</dimen>
+    <dimen name="top_textview_margeintop">6dp</dimen>
+    <dimen name="top_portrait_margeintop">15dp</dimen>
+    <dimen name="circleImageView_portrait_height">64dp</dimen>
+    <dimen name="circleImageView_portrait_width">64dp</dimen>
     <dimen name="circleImageView_portrait_margintop">15dp</dimen>
     <dimen name="imageview_stars_height">12dp</dimen>
     <dimen name="imageview_stars_width">12dp</dimen>
