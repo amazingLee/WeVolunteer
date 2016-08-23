@@ -27,6 +27,9 @@
      
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".application.BaseApplication"
         android:allowBackup="true"
@@ -136,6 +139,14 @@
             android:name=".activity.ProfessionalSelectionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <activity
+            android:name=".activity.Delete_certificate"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <!--Image Selector Entry-->
+        <activity
+            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
+            android:configChanges="orientation|screenSize" />
 
     </application>
 

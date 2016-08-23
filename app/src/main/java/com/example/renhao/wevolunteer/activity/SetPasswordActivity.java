@@ -48,29 +48,32 @@ public class SetPasswordActivity extends AppCompatActivity {
                 if (edit_old.getText() != null) {
                     if (edit_new.getText() != null) {
                         if (edit_again != null) {
-                            if(EncryptUtil.makeMD5(edit_old.getText().toString()).toUpperCase().
-                                    equals(PSWD_OLD)){
-                                PSWD_NEW=edit_new.getText().toString();
-                                PSWD_AGAIN=edit_again.getText().toString();
-                                if(PSWD_NEW.equals(PSWD_AGAIN)){
-                                    mAction.setnew_PSWD(ID,PSWD_NEW, new ActionCallbackListener<String>() {
-                                        @Override
-                                        public void onSuccess(String data) {
-                                            showToast("修改成功");
-                                            SetPasswordActivity.this.finish();
-                                        }
+                            if (EncryptUtil.makeMD5(edit_old.getText().toString()).toUpperCase().
+                                    equals(PSWD_OLD)) {
+                                PSWD_NEW = edit_new.getText().toString();
+                                PSWD_AGAIN = edit_again.getText().toString();
+                                if (PSWD_NEW.length() >= 6) {
+                                    if (PSWD_NEW.equals(PSWD_AGAIN)) {
+                                        mAction.setnew_PSWD(ID, PSWD_NEW, new ActionCallbackListener<String>() {
+                                            @Override
+                                            public void onSuccess(String data) {
+                                                showToast("修改成功");
+                                                SetPasswordActivity.this.finish();
+                                            }
 
-                                        @Override
-                                        public void onFailure(String errorEvent, String message) {
-                                            showToast("网络异常，请检查后重试");
-                                        }
-                                    });
-                                }else{
-                                    showToast("两次新密码输入不相同！");
+                                            @Override
+                                            public void onFailure(String errorEvent, String message) {
+                                                showToast("网络异常，请检查后重试");
+                                            }
+                                        });
+                                    } else {
+                                        showToast("两次新密码输入不相同！");
+                                    }
+                                } else {
+                                    showToast("密码需要大于六位");
                                 }
-                            }else{
+                            } else {
                                 showToast("原密码错误");
-                                EncryptUtil.makeMD5(edit_old.getText().toString()).toUpperCase();
                             }
 
                         } else {

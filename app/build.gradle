@@ -32,6 +32,11 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -43,6 +48,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
     compile project(':core')
     compile project(':model')
     compile project(':PullToRefresh')

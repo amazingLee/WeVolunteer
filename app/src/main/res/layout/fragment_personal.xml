@@ -89,11 +89,11 @@
             </LinearLayout>
 
         </RelativeLayout>
-        <!--middle item-->
+        <!--middle item_major_ability_pic-->
         <include
             android:id="@+id/middle_part"
             layout="@layout/personal_middle_part" />
-        <!--bottom item-->
+        <!--bottom item_major_ability_pic-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

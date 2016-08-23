@@ -302,7 +302,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             public void success(AccessTokenBO accessTokenBO) {
 
                 //取得头像
-                mAction.get_portrait("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<String>() {
+                mAction.get_portrait("0103A9AC-2CD9-423A-8AAE-6806302F537F", new ActionCallbackListener<String>() {
 
                             @Override
                             public void onSuccess(String data) {
@@ -332,7 +332,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        mAction.get_volunteerDetail("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<VolunteerViewDto>() {
+        mAction.get_volunteerDetail("0103A9AC-2CD9-423A-8AAE-6806302F537F", new ActionCallbackListener<VolunteerViewDto>() {
 
             @Override
             public void onSuccess(VolunteerViewDto data) {

@@ -2,6 +2,8 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -112,6 +114,9 @@ public interface AppAction {
 
     //获取头像
     public void get_portrait(String UserId, ActionCallbackListener<String> listener);
+
+    //上传专业证书
+    public void update_major_attachment(List<AttachmentParaDto> data, ActionCallbackListener<AttachmentsReturnDto> listener);
 
     /**
      * dictionary 查询

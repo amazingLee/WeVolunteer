@@ -1,6 +1,8 @@
 package com.example.api;
 
 import com.example.model.AccessTokenBO;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -102,6 +104,9 @@ public interface Api {
     public static final String UPDATE_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/update/photo";
     public static final String GET_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/query/photo";
 
+    //专业证书批量上传
+    public static final String UPDATE_MAJOR_ATTACHMENT = "Nbcei.Plugin.Attachment.Api.Impl/v1/attachments/savefile";
+
     /**
      * 获取accessToken
      *
@@ -182,6 +187,9 @@ public interface Api {
 
     //取得头像
     public ApiResponse<String> get_portrait(String UserID, String accessToken);
+
+    //证书上传
+    public ApiResponse<AttachmentsReturnDto> update_major_attachment(List<AttachmentParaDto> data, String accessToken);
 
     /**
      * @param query

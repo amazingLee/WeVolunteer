@@ -11,6 +11,8 @@ import com.example.core.listener.AccessTokenListener;
 import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -861,6 +863,31 @@ public class AppActionImpl implements AppAction {
 
             @Override
             protected void onPostExecute(ApiResponse<String> result) {
+                if (result == null) {
+                    listener.onFailure("", "未知错误");
+                    return;
+                }
+                if (result.isSuccess()) {
+                    listener.onSuccess(result.getData());
+                } else {
+                    listener.onFailure("", result.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void update_major_attachment(final List<AttachmentParaDto> data, final ActionCallbackListener<AttachmentsReturnDto> listener) {
+        //判断票据是否过期
+        final String accessToken = LocalDate.getInstance(context).getLocalDate("access_token", "");
+        new AsyncTask<Void, Void, ApiResponse<AttachmentsReturnDto>>() {
+            @Override
+            protected ApiResponse<AttachmentsReturnDto> doInBackground(Void... params) {
+                return api.update_major_attachment(data, accessToken);
+            }
+
+            @Override
+            protected void onPostExecute(ApiResponse<AttachmentsReturnDto> result) {
                 if (result == null) {
                     listener.onFailure("", "未知错误");
                     return;

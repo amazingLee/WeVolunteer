@@ -271,7 +271,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 startActivityForResult(intent, MY_NICKNAME);
                 break;
             case CHANGE_PASSWORD:
-                intent.putExtra("ID", "ecb8263d-4559-4dff-8db5-13be1059d6fa");
+                intent.putExtra("ID", "0103A9AC-2CD9-423A-8AAE-6806302F537F");
                 intent.setClass(this, SetPasswordActivity.class);
                 startActivity(intent);
                 break;
@@ -317,7 +317,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 break;
             case MY_IMAGETIME:
                 intent.setClass(this, ServiceTimeActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, MY_IMAGETIME);
                 break;
             case MY_IMAGETYPE:
                 intent.setClass(this, ServiceCategoryActivity.class);
@@ -405,6 +405,10 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
                 break;
             case MY_HOMEADDRESS:
+                result = data.getExtras();
+                Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
+                break;
+            case MY_IMAGETIME:
                 result = data.getExtras();
                 Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
                 break;
@@ -502,7 +506,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
     private void UpdatePortrait(byte[] send_portrait) {
         UserPhotoDto vl_updates = new UserPhotoDto();
 
-        vl_updates.setUserId("ecb8263d-4559-4dff-8db5-13be1059d6fa");
+        vl_updates.setUserId("0103A9AC-2CD9-423A-8AAE-6806302F537F");
         vl_updates.setPhoto(Base64.encodeToString(send_portrait, Base64.DEFAULT));
 
         mAction.update_portrait(vl_updates, new ActionCallbackListener<String>() {

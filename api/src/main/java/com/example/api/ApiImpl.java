@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -505,6 +507,21 @@ public class ApiImpl implements Api {
         }.getType();
         try {
             return httpEngine.getApiHandler(params, GET_PORTRAIT, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+
+    }
+
+    @Override
+    public ApiResponse<AttachmentsReturnDto> update_major_attachment(List<AttachmentParaDto> data, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(data);
+        Type typeOfT = new TypeToken<ApiResponse<AttachmentsReturnDto>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, UPDATE_MAJOR_ATTACHMENT, typeOfT, accessToken);
         } catch (IOException e) {
             e.printStackTrace();
         }

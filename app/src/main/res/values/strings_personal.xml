@@ -81,6 +81,7 @@
     <string name="myImageTime_item_text">意向时间</string>
     <string name="myImageType_item_text">意向类别</string>
     <string name="btn_quit_text">退出登陆</string>
+    <string name="btn_major_delete">移除</string>
 
 
     <!--POP for PersonalData-->
