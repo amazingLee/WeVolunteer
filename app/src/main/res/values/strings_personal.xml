@@ -92,5 +92,10 @@
     <string name="btn_student">在校</string>
     <string name="btn_on_job">在职</string>
     <string name="btn_retire">退休</string>
+    <!--pop for polity-->
+    <string name="btn_CPC_string">中共党员</string>
+    <string name="btn_CYL_string">共青团员</string>
+    <string name="btn_democratic_string">明主党派</string>
+    <string name="btn_masses_string">群众</string>
 
 </resources>

@@ -90,7 +90,7 @@ public class IndexActivity extends BaseActivity {
         EventBus.getDefault().register(this);
 
         initActionBar();
-        setFragment(HOME);
+        setFragment(MYSELF);
 
         //判断用户是否登录
         boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);

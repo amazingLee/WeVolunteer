@@ -5,7 +5,9 @@ package com.example.model.Attachment;
  *
  */
 
-public class AttachmentParaDto {
+import java.io.Serializable;
+
+public class AttachmentParaDto implements Serializable {
     private String FileName;   //(string, optional): 文件名
     private String FileData;   //(string, optional): 文件二进制数据
     private String IsPublic;   // (string, optional): 附件是否公开

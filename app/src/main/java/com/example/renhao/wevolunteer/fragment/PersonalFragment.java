@@ -246,6 +246,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case APPLY_PROFESSIONAL:
+                intent.putExtra("personal_data", personal_data);
                 intent.setClass(getActivity(), ApplyProBonoActivity.class);
                 startActivity(intent);
                 break;
