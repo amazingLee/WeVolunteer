@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.renhao.wevolunteer.activity.RegisterActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.example.renhao.wevolunteer.activity.RegisterActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/actionbar_homepage_margin"
             android:layout_marginStart="@dimen/actionbar_homepage_margin"
-            android:src="@drawable/icon_indicator" />
+            android:src="@drawable/icon_indicator"/>
 
         <TextView
             android:id="@+id/textView"
@@ -28,12 +28,13 @@
             android:gravity="center_vertical"
             android:text="@string/title_register"
             android:textColor="@color/colorWhite"
-            android:textSize="22sp" />
+            android:textSize="22sp"/>
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +52,7 @@
                     android:padding="15dp"
                     android:text="@string/tv_register_nickname"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/et_register_nickname"
@@ -61,8 +62,9 @@
                     android:layout_marginStart="23dp"
                     android:background="@color/colorWhite"
                     android:hint="@string/hint_register_nickname"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -75,7 +77,7 @@
                     android:padding="15dp"
                     android:text="@string/tv_register_name"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/et_register_trueName"
@@ -85,13 +87,15 @@
                     android:layout_marginStart="23dp"
                     android:background="@color/colorWhite"
                     android:hint="@string/hint_register_name"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_credentials_type"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/bg_single_input"
+                android:background="@drawable/linearlayout_select"
+                android:clickable="true"
                 android:orientation="horizontal">
 
                 <TextView
@@ -100,19 +104,28 @@
                     android:padding="15dp"
                     android:text="@string/tv_id_number_type"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
-                <Spinner
-                    android:id="@+id/et_register_email"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_credentials_type"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:background="@color/colorWhite"
-                    android:hint="@string/hint_Email"
-                    android:inputType="textEmailAddress"
-                    android:textSize="15sp" />
+                    android:layout_weight="0.9"
+                    android:hint="==请选择=="
+                    android:textSize="15sp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/icon_right_indicator"/>
+
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -126,31 +139,7 @@
                     android:padding="15dp"
                     android:text="@string/tv_id_number"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/et_id_number_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@color/colorWhite"
-                    android:hint="@string/hint_id_number_type"
-                    android:textSize="15sp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/bg_single_input"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:text="@string/tv_id_number"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/et_register_id_number"
@@ -160,8 +149,35 @@
                     android:layout_marginStart="5dp"
                     android:background="@color/colorWhite"
                     android:hint="@string/hint_id_number"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_single_input"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/tv_Email"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/et_register_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@color/colorWhite"
+                    android:hint="@string/hint_Email"
+                    android:inputType="textEmailAddress"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -174,7 +190,7 @@
                     android:padding="15dp"
                     android:text="@string/tv_register_password"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/et_register_password"
@@ -182,11 +198,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:inputType="textPassword"
                     android:background="@color/colorWhite"
                     android:hint="@string/hint_register_password"
-                    android:textSize="15sp" />
+                    android:inputType="textPassword"
+                    android:textSize="15sp"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -199,7 +216,7 @@
                     android:padding="15dp"
                     android:text="@string/tv_register_Repassword"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/et_register_Repassword"
@@ -207,10 +224,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:inputType="textPassword"
                     android:background="@color/colorWhite"
                     android:hint="@string/hint_register_Repassword"
-                    android:textSize="15sp" />
+                    android:inputType="textPassword"
+                    android:textSize="15sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -225,7 +242,7 @@
                     android:padding="15dp"
                     android:text="@string/tv_personal_attribute"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <CheckBox
                     android:id="@+id/cb_school"
@@ -252,36 +269,45 @@
             </LinearLayout>
 
             <LinearLayout
-            android:id="@+id/LL_apply_area"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:showDividers="middle"
-            android:background="@drawable/linearlayout_select"
-            android:clickable="true"
-            android:orientation="horizontal">
+                android:id="@+id/LL_apply_area"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/linearlayout_select"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:showDividers="middle">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="15dp"
-                android:text="@string/myArea_item_text"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:padding="15dp"
+                    android:text="@string/myArea_item_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0.2"
-                android:src="@drawable/icon_right_indicator" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_register_areaName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:padding="15dp"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/icon_right_indicator"/>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#d9d9d9"
                 />
+
             <LinearLayout
                 android:id="@+id/LL_apply_ORG"
                 android:layout_width="match_parent"
@@ -293,18 +319,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.6"
                     android:padding="15dp"
                     android:text="@string/myORG_item_text"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_register_orgName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:padding="15dp"
+                    android:textSize="16sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.2"
-                    android:src="@drawable/icon_right_indicator" />
+                    android:src="@drawable/icon_right_indicator"/>
             </LinearLayout>
 
 
@@ -321,7 +355,7 @@
                     android:text="@string/tv_mobile_phone"
                     android:textSize="16sp"
 
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/et_register_phone"
@@ -333,7 +367,7 @@
                     android:background="@color/colorWhite"
                     android:hint="@string/hint_mobile_phone"
                     android:inputType="phone"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <Button
                     android:id="@+id/btn_register_verification_code"
@@ -344,7 +378,7 @@
                     android:layout_marginRight="15dp"
                     android:background="@drawable/btn_verification_code_bg"
                     android:text="@string/btn_verification_code"
-                    android:textColor="@color/colorCyan" />
+                    android:textColor="@color/colorCyan"/>
             </LinearLayout>
 
             <LinearLayout
@@ -359,7 +393,7 @@
                     android:padding="15dp"
                     android:text="@string/tv_register_verification_code"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/et_register_verification_code"
@@ -369,7 +403,7 @@
                     android:layout_marginStart="12dp"
                     android:background="@color/colorWhite"
                     android:hint="@string/hint_verification_code"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -396,7 +430,7 @@
                 android:background="@drawable/btn_login"
                 android:text="@string/btn_register"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <Button
                 android:id="@+id/btn_back_login"
@@ -408,7 +442,7 @@
                 android:background="@drawable/btn_register"
                 android:text="@string/btn_existing_login"
                 android:textColor="@color/colorCyan"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

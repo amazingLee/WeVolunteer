@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.example.api.net.HttpEngine;
 import com.example.model.AccessTokenBO;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -30,10 +32,13 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
@@ -370,6 +375,21 @@ public class ApiImpl implements Api {
     }
 
     @Override
+    public ApiResponse<List<OrganizationListDto>> organizationQueryChild(String parentId, String accessToken) {
+        List<String> params = new ArrayList<>();
+        params.add(parentId);
+        Type typeOft = new TypeToken<ApiResponse<List<OrganizationListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.getApiHandler(params, ORGANIZATION_QUERY_CHILD, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
     public ApiResponse<List<AreaListDto>> AreaQuery(String parentId, String accessToken) {
         List<String> params = new ArrayList<>();
         params.add(parentId);
@@ -584,5 +604,48 @@ public class ApiImpl implements Api {
             e.printStackTrace();
         }
         return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<VolunteerBaseListDto>> volunteerBaseQuery(VolunteerBaseQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOft = new TypeToken<ApiResponse<PagedListEntityDto<VolunteerBaseListDto>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, VOLUNTEER_BASE_QUERY, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<List<String>> signRecordCreate(List<SignInOutDto> creates, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(creates);
+        Type typeOft = new TypeToken<ApiResponse<List<String>>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, SIGNRECORD_CREATE, typeOft, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+    }
+
+    @Override
+    public ApiResponse<AttachmentsReturnDto> update_major_attachment(List<AttachmentParaDto> data, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(data);
+        Type typeOfT = new TypeToken<ApiResponse<AttachmentsReturnDto>>() {
+        }.getType();
+        try {
+            return httpEngine.postApiHandler(params, UPDATE_MAJOR_ATTACHMENT, typeOfT, accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false, "未知错误");
+
     }
 }

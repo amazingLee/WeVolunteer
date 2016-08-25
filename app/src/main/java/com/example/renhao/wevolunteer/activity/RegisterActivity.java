@@ -3,6 +3,7 @@ package com.example.renhao.wevolunteer.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -10,19 +11,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
-import com.example.core.listener.AccessTokenListener;
-import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
-import com.example.model.area.AreaListDto;
-import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.renhao.wevolunteer.R;
-import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
+import com.example.renhao.wevolunteer.utils.Util;
+import com.example.renhao.wevolunteer.view.Btn_TimeCountUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +27,11 @@ import java.util.List;
 /**
  * 注册界面
  */
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "RegisterActivity";
+
+    public static final int AREA_REGISTER = 0;
+    public static final int ORG_REGISTER = 2;
 
     CheckBox cb_school;
     CheckBox cb_job;
@@ -42,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText et_id_number;
     EditText et_password;
     EditText et_Repassword;
+    EditText et_email;
     EditText et_phone;
     EditText et_verification_code;
     Button btn_verification_code;
@@ -50,42 +51,39 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     ImageView img_back;
     LinearLayout ll_area;
     LinearLayout ll_org;
+    LinearLayout ll_credentials_type;
+    TextView tv_cardType;
+    TextView areaNameTv, orgNameTv;
 
-    private String isCheck_text;
+    private int isCheck_Code = -1;
     private String isCheck_register_agree;
     private String nickname;
     private String truename;
+    private String cardType;
+    private String cardCode;
     private String id_number;
     private String phone;
     private String password;
     private String Repassword;
+    private String email;
     private String verification_code;
-
-    private AppAction mAction;
+    private String areaName;
+    private String areaId;
+    private String orgName;
+    private String orgCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_register);
-        mAction = new AppActionImpl(this);
-        mAction.getAccessToken(null, null, new AccessTokenListener() {
-            @Override
-            public void success(AccessTokenBO accessTokenBO) {
-                showToast("success");
-            }
-
-            @Override
-            public void fail() {
-                showToast("fail");
-            }
-        });
 
         initView();
         initViewListener();
+
     }
 
-    private void initView(){
+    private void initView() {
         cb_school = (CheckBox) findViewById(R.id.cb_school);
         cb_job = (CheckBox) findViewById(R.id.cb_job);
         cb_retire = (CheckBox) findViewById(R.id.cb_retire);
@@ -96,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         et_phone = (EditText) findViewById(R.id.et_register_phone);
         et_password = (EditText) findViewById(R.id.et_register_password);
         et_Repassword = (EditText) findViewById(R.id.et_register_Repassword);
+        et_email = (EditText) findViewById(R.id.et_register_email);
         et_verification_code = (EditText) findViewById(R.id.et_register_verification_code);
         btn_verification_code = (Button) findViewById(R.id.btn_register_verification_code);
         btn_register_volunteer = (Button) findViewById(R.id.btn_register_volunteer);
@@ -103,10 +102,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         img_back = (ImageView) findViewById(R.id.imageView_btn_back);
         ll_area = (LinearLayout) findViewById(R.id.LL_apply_area);
         ll_org = (LinearLayout) findViewById(R.id.LL_apply_ORG);
+        ll_credentials_type = (LinearLayout) findViewById(R.id.ll_credentials_type);
+        tv_cardType = (TextView) findViewById(R.id.tv_credentials_type);
+        areaNameTv = (TextView) findViewById(R.id.tv_register_areaName);
+        orgNameTv = (TextView) findViewById(R.id.tv_register_orgName);
 
     }
 
-    private void initViewListener(){
+    private void initViewListener() {
         cb_school.setOnClickListener(this);
         cb_job.setOnClickListener(this);
         cb_retire.setOnClickListener(this);
@@ -117,111 +120,115 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         img_back.setOnClickListener(this);
         ll_area.setOnClickListener(this);
         ll_org.setOnClickListener(this);
+        ll_credentials_type.setOnClickListener(this);
     }
+
     //用户填写的注册的信息
-    private void registerInfo(){
+    private void registerInfo() {
         nickname = et_nickname.getText().toString();
         truename = et_truename.getText().toString();
+        cardType = tv_cardType.getText().toString();
         id_number = et_id_number.getText().toString();
         phone = et_phone.getText().toString();
         password = et_password.getText().toString();
         Repassword = et_Repassword.getText().toString();
+        email = et_email.getText().toString();
         verification_code = et_verification_code.getText().toString();
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String cardType_text = data.getStringExtra("type_text");
+            if (cardType_text != null) {
+                tv_cardType.setText(cardType_text);
+                cardCode = data.getStringExtra("typeCode");
+            }
+        }
+        if (requestCode == AREA_REGISTER) {
+            areaName = data.getStringExtra("areaName");
+            areaId = data.getStringExtra("areaId");
+            areaNameTv.setText(areaName);
+        }
+
+        if (requestCode == ORG_REGISTER) {
+            orgName = data.getStringExtra("orgName");
+            orgCode = data.getStringExtra("orgId");
+            orgNameTv.setText(orgName);
+        }
+    }
+
+
+    @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
+            case R.id.ll_credentials_type:
+                startActivityForResult(new Intent(RegisterActivity.this, CardTypeActivity.class), 1);
+                break;
             case R.id.cb_school:
                 //根据选中的状态实现不同的功能
-                if (((CheckBox)v).isChecked()){
+                if (((CheckBox) v).isChecked()) {
                     cb_job.setChecked(false);
                     cb_retire.setChecked(false);
-                    isCheck_text = cb_school.getHint().toString();
-                    showToast(isCheck_text);
-                }else {
-                    isCheck_text = null;
-                    showToast("已取消");
+                    isCheck_Code = 0;
+                } else {
+                    isCheck_Code = -1;
                 }
                 break;
             case R.id.cb_job:
                 //根据选中的状态实现不同的功能
-                if (((CheckBox)v).isChecked()){
+                if (((CheckBox) v).isChecked()) {
                     cb_school.setChecked(false);
                     cb_retire.setChecked(false);
-                    isCheck_text = cb_job.getHint().toString();
-                    showToast(isCheck_text);
-                }else {
-                    isCheck_text = null;
-                    showToast("已取消");
+                    isCheck_Code = 1;
+                } else {
+                    isCheck_Code = -1;
                 }
                 break;
             case R.id.cb_retire:
                 //根据选中的状态实现不同的功能
-                if (((CheckBox)v).isChecked()){
+                if (((CheckBox) v).isChecked()) {
                     cb_job.setChecked(false);
                     cb_school.setChecked(false);
-                    isCheck_text = cb_retire.getHint().toString();
-                    showToast(isCheck_text);
-                }else {
-                    isCheck_text = null;
-                    showToast("已取消");
+                    isCheck_Code = 2;
+                } else {
+                    isCheck_Code = -1;
                 }
                 break;
             case R.id.LL_apply_area:
-
-                mAction.getAccessToken(null, null, new AccessTokenListener() {
-                    @Override
-                    public void success(AccessTokenBO accessTokenBO) {
-                        AreaQuery();
-                        startActivity(new Intent(RegisterActivity.this, AreaSelectionActivity.class));
-                        showToast("success");
-                    }
-
-                    @Override
-                    public void fail() {
-                        showToast("fail");
-                    }
-                });
-
+                //AreaQuery();
+                Intent areaIntent = new Intent(RegisterActivity.this, AreaSelectionActivity.class);
+                areaIntent.putExtra("type", AREA_REGISTER);
+                startActivityForResult(areaIntent, AREA_REGISTER);
                 break;
             case R.id.LL_apply_ORG:
-                mAction.getAccessToken("AndroidUser", "8NDVQX", new AccessTokenListener() {
-                    @Override
-                    public void success(AccessTokenBO accessTokenBO) {
-
-
-                        showToast("success");
-                    }
-
-                    @Override
-                    public void fail() {
-                        showToast("fail");
-                    }
-                });
-
-
+                //organizationQueryChild();
+                Intent orgIntent = new Intent(RegisterActivity.this, MyORGActivity.class);
+                orgIntent.putExtra("type", ORG_REGISTER);
+                startActivityForResult(orgIntent, ORG_REGISTER);
                 break;
             case R.id.cb_register_agree:
-                if (((CheckBox)v).isChecked()){
+                if (((CheckBox) v).isChecked()) {
                     isCheck_register_agree = cb_register_agree.getText().toString();
                     showToast(isCheck_register_agree);
-                }else {
+                } else {
                     isCheck_register_agree = null;
                     showToast("已取消");
                 }
                 break;
             case R.id.btn_register_verification_code:
-                showToast("点击发送短信");
+                sendCode();
                 break;
             case R.id.btn_register_volunteer:
-                registerInfo();
-                RegisterSubmit();
-                showToast("提交注册成功," +isCheck_text+","+isCheck_register_agree+
-                        ","+truename+","+id_number+","+phone+","+verification_code);
+                informationJudge();
                 break;
             case R.id.btn_back_login:
-                showToast("已有账号  点击登录");
                 finish();
                 break;
             case R.id.imageView_btn_back:
@@ -232,24 +239,71 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private Btn_TimeCountUtil btn_timeCountUtil;//发送验证码的计时器
+
+    private void sendCode() {
+        //先判断手机号码是否输入正确
+        String phoneNumber = et_phone.getText().toString();
+        if (Util.isPhoneNumber(phoneNumber)) {
+            //开始计时
+            btn_timeCountUtil = new Btn_TimeCountUtil(RegisterActivity.this, 60000, 1000, btn_verification_code);
+            btn_timeCountUtil.start();
+            //发送短信验证码
+            AppActionImpl.getInstance(getApplicationContext()).getVerification(phoneNumber, new ActionCallbackListener<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    showToast("验证码已发送");
+                }
+
+                @Override
+                public void onFailure(String errorEvent, String message) {
+                    showToast("验证码发送失败");
+                }
+            });
+        } else {
+            showToast("请填写正确的手机号码");
+        }
+    }
+
     //提交注册信息的接口
-    public void RegisterSubmit(){
+    public void RegisterSubmit() {
         VolunteerCreateDto vl_create = new VolunteerCreateDto();
-        vl_create.setLoginUserName("AndroidUser1");
-        vl_create.setReUserPassword("123456");
-        vl_create.setAreaCode("3302030101");
-        vl_create.setTrueName("葛焕然");
-        vl_create.setUserPassword("123456");
-        vl_create.setIdNumber("332502199407143993");
-        vl_create.setMobile("15728006853");
-        vl_create.setOrgId("011de0b0-9c25-4002-98be-29df51bd2fbe");
-        vl_create.setEmail("750954284@qq.com");
-        Logger.v(TAG, new Gson().toJson(vl_create));
+        vl_create.setLoginUserName(nickname);
+        vl_create.setTrueName(truename);
+        vl_create.setUserPassword(password);
+        vl_create.setReUserPassword(Repassword);
+        vl_create.setIdNumber(id_number);
+        vl_create.setMobile(phone);
+        vl_create.setAreaCode(areaId);
+        vl_create.setOrgId(orgCode);
+        vl_create.setEmail(email);
+        vl_create.setJobStatus(isCheck_Code);
+        vl_create.setCardType(Integer.parseInt(cardCode));
         List<VolunteerCreateDto> vl_creates = new ArrayList<>();
         vl_creates.add(vl_create);
-        mAction.volunteerCreate(vl_creates, new ActionCallbackListener<List<String>>() {
+        AppActionImpl.getInstance(getApplicationContext()).volunteerCreate(vl_creates, new ActionCallbackListener<List<String>>() {
             @Override
             public void onSuccess(List<String> data) {
+                if (data == null || data.size() < 1)
+                    return;
+                showToast("注册成功");
+                finish();
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+                showToast("注册失败");
+            }
+        });
+    }
+
+   /* *//**
+     *
+     *//*
+    private void organizationQueryChild() {
+        AppActionImpl.getInstance(getApplicationContext()).organizationQueryChild("00000000-0000-0000-0000-000000000000", new ActionCallbackListener<List<OrganizationListDto>>() {
+            @Override
+            public void onSuccess(List<OrganizationListDto> data) {
                 showToast("success");
             }
 
@@ -260,22 +314,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private void getPersonAttribute(){
-        AppActionImpl.getInstance(getApplicationContext()).dictionaryQueryDetailDefault("PersonAttribute", "1b87202f-9174-4191-b104-1af9a70e8639", new ActionCallbackListener<DictionaryViewDto>() {
-            @Override
-            public void onSuccess(DictionaryViewDto data) {
-
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-
-            }
-        });
-    }
-
-    private void AreaQuery(){
-        mAction.AreaQuery("ac689592-5a3e-4015-8609-cdeed42df6ab", new ActionCallbackListener<List<AreaListDto>>() {
+    private void AreaQuery() {
+        AppActionImpl.getInstance(getApplicationContext()).AreaQuery("ac689592-5a3e-4015-8609-cdeed42df6ab", new ActionCallbackListener<List<AreaListDto>>() {
             @Override
             public void onSuccess(List<AreaListDto> data) {
                 showToast("success");
@@ -286,10 +326,60 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 showToast("fail");
             }
         });
+    }*/
+
+    /**
+     * 判断用户注册信息是否为空
+     */
+    private void informationJudge() {
+        registerInfo();
+        if (TextUtils.isEmpty(nickname)) {
+            showToast("昵称不能为空");
+        } else if (TextUtils.isEmpty(truename)) {
+            showToast("姓名不能为空");
+        } else if (TextUtils.isEmpty(cardCode)) {
+            showToast("证件类型不能为空");
+        } else if (!Util.isID(id_number)) {
+            showToast("证件号码错误");
+        } else if (!Util.isEmail(email)) {
+            showToast("请输入正确的电子邮箱");
+        } else if (TextUtils.isEmpty(password)) {
+            showToast("密码不能为空");
+        } else if (TextUtils.isEmpty(Repassword)) {
+            showToast("确认密码不能为空");
+        } else if (!Repassword.equals(password)) {
+            showToast("两次密码不同，请重新确认");
+        } else if (isCheck_Code == -1) {
+            showToast("请选择个人属性");
+        } else if (TextUtils.isEmpty(phone)) {
+            showToast("请输入手机号");
+        } else if (TextUtils.isEmpty(areaId)) {
+            showToast("请选择所在区域");
+        } else if (TextUtils.isEmpty(orgCode)) {
+            showToast("请选择所属机构");
+        } else if (TextUtils.isEmpty(verification_code)) {
+            showToast("请输入验证码");
+        } else if (TextUtils.isEmpty(isCheck_register_agree)) {
+            showToast("请同意《宁波市注册志愿者管理法办》");
+        } else {
+            //验证验证码是否正确
+            AppActionImpl.getInstance(getApplicationContext()).getverify(phone, verification_code,
+                    new ActionCallbackListener<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean data) {
+                            RegisterSubmit();
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+                            showToast("验证码错误");
+                        }
+                    });
+
+        }
     }
 
-
-    private void showToast(String msg){
+    private void showToast(String msg) {
         Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 

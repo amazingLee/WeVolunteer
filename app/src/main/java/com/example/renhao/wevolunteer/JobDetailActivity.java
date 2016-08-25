@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.handler.MxgsaTagHandler;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,12 +53,12 @@ public class JobDetailActivity extends BaseActivity {
 
         detailText += "岗位要求";
         detailText += "\n";
-        detailText += TextUtils.isEmpty(jobText) ? "" : jobText;
+        detailText += TextUtils.isEmpty(jobText) ? "" : Html.fromHtml(jobText, null, new MxgsaTagHandler(this));
         detailText += "\n";
         detailText += "\n";
         detailText += "岗位详情";
         detailText += "\n";
-        detailText += TextUtils.isEmpty(text) ? "" : text;
+        detailText += TextUtils.isEmpty(text) ? "" : Html.fromHtml(text, null, new MxgsaTagHandler(this));
 
         mTvDetail.setText(detailText);
     }

@@ -2,6 +2,8 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -28,10 +30,13 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
@@ -138,6 +143,7 @@ public interface AppAction {
     public void dictionaryQueryDetailDefault(String typeCode, String code, ActionCallbackListener<DictionaryViewDto> listener);
 
 
+
     /**
      * dictionary 类型 查询
      *
@@ -153,6 +159,8 @@ public interface AppAction {
      * @param listener
      */
     public void organizationQuery(OrganizationQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<OrganizationListDto>> listener);
+
+    public void organizationQueryChild(String parentId,ActionCallbackListener<List<OrganizationListDto>> listener);
 
     /**
      * 所在区域  get
@@ -176,4 +184,19 @@ public interface AppAction {
 
 
     public void activityRecruitQuery(ActivityRecruitQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>> listener);
+
+
+    /**
+     * 志愿者服务站点
+     */
+    public void volunteerBaseQuery(VolunteerBaseQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<VolunteerBaseListDto>> listener);
+
+    /**
+     * 签到签退明细
+     */
+    public void signRecordCreate(List<SignInOutDto> signInOutDtos, ActionCallbackListener<List<String>> listener);
+
+    //上传专业证书
+    public void update_major_attachment(List<AttachmentParaDto> data, ActionCallbackListener<AttachmentsReturnDto> listener);
+
 }

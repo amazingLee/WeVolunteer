@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
@@ -32,19 +31,17 @@ public class NickNameActivity extends AppCompatActivity {
     private TextView tv_nickname;
     private CheckBox isShow;
     private TextView update_submit;
-    private AppAction mAction;
+    private ImageView btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nick_name);
 
-        mAction = new AppActionImpl(this);
-
         Intent intent = getIntent();
-        personal_data= (VolunteerViewDto) intent.getSerializableExtra("personal_data");
-        MyNickName=personal_data.getNickName();
-        IsShowTrueName=personal_data.getShowTrueName();
+        personal_data = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
+        MyNickName = personal_data.getNickName();
+        IsShowTrueName = personal_data.getShowTrueName();
 
         tv_nickname = (TextView) findViewById(R.id.edit_NickName_name);
         isShow = (CheckBox) findViewById(R.id.checkBox_NickName_isShow);
@@ -65,7 +62,7 @@ public class NickNameActivity extends AppCompatActivity {
 
                 List<VolunteerViewDto> vl_updates = new ArrayList<>();
                 vl_updates.add(personal_data);
-                mAction.volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
+                AppActionImpl.getInstance(getApplicationContext()).volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
                     @Override
                     public void onSuccess(String data) {
 
@@ -85,7 +82,7 @@ public class NickNameActivity extends AppCompatActivity {
         });
 
         //回退按钮
-        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        btn_back = (ImageView) findViewById(R.id.imageView_nickname_back);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

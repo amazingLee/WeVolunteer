@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:layout_height="@dimen/imageview_myproject_item_height"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/imageview_myproject_margin"
-            android:src="@color/colorCyan" />
+            android:src="@color/colorCyan"/>
 
         <LinearLayout
             android:layout_width="@dimen/textview_myproject_width"
@@ -28,17 +28,15 @@
                 android:id="@+id/tv_myProject_projectName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="宁波市青少年宫培训教学引导岗"
                 android:textColor="@color/colorCyan"
-                android:textSize="@dimen/textview_myproject_textsize" />
+                android:textSize="@dimen/textview_myproject_textsize"/>
 
             <TextView
                 android:id="@+id/tv_myProject_projectTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="2016-8-15 10:10"
-                android:textSize="@dimen/textview_myproject_time_textsize" />
+                android:textSize="@dimen/textview_myproject_time_textsize"/>
         </LinearLayout>
 
         <TextView
@@ -49,8 +47,7 @@
             android:layout_marginLeft="@dimen/imageview_myproject_margin"
             android:background="@color/colorCyan"
             android:gravity="center"
-            android:text="招募中"
             android:textColor="#fff"
-            android:textSize="@dimen/textview_myproject_textsize" />
+            android:textSize="@dimen/textview_myproject_textsize"/>
     </LinearLayout>
 </LinearLayout>

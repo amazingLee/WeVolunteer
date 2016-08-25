@@ -15,22 +15,24 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
+import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.model.user.UserPhotoDto;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.example.renhao.wevolunteer.view.Attribute_Pop;
 import com.example.renhao.wevolunteer.view.Portrait_Pop;
 
@@ -40,9 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonalDataActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private AppAction mAction;
+public class PersonalDataActivity extends BaseActivity implements View.OnClickListener {
 
     private Portrait_Pop portrait_PPwindow;
     private Attribute_Pop attribute_PPwindow;
@@ -50,6 +50,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
 
     public static Activity PDactivity;
     private VolunteerViewDto Personal_Data;
+    private Button exit;
     private TextView tv_myNickName, tv_myPhone, tv_myUserName, tv_myTrueName, tv_myIDNumber, tv_myAttribute;
 
     //需要更改的值 头像暂无
@@ -105,8 +106,27 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
     private final int MY_IMAGETIME = 14;
     private final int MY_IMAGETYPE = 15;
 
-
     private final int UPDATE_UI = 0;
+
+    private ImageView top_btn_back;
+    private LinearLayout myPortrait;
+    private LinearLayout myNickName;
+    private LinearLayout changePassword;
+    private LinearLayout myPhoneNumber;
+    private LinearLayout myUserName;
+    private LinearLayout myTrueName;
+    private LinearLayout myIDNumber;
+    private LinearLayout myAttribute;
+    private LinearLayout myPoliticsStatus;
+    private LinearLayout myArea;
+    private LinearLayout myORG;
+    private LinearLayout myMajor;
+    private LinearLayout myNowCompany;
+    private LinearLayout myHomeAddress;
+    private LinearLayout myImageTime;
+    private LinearLayout myImageType;
+
+    private String volunteerId;
 
     /*Handler更新UI*/
     Handler myHandler = new Handler() {
@@ -121,6 +141,9 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
     };
 
     private void repeat_update() {
+
+        volunteerId = LocalDate.getInstance(this).getLocalDate("volunteerId", "");
+
         if (Personal_Data.getNickName() != null) {
             IsShowTrueName = Personal_Data.getShowTrueName();
             MyNickNmae = Personal_Data.getNickName();
@@ -141,15 +164,15 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
             MyIDNumber = Personal_Data.getIdNumber();
             tv_myIDNumber.setText(MyIDNumber);
         }
-        if (Personal_Data.getJobStatus() != null) {
-            MyAttribute_code = Personal_Data.getJobStatus();
+        if (Personal_Data.getJobStatusStr() != null) {
+           /* MyAttribute_code = Personal_Data.getJobStatus();
             if (MyAttribute_code == 0)
                 tv_myAttribute.setText("在校");
             if (MyAttribute_code == 1)
                 tv_myAttribute.setText("在职");
             if (MyAttribute_code == 2)
-                tv_myAttribute.setText("退休");
-
+                tv_myAttribute.setText("退休");*/
+            tv_myAttribute.setText(Personal_Data.getJobStatusStr());
         }
 
     }
@@ -158,8 +181,6 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_data);
-
-        mAction = new AppActionImpl(this);
 
         Intent intent = getIntent();
         Personal_Data = (VolunteerViewDto) intent.getSerializableExtra("data");
@@ -174,17 +195,46 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
         tv_myIDNumber = (TextView) findViewById(R.id.tv_PD_myIDNumber);
         tv_myAttribute = (TextView) findViewById(R.id.tv_PD_myAttribute);
 
+        exit = (Button) findViewById(R.id.btn_personalData_quit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exitLogin();
+            }
+        });
+
         try {
             portrait.setImageBitmap(getBitmapFromByte(intent.getByteArrayExtra("portrait")));
         } catch (Exception e) {
 
         }
 
-
         initViewsEven();
         //更改显示的内容
         repeat_update();
 
+        if (!Personal_Data.getSpeciality()) {
+            myPoliticsStatus.setVisibility(View.GONE);
+           // myArea.setVisibility(View.GONE);
+           // myORG.setVisibility(View.GONE);
+            myMajor.setVisibility(View.GONE);
+            myNowCompany.setVisibility(View.GONE);
+            myHomeAddress.setVisibility(View.GONE);
+           // myImageTime.setVisibility(View.GONE);
+            myImageType.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 退出登录
+     */
+    private void exitLogin() {
+        LocalDate.getInstance(getApplicationContext()).setLocalDate("volunteerId", "");
+        LocalDate.getInstance(getApplicationContext()).setLocalDate("isLogin", false);
+        LocalDate.getInstance(getApplicationContext()).setLocalDate("access_token", "");
+        getAccessToken();
+        setResult(RESULT_OK);
+        finish();
     }
 
 
@@ -192,23 +242,23 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
     private void initViewsEven() {
 
         //find组件
-        ImageView top_btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
-        LinearLayout myPortrait = (LinearLayout) findViewById(R.id.LL_PD_myPortrait);
-        LinearLayout myNickName = (LinearLayout) findViewById(R.id.LL_PD_myNickName);
-        LinearLayout changePassword = (LinearLayout) findViewById(R.id.LL_PD_changePassword);
-        LinearLayout myPhoneNumber = (LinearLayout) findViewById(R.id.LL_PD_myPhoneNumber);
-        LinearLayout myUserName = (LinearLayout) findViewById(R.id.LL_PD_myUserName);
-        LinearLayout myTrueName = (LinearLayout) findViewById(R.id.LL_PD_myTrueName);
-        LinearLayout myIDNumber = (LinearLayout) findViewById(R.id.LL_PD_myIDNumber);
-        LinearLayout myAttribute = (LinearLayout) findViewById(R.id.LL_PD_myAttribute);
-        LinearLayout myPoliticsStatus = (LinearLayout) findViewById(R.id.LL_PD_myPoliticsStatus);
-        LinearLayout myArea = (LinearLayout) findViewById(R.id.LL_PD_myArea);
-        LinearLayout myORG = (LinearLayout) findViewById(R.id.LL_PD_myORG);
-        LinearLayout myMajor = (LinearLayout) findViewById(R.id.LL_PD_myMajor);
-        LinearLayout myNowCompany = (LinearLayout) findViewById(R.id.LL_PD_myNowCompany);
-        LinearLayout myHomeAddress = (LinearLayout) findViewById(R.id.LL_PD_myHomeAddress);
-        LinearLayout myImageTime = (LinearLayout) findViewById(R.id.LL_PD_myImageTime);
-        LinearLayout myImageType = (LinearLayout) findViewById(R.id.LL_PD_myImageType);
+        top_btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
+        myPortrait = (LinearLayout) findViewById(R.id.LL_PD_myPortrait);
+        myNickName = (LinearLayout) findViewById(R.id.LL_PD_myNickName);
+        changePassword = (LinearLayout) findViewById(R.id.LL_PD_changePassword);
+        myPhoneNumber = (LinearLayout) findViewById(R.id.LL_PD_myPhoneNumber);
+        myUserName = (LinearLayout) findViewById(R.id.LL_PD_myUserName);
+        myTrueName = (LinearLayout) findViewById(R.id.LL_PD_myTrueName);
+        myIDNumber = (LinearLayout) findViewById(R.id.LL_PD_myIDNumber);
+        myAttribute = (LinearLayout) findViewById(R.id.LL_PD_myAttribute);
+        myPoliticsStatus = (LinearLayout) findViewById(R.id.LL_PD_myPoliticsStatus);
+        myArea = (LinearLayout) findViewById(R.id.LL_PD_myArea);
+        myORG = (LinearLayout) findViewById(R.id.LL_PD_myORG);
+        myMajor = (LinearLayout) findViewById(R.id.LL_PD_myMajor);
+        myNowCompany = (LinearLayout) findViewById(R.id.LL_PD_myNowCompany);
+        myHomeAddress = (LinearLayout) findViewById(R.id.LL_PD_myHomeAddress);
+        myImageTime = (LinearLayout) findViewById(R.id.LL_PD_myImageTime);
+        myImageType = (LinearLayout) findViewById(R.id.LL_PD_myImageType);
 
         //设置监听
         top_btn_back.setOnClickListener(this);
@@ -247,7 +297,6 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
         myHomeAddress.setTag(MY_HOMEADDRESS);
         myImageTime.setTag(MY_IMAGETIME);
         myImageType.setTag(MY_IMAGETYPE);
-
     }
 
 
@@ -271,7 +320,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 startActivityForResult(intent, MY_NICKNAME);
                 break;
             case CHANGE_PASSWORD:
-                intent.putExtra("ID", "ecb8263d-4559-4dff-8db5-13be1059d6fa");
+                intent.putExtra("ID", volunteerId);
                 intent.setClass(this, SetPasswordActivity.class);
                 startActivity(intent);
                 break;
@@ -287,10 +336,12 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
             case MY_IDNUMBER:
                 break;
             case MY_ATTRIBUTE:
-                attribute_PPwindow = new Attribute_Pop(this, itemsOnClick);
+                /*attribute_PPwindow = new Attribute_Pop(this, itemsOnClick);
                 attribute_PPwindow.showAtLocation(this.findViewById(R.id.SV_PD),
                         Gravity.CENTER, 0, 0); //设置layout在PopupWindow中显示的位置
-                ppwindow_flag = 1;
+                ppwindow_flag = 1;*/
+                intent.setClass(this, AttributeAtivity.class);
+                startActivityForResult(intent, MY_ATTRIBUTE);
                 break;
             case MY_POLITICSSTATUS:
                 intent.setClass(this, PoliticsstatusActivity.class);
@@ -301,10 +352,11 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 startActivity(intent);
                 break;
             case MY_ORG:
-                //因与前面重复，暂无
+                intent.setClass(this, MyORGActivity.class);
+                startActivity(intent);
                 break;
             case MY_MAJOR:
-                intent.setClass(this, MajorAbilityActivity.class);
+                intent.setClass(this, SpecilaAbilityActivity.class);
                 startActivityForResult(intent, MY_MAJOR);
                 break;
             case MY_NOWCOMPANY:
@@ -317,21 +369,17 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 break;
             case MY_IMAGETIME:
                 intent.setClass(this, ServiceTimeActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, MY_IMAGETIME);
                 break;
             case MY_IMAGETYPE:
                 intent.setClass(this, ServiceCategoryActivity.class);
                 startActivity(intent);
                 break;
         }
-
-
     }
 
     //为弹出窗口实现监听类
     private View.OnClickListener itemsOnClick = new View.OnClickListener() {
-
-
         public void onClick(View v) {
             //点击以后销毁pop框，将背景恢复
             if (ppwindow_flag == 0) {
@@ -392,6 +440,11 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
                 SendHandlerMsg(UPDATE_UI);
                 break;
+            case MY_ATTRIBUTE:
+                result = data.getExtras();
+                Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
+                SendHandlerMsg(UPDATE_UI);
+                break;
             case MY_POLITICSSTATUS:
                 result = data.getExtras();
                 Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
@@ -408,13 +461,17 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 result = data.getExtras();
                 Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
                 break;
+            case MY_IMAGETIME:
+                result = data.getExtras();
+                Personal_Data = (VolunteerViewDto) result.getSerializable("personal_data");
+                break;
 
             //照片的返回结果处理
             case CODE_GALLERY_REQUEST:
                 cropRawPhoto(data.getData());
                 break;
             case CODE_CAMERA_REQUEST:
-                if (hasSdcard()) {
+                if (Util.hasSDcard()) {
                     File tempFile = new File(Environment.getExternalStorageDirectory(),
                             IMAGE_FILE_NAME);
                     cropRawPhoto(Uri.fromFile(tempFile));
@@ -453,7 +510,7 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
         Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // 判断存储卡是否可用，存储照片文件
-        if (hasSdcard()) {
+        if (Util.hasSDcard()) {
             intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
                     .fromFile(new File(Environment
                             .getExternalStorageDirectory(), IMAGE_FILE_NAME)));
@@ -493,22 +550,21 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
         Bundle extras = intent.getExtras();
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
-            portrait.setImageBitmap(photo);
-            send_portrait = getBitmapByte(photo);
-            UpdatePortrait(send_portrait);
+            UpdatePortrait(photo);
         }
     }
 
-    private void UpdatePortrait(byte[] send_portrait) {
-        UserPhotoDto vl_updates = new UserPhotoDto();
+    private void UpdatePortrait(final Bitmap bitmap) {
 
-        vl_updates.setUserId("ecb8263d-4559-4dff-8db5-13be1059d6fa");
+        byte[] send_portrait = getBitmapByte(bitmap);
+        UserPhotoDto vl_updates = new UserPhotoDto();
+        vl_updates.setUserId(volunteerId);
         vl_updates.setPhoto(Base64.encodeToString(send_portrait, Base64.DEFAULT));
 
-        mAction.update_portrait(vl_updates, new ActionCallbackListener<String>() {
+        AppActionImpl.getInstance(this).update_portrait(vl_updates, new ActionCallbackListener<String>() {
             @Override
             public void onSuccess(String data) {
-
+                portrait.setImageBitmap(bitmap);
                 repeat_update();
                 showToast("修改成功");
             }
@@ -518,20 +574,6 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
                 showToast("网络异常，请检查后重试");
             }
         });
-    }
-
-
-    /**
-     * 检查设备是否存在SDCard的工具方法
-     */
-    public static boolean hasSdcard() {
-        String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            // 有存储的SDCard
-            return true;
-        } else {
-            return false;
-        }
     }
 
 
@@ -546,10 +588,9 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
     private void personal_data_UpDate() {
         List<VolunteerViewDto> vl_updates = new ArrayList<>();
         vl_updates.add(Personal_Data);
-        mAction.volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
+        AppActionImpl.getInstance(this).volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
             @Override
             public void onSuccess(String data) {
-
                 repeat_update();
                 showToast("修改成功");
             }
@@ -584,9 +625,4 @@ public class PersonalDataActivity extends AppCompatActivity implements View.OnCl
             return null;
         }
     }
-
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
 }

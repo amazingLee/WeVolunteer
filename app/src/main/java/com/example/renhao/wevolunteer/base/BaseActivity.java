@@ -66,9 +66,9 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected void getAccessToken() {
         showNormalDialog("正在连接服务器");
-
-        String username = LocalDate.getInstance(this).getLocalDate("username", "");
-        String password = LocalDate.getInstance(this).getLocalDate("password", "");
+        boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);
+        String username = isLogin ? LocalDate.getInstance(this).getLocalDate("username", "") : "";
+        String password = isLogin ? LocalDate.getInstance(this).getLocalDate("password", "") : "";
 
         AppActionImpl.getInstance(this).getAccessToken(username, password, new AccessTokenListener() {
             @Override

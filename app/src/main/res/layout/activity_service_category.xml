@@ -18,15 +18,16 @@
             android:src="@drawable/icon_indicator"
             android:id="@+id/imageView" />
         <TextView
+            android:id="@+id/tv_service_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/title_service_category"
             android:textSize="22sp"
             android:textColor="@color/colorWhite"
-            android:layout_centerInParent="true"
-            android:id="@+id/textView" />
+            android:layout_centerInParent="true"/>
         <TextView
+            android:id="@+id/tv_serverCategory_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tv_submit"

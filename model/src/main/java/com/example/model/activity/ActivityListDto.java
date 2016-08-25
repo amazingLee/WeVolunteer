@@ -26,8 +26,8 @@ public class ActivityListDto implements Serializable {
     private String DaySTime;//(string, optional),
     private String DayETime;//(string, optional),
     private String CompanyId;// (string, optional),
-    private String Lng;//(number, optional),
-    private String Lat;//(number, optional),
+    private Number Lng;//(number, optional),
+    private Number Lat;//(number, optional),
     private Integer Type;//(integer, optional),
     private String AreaCode;// (string, optional),
     private String AreaName;//(string, optional),
@@ -149,13 +149,6 @@ public class ActivityListDto implements Serializable {
         JobText = jobText;
     }
 
-    public String getLat() {
-        return Lat;
-    }
-
-    public void setLat(String lat) {
-        Lat = lat;
-    }
 
     public String getLengthTime() {
         return LengthTime;
@@ -165,11 +158,19 @@ public class ActivityListDto implements Serializable {
         LengthTime = lengthTime;
     }
 
-    public String getLng() {
+    public Number getLat() {
+        return Lat;
+    }
+
+    public void setLat(Number lat) {
+        Lat = lat;
+    }
+
+    public Number getLng() {
         return Lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Number lng) {
         Lng = lng;
     }
 

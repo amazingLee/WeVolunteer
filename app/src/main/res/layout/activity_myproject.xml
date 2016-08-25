@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -11,7 +12,7 @@
         android:background="@color/colorCyan">
 
         <ImageView
-            android:id="@+id/imageView_btn_back"
+            android:id="@+id/imageView_myproject_btn_back"
             android:layout_width="@dimen/imageview_homepage_magnifierSize"
             android:layout_height="@dimen/imageview_homepage_magnifierSize"
             android:layout_centerVertical="true"
@@ -20,7 +21,7 @@
             android:src="@drawable/icon_indicator" />
 
         <ImageView
-            android:id="@+id/imageview_homepage_magnifier"
+            android:id="@+id/imageview_myproject_magnifier"
             android:layout_width="@dimen/imageview_myproject_magnifierSize"
             android:layout_height="@dimen/imageview_myproject_magnifierSize"
             android:layout_alignParentRight="true"
@@ -39,11 +40,28 @@
             android:textSize="22sp" />
     </RelativeLayout>
 
-    <ListView
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/listview_myproject"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffeaebeb"
+        android:cacheColorHint="#00000000"
+        android:choiceMode="singleChoice"
+        android:divider="#ffffffff"
+        android:dividerHeight="8dp"
+        android:drawSelectorOnTop="false"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:groupIndicator="@null"
+        android:listSelector="@drawable/timer_list_selector"
+        android:scrollingCache="true"
+        app:ptrHeaderBackground="#ffeaebeb"/>
+
+    <!--<ListView
         android:id="@+id/lv_myproject"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
+    </ListView>-->
 
 </LinearLayout>

@@ -1,13 +1,16 @@
 package com.example.renhao.wevolunteer.fragment;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,6 +31,7 @@ import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.squareup.picasso.Picasso;
 import com.yyydjk.library.DropDownMenu;
 
 import java.util.ArrayList;
@@ -250,8 +254,25 @@ public class ProjectFragment extends BaseFragment {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     private void initPtrListView(final PullToRefreshListView mPtr) {
+        mPtr.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                final Picasso picasso = Picasso.with(getContext());
 
+                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                    picasso.resumeTag("Ptr");
+                } else {
+                    picasso.pauseTag("Ptr");
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
         mPtr.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override

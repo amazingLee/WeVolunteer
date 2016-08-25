@@ -1,6 +1,8 @@
 package com.example.api;
 
 import com.example.model.AccessTokenBO;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -27,10 +29,13 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
@@ -91,6 +96,7 @@ public interface Api {
     //组织
     public static final String ORGANIZATION_QUERY = "Nbcei.Framework.Api.Impl/v1/organization/query";
     public static final String ORGANIZATION_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
+    public static final String ORGANIZATION_QUERY_CHILD = "Nbcei.Framework.Api.Impl/v1/organization/query/child";
 
     //所在区域
     public static final String AREA_QUERY = "Nbcei.Framework.Api.Impl/v1/area/query/child";
@@ -113,6 +119,16 @@ public interface Api {
     //头像操作
     public static final String UPDATE_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/update/photo";
     public static final String GET_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/query/photo";
+
+
+    //志愿者服务站点
+    public static final String VOLUNTEER_BASE_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteerbase/query";
+
+    //签到签退明细
+    public static final String SIGNRECORD_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/signrecord/create";
+
+    //专业证书批量上传
+    public static final String UPDATE_MAJOR_ATTACHMENT = "Nbcei.Plugin.Attachment.Api.Impl/v1/attachments/savefile";
 
     /**
      * 获取accessToken
@@ -258,6 +274,11 @@ public interface Api {
     public ApiResponse<CompanyViewDto> organizationDetail(String id,String accessToken);*/
 
     /**
+     * 所属机构查询
+     */
+    public ApiResponse<List<OrganizationListDto>>  organizationQueryChild(String parentId,String accessToken);
+
+    /**
      * 所在区域查询
      */
     public ApiResponse<List<AreaListDto>> AreaQuery(String parentId, String accessToken);
@@ -274,4 +295,15 @@ public interface Api {
      */
     public ApiResponse<PagedListEntityDto<ContentListDto>> contentQuery(ContentQueryOptionDto query, String accessToken);
 
+    /**
+     * 志愿者服务站点
+     */
+    public ApiResponse<PagedListEntityDto<VolunteerBaseListDto>> volunteerBaseQuery(VolunteerBaseQueryOptionDto query, String accessToken);
+    /**
+     * 签到签退明细
+     */
+    public ApiResponse<List<String>> signRecordCreate(List<SignInOutDto> creates, String accessToken);
+
+    //证书上传
+    public ApiResponse<AttachmentsReturnDto> update_major_attachment(List<AttachmentParaDto> data, String accessToken);
 }

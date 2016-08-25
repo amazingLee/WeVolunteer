@@ -102,4 +102,5 @@
     <dimen name="layout_bottom_bottom_marginbottom">10dp</dimen>
     <dimen name="imageview_bottom_mark_marginright">5dp</dimen>
     <dimen name="imageview_bottom_mark_size">25dp</dimen>
+    <dimen name="top_item_margeintop">8dp</dimen>
 </resources>

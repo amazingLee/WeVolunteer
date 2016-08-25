@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.handler.MxgsaTagHandler;
 import com.example.renhao.wevolunteer.utils.Util;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
@@ -49,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -210,6 +211,7 @@ public class ProjectDetailActivity extends BaseActivity {
 
     }
 
+
     /**
      * 获取已经报名的志愿者，并获取其头像显示
      */
@@ -285,6 +287,10 @@ public class ProjectDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(ActivityViewDto data) {
                 dissMissNormalDialog();
+
+                if (data == null)
+                    return;
+
                 mActivityViewDto = data;
                 times = data.getActivityTimes();
                 setActivityDetail(data);
@@ -309,9 +315,9 @@ public class ProjectDetailActivity extends BaseActivity {
         mTvState.setText(data.getOperationState());
 
         String imagUrl = "";
-        if (TextUtils.isEmpty(data.getAppImgUrl())) {
-            imagUrl = data.getAppImgUrl();
-            Picasso.with(getApplicationContext()).load(imagUrl)
+        if (!TextUtils.isEmpty(data.getAppLstUrl())) {
+            imagUrl = data.getAppLstUrl();
+            Picasso.with(getApplicationContext()).load(Util.getRealUrl(imagUrl))
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(mImageview);
@@ -348,7 +354,7 @@ public class ProjectDetailActivity extends BaseActivity {
         contactStr += TextUtils.isEmpty(data.getMobile()) ? "" : data.getMobile();
         mTvContact.setText(contactStr);
 
-        mTvDetail.setText(data.getJobText());
+        mTvDetail.setText(Html.fromHtml(data.getJobText(), null, new MxgsaTagHandler(this)));
 
         mTvSignedNum.setText(data.getRecruited() + "");
 
@@ -381,8 +387,12 @@ public class ProjectDetailActivity extends BaseActivity {
         AppActionImpl.getInstance(this).jobActivityDetail(id, new ActionCallbackListener<JobActivityViewDto>() {
             @Override
             public void onSuccess(JobActivityViewDto data) {
-                mJobActivityViewDto = data;
                 dissMissNormalDialog();
+
+                if (data == null)
+                    return;
+
+                mJobActivityViewDto = data;
                 times = data.getActivityTimes();
                 setJobActivityDetail(data);
             }
@@ -406,9 +416,9 @@ public class ProjectDetailActivity extends BaseActivity {
         mTvState.setText(data.getOperationState());
 
         String imagUrl = "";
-        if (TextUtils.isEmpty(data.getAppImgUrl())) {
-            imagUrl = data.getAppImgUrl();
-            Picasso.with(getApplicationContext()).load(imagUrl)
+        if (!TextUtils.isEmpty(data.getAppLstUrl())) {
+            imagUrl = data.getAppLstUrl();
+            Picasso.with(getApplicationContext()).load(Util.getRealUrl(imagUrl))
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(mImageview);
@@ -447,7 +457,7 @@ public class ProjectDetailActivity extends BaseActivity {
 
         getSpecialType(data.getSpecialityType());
 
-        mTvDetail.setText(data.getJobText());
+        mTvDetail.setText(Html.fromHtml(data.getJobText(), null, new MxgsaTagHandler(this)));
 
         sTime = new ArrayList<>();
         for (int i = 0; i < data.getActivityTimes().size(); i++) {
@@ -777,10 +787,11 @@ public class ProjectDetailActivity extends BaseActivity {
                     public void onSuccess(PagedListEntityDto<ActivityAttentionListDto> data) {
                         if (data.getRows() != null && data.getRows().size() > 0) {
                             isAttention = true;
+                            mBtnFocuson.setText("已关注");
                             attentionId = data.getRows().get(0).getId();
                         } else {
                             isAttention = false;
-
+                            mBtnFocuson.setText("关注");
                         }
                         isInitAttention = true;
                     }
@@ -818,8 +829,7 @@ public class ProjectDetailActivity extends BaseActivity {
             ActivityAttentionDto dto = new ActivityAttentionDto();
             dto.setActivityId(id);
             dto.setUserId(volunteerId);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-            dto.setAttentionTime(format.format(new Date()));
+            dto.setAttentionTime(Util.getNowDate());
             dtos.add(dto);
 
             AppActionImpl.getInstance(this).activityAttentionCreate(dtos,
@@ -843,8 +853,8 @@ public class ProjectDetailActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 0)
-            finish();
+        /*if (resultCode == 0)
+            finish();*/
     }
 
 

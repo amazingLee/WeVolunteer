@@ -1,7 +1,6 @@
 package com.example.renhao.wevolunteer.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,25 +13,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
+import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.example.model.ActionCallbackListener;
 import com.example.model.user.UserListDto;
+import com.example.renhao.wevolunteer.IndexActivity;
 import com.example.renhao.wevolunteer.R;
 
 /**
  * 登录界面
  */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText et_username ;
+    EditText et_username;
     EditText et_password;
     Button btn_login;
     Button btn_register;
     ImageView img_back;
 
-    private AppAction mAction;
     private String username;
     private String password;
 
@@ -40,12 +39,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String FILE_NAME = "SaveUsernameAndPassword";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAction = new AppActionImpl(this);
 
         initView();
         initViewListener();
@@ -53,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void initView(){
+    private void initView() {
         et_username = (EditText) findViewById(R.id.edit_login_username);
         et_password = (EditText) findViewById(R.id.edit_login_password);
         btn_login = (Button) findViewById(R.id.btn_login);
@@ -61,80 +58,43 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         img_back = (ImageView) findViewById(R.id.imageView_btn_back);
     }
 
-    private void initViewListener(){
+    private void initViewListener() {
         btn_login.setOnClickListener(this);
         btn_register.setOnClickListener(this);
         img_back.setOnClickListener(this);
     }
 
-    private void setSharePreferences(){
-        //获取SharedPreferences时，需要设置两参数
-        //第一个是保存的文件的名称，第二个参数是保存的模式（是否只被本应用使用）
-        sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-        //从文件中获取保存的数据
-        username = sp.getString("username","");
-        password = sp.getString("password","");
-        if (username !=null && !"".equals(username)){
+    private void setSharePreferences() {
+        username = LocalDate.getInstance(this).getLocalDate("username", "");
+        password = LocalDate.getInstance(this).getLocalDate("password", "");
+        if (!TextUtils.isEmpty(username)) {
             et_username.setText(username);
         }
-        if (password !=null && !"".equals(password)){
+        if (!TextUtils.isEmpty(password)) {
             et_password.setText(password);
         }
 
     }
 
-    private void onSaveContent(){
+    private void onSaveContent() {
         super.onStop();
         username = et_username.getText().toString();
         password = et_password.getText().toString();
-        sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("username",username);
-        editor.putString("password",password);
-        editor.commit();
+        LocalDate.getInstance(this).setLocalDate("username", username);
+        LocalDate.getInstance(this).setLocalDate("password", password);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_login:
-                mAction.getAccessToken(username, password, new AccessTokenListener() {
-                    @Override
-                    public void success(AccessTokenBO accessTokenBO) {
-                        showToast("success");
-                        onSaveContent();
-                        if (TextUtils.isEmpty(username)) {
-                            showToast("账号不能为空");
-                        } else if (TextUtils.isEmpty(password)) {
-                            showToast("密码不能为空");
-                        } else {
-                            mAction.userNameLogin(username, new ActionCallbackListener<UserListDto>() {
-                                @Override
-                                public void onSuccess(UserListDto data) {
-                                    showToast("success");
-                                }
-
-                                @Override
-                                public void onFailure(String errorEvent, String message) {
-                                    showToast("fail");
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void fail() {
-                        showToast("fail");
-                    }
-                });
-
-
+                login();
                 break;
             case R.id.btn_register:
                 createAlertDialog();
-                showToast("点击注册");
                 break;
             case R.id.imageView_btn_back:
+                startActivity(new Intent(LoginActivity.this, IndexActivity.class));
                 finish();
                 break;
             default:
@@ -142,7 +102,56 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void createAlertDialog(){
+    private void login() {
+        username = et_username.getText().toString();
+        password = et_password.getText().toString();
+        if (TextUtils.isEmpty(username)) {
+            showToast("账号不能为空");
+            return;
+        } else if (TextUtils.isEmpty(password)) {
+            showToast("密码不能为空");
+            return;
+        } else {
+            onSaveContent();
+            AppActionImpl.getInstance(getApplicationContext()).getAccessToken(username, password, new AccessTokenListener() {
+                @Override
+                public void success(AccessTokenBO accessTokenBO) {
+                    showToast("success");
+                    AppActionImpl.getInstance(getApplicationContext()).userNameLogin(username, new ActionCallbackListener<UserListDto>() {
+                        @Override
+                        public void onSuccess(UserListDto data) {
+
+                            //注册登录时需写的
+                            LocalDate.getInstance(getApplicationContext()).setLocalDate("volunteerId", data.getId());
+                            LocalDate.getInstance(getApplicationContext()).setLocalDate("isLogin", true);
+                            LocalDate.getInstance(getApplicationContext()).setLocalDate("username", username);
+                            LocalDate.getInstance(getApplicationContext()).setLocalDate("password", password);
+
+                            showToast("登录成功");
+                            //测试用的跳转
+                            startActivity(new Intent(LoginActivity.this, IndexActivity.class));
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+                            showToast("登录失败");
+                            LocalDate.getInstance(getApplicationContext()).setLocalDate("volunteerId", "");
+                            LocalDate.getInstance(getApplicationContext()).setLocalDate("isLogin", false);
+                        }
+                    });
+                }
+
+                @Override
+                public void fail() {
+                    showToast("fail");
+                }
+            });
+
+        }
+    }
+
+    private void createAlertDialog() {
         final AlertDialog builder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = getLayoutInflater();
         final View view = inflater.inflate(R.layout.register_dialog, null);
@@ -172,7 +181,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         builder.setView(view);
         builder.show();
     }
-
 
 
     private void showToast(String msg) {

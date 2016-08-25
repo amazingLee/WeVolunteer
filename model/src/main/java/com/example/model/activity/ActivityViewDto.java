@@ -87,6 +87,16 @@ public class ActivityViewDto implements Serializable {
     private String CompanyName;//(string, optional): 单位名称
     private String OperationState;//(string, optional): 当前项目运行状态
 
+    private String AppLstUrl;
+
+    public String getAppLstUrl() {
+        return AppLstUrl;
+    }
+
+    public void setAppLstUrl(String appLstUrl) {
+        AppLstUrl = appLstUrl;
+    }
+
     public String getOperationState() {
         return OperationState;
     }

@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.example.renhao.wevolunteer.view.Btn_TimeCountUtil;
 
 import java.util.ArrayList;
@@ -27,8 +27,6 @@ import java.util.List;
 public class MobilePhoneActivity extends AppCompatActivity {
     private static final String TAG = "MobilePhoneActivity";
 
-
-    private AppAction mAction;
     private VolunteerViewDto personal_data;
     private String myPhone;
 
@@ -47,23 +45,6 @@ public class MobilePhoneActivity extends AppCompatActivity {
         Intent intent = getIntent();
         personal_data = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
 
-        //初始化连接
-        mAction = new AppActionImpl(this);
-
-//        //暂时获取票据
-//        mAction.getAccessToken("AndroidUser", "8NDVQX", new AccessTokenListener() {
-//            @Override
-//            public void success(AccessTokenBO accessTokenBO) {
-//                showToast("success");
-//            }
-//
-//            @Override
-//            public void fail() {
-//                showToast("fail");
-//            }
-//        });
-
-
         edit_get_Verify = (EditText) findViewById(R.id.edit_Verification);
         edit_get_phone = (EditText) findViewById(R.id.edit_myphone);
 
@@ -73,16 +54,13 @@ public class MobilePhoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 myPhone = edit_get_phone.getText().toString();
-                if (!myPhone.equals("")) {
+                if (Util.isPhoneNumber(myPhone)) {
                     //获取验证码按钮倒计时
                     btn_timeCountUtil = new Btn_TimeCountUtil(MobilePhoneActivity.this,
                             60000, 1000, btn_getVerify);
                     btn_timeCountUtil.start();
-
                     String phone = myPhone;
-                    mAction.getVerification(phone, new ActionCallbackListener<String>() {
-
-
+                    AppActionImpl.getInstance(getApplicationContext()).getVerification(phone, new ActionCallbackListener<String>() {
                         @Override
                         public void onSuccess(String data) {
                             showToast("验证码已发送");
@@ -93,7 +71,6 @@ public class MobilePhoneActivity extends AppCompatActivity {
                             showToast("验证码发送失败");
                         }
                     });
-
                 } else {
                     Toast.makeText(MobilePhoneActivity.this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
                 }
@@ -119,24 +96,20 @@ public class MobilePhoneActivity extends AppCompatActivity {
                 } else if (phone.equals("")) {
                     showToast("手机号码不能为空");
                 } else {
-                    mAction.getverify(phone, Verification, new ActionCallbackListener<Boolean>() {
-
-
+                    AppActionImpl.getInstance(getApplicationContext()).getverify(phone, Verification, new ActionCallbackListener<Boolean>() {
                         @Override
                         public void onSuccess(Boolean data) {
                             if (data) {
                                 //修改项
                                 personal_data.setMobile(phone);
-
                                 List<VolunteerViewDto> vl_updates = new ArrayList<>();
                                 vl_updates.add(personal_data);
-                                mAction.volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
+                                AppActionImpl.getInstance(getApplicationContext()).volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
                                     @Override
                                     public void onSuccess(String data) {
                                         Intent result = new Intent();
                                         result.putExtra("personal_data", personal_data);
                                         setResult(RESULT_OK, result);
-                                        showToast("验证成功");
                                         MobilePhoneActivity.this.finish();
                                     }
 
@@ -145,8 +118,7 @@ public class MobilePhoneActivity extends AppCompatActivity {
                                         showToast("网络异常，请检查后重试");
                                     }
                                 });
-
-                            } else if (!data) {
+                            } else {
                                 showToast("验证码错误");
                             }
                         }

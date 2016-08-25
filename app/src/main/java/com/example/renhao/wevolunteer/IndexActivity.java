@@ -20,13 +20,14 @@ import android.widget.LinearLayout;
 import com.MrL.qrcodescan.MipcaActivityCapture;
 import com.example.core.local.LocalDate;
 import com.example.renhao.wevolunteer.base.BaseActivity;
-import com.example.renhao.wevolunteer.event.FlagEvent;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
+import com.example.renhao.wevolunteer.event.QRCodeResultEvent;
 import com.example.renhao.wevolunteer.fragment.FindPageFragment;
 import com.example.renhao.wevolunteer.fragment.HomePageFragment;
 import com.example.renhao.wevolunteer.fragment.PersonalFragment;
 import com.example.renhao.wevolunteer.fragment.SigninPageFragment;
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
+import com.example.renhao.wevolunteer.view.PopupMenu;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,10 +76,10 @@ public class IndexActivity extends BaseActivity {
     private SigninPageFragment mSigninPageFragment;
     private PersonalFragment mPersonalFragment;
 
+    private PopupMenu mPopupMenu;
+    private ImageView magnifier;
 
     private int fragmentPosition = -1;
-
-    public static Boolean flag = false;//地图签到按钮的判断
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,6 +129,10 @@ public class IndexActivity extends BaseActivity {
      * 初始化actionbar 并绑定监听
      */
     private void initActionBar() {
+        String[] tabs = {"全部", "岗位", "活动", "志愿者指导中心", "志愿者服务站"};
+        mPopupMenu = new PopupMenu(this, tabs);
+        mPopupMenu.setWidth(360);
+
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
@@ -141,7 +146,7 @@ public class IndexActivity extends BaseActivity {
         ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0, 0);
 
         LinearLayout scan = (LinearLayout) mCustomView.findViewById(R.id.linearlayout_homepage_scan);
-        ImageView magnifier = (ImageView) mCustomView.findViewById(R.id.imageview_homepage_magnifier);
+        magnifier = (ImageView) mCustomView.findViewById(R.id.imageview_homepage_magnifier);
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,8 +157,40 @@ public class IndexActivity extends BaseActivity {
         magnifier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(IndexActivity.this, SearchActivity.class);
-                startActivity(intent);
+
+                if (fragmentPosition == FIND) {
+                    mPopupMenu.showLocation(R.id.imageview_homepage_magnifier);
+                    mPopupMenu.setOnItemClickListener(new PopupMenu.OnItemClickListener() {
+                        @Override
+                        public void onClick(PopupMenu.MENUITEM item, String str) {
+                            switch (str) {
+                                case "全部":
+                                    if (mFindPageFragment != null)
+                                        mFindPageFragment.setShowMap(FindPageFragment.MAP_ALL);
+                                    break;
+                                case "岗位":
+                                    if (mFindPageFragment != null)
+                                        mFindPageFragment.setShowMap(FindPageFragment.MAP_JOB);
+                                    break;
+                                case "活动":
+                                    if (mFindPageFragment != null)
+                                        mFindPageFragment.setShowMap(FindPageFragment.MAP_ACTIVITY);
+                                    break;
+                                case "志愿者指导中心":
+                                    if (mFindPageFragment != null)
+                                        mFindPageFragment.setShowMap(FindPageFragment.MAP_CENTER);
+                                    break;
+                                case "志愿者服务站":
+                                    if (mFindPageFragment != null)
+                                        mFindPageFragment.setShowMap(FindPageFragment.MAP_STATION);
+                                    break;
+                            }
+                        }
+                    });
+                } else {
+                    Intent intent = new Intent(IndexActivity.this, SearchActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -176,6 +213,7 @@ public class IndexActivity extends BaseActivity {
         mChangrTvIndexMyself.setIconColor(getResources().getColor(R.color.colorGray));
         switch (position) {
             case HOME:
+                magnifier.setImageResource(R.drawable.magnifier);
                 mChangrTvIndexHomepage.setIconColor(getResources().getColor(R.color.colorCyan));
                 if (mHomePageFragment == null) {
                     mHomePageFragment = new HomePageFragment();
@@ -185,45 +223,57 @@ public class IndexActivity extends BaseActivity {
                 fragmentPosition = HOME;
                 break;
             case FIND:
+                magnifier.setImageResource(R.drawable.icon_menu);
                 mChangrTvIndexFind.setIconColor(getResources().getColor(R.color.colorCyan));
                 if (fragmentPosition != SIGNIN) {
 
                     if (mFindPageFragment == null) {
                         mFindPageFragment = new FindPageFragment();
-                        System.out.println("1");
+                       /* Bundle data = new Bundle();
+                        data.putBoolean("Tag", false);
+                        mFindPageFragment.setArguments(data);*/
+                        mFindPageFragment.setTag(false);
+                    } else {
+                        //发送消息，隐藏签到按钮控件
+                       /* EventBus.getDefault().post(new FlagEvent("find"));*/
+                        mFindPageFragment.setType(false);
                     }
-                    Bundle data = new Bundle();
-                    data.putString("Tag", "false");
-                    mFindPageFragment.setArguments(data);
                     setFractionTranslate(transaction, FIND);
                     transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
                 } else {
                     //发送消息，隐藏签到按钮控件
-                    EventBus.getDefault().post(new FlagEvent("find"));
+                    /*EventBus.getDefault().post(new FlagEvent("find"));*/
+                    mFindPageFragment.setType(false);
                 }
 
                 fragmentPosition = FIND;
                 break;
             case SIGNIN:
+                magnifier.setImageResource(R.drawable.magnifier);
                 mChangrTvIndexSignin.setIconColor(getResources().getColor(R.color.colorCyan));
                 if (fragmentPosition != FIND) {
 
                     if (mFindPageFragment == null) {
                         mFindPageFragment = new FindPageFragment();
-                        System.out.println("2");
+                       /* Bundle data = new Bundle();
+                        data.putBoolean("Tag", true);
+                        mFindPageFragment.setArguments(data);*/
+                        mFindPageFragment.setTag(true);
+                    } else {
+                        /*EventBus.getDefault().post(new FlagEvent("sign_in"));*/
+                        mFindPageFragment.setType(true);
                     }
-                    Bundle data = new Bundle();
-                    data.putString("Tag", "true");
-                    mFindPageFragment.setArguments(data);
                     setFractionTranslate(transaction, FIND);
                     transaction.replace(R.id.framelayout_index_content, mFindPageFragment);
                 } else {
                     //发送消息，显示签到按钮控件
-                    EventBus.getDefault().post(new FlagEvent("sign_in"));
+                   /* EventBus.getDefault().post(new FlagEvent("sign_in"));*/
+                    mFindPageFragment.setType(true);
                 }
                 fragmentPosition = SIGNIN;
                 break;
             case MYSELF:
+                magnifier.setImageResource(R.drawable.magnifier);
                 mChangrTvIndexMyself.setIconColor(getResources().getColor(R.color.colorCyan));
                 if (mPersonalFragment == null) {
                     mPersonalFragment = new PersonalFragment();
@@ -308,22 +358,28 @@ public class IndexActivity extends BaseActivity {
             return;
         if (qrcodeMsg.equals("0"))
             return;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(qrcodeMsg);
-        builder.setTitle("二维码内容");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        Logger.v(TAG, requestCode);
+        if (requestCode == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(qrcodeMsg);
+            builder.setTitle("二维码内容");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
+                }
+            });
 
-        builder.create().show();
+            builder.create().show();
+        } else if (requestCode == 1) {
+            //将获取到的二维码的值传到FindPageFragment
+            EventBus.getDefault().post(new QRCodeResultEvent(qrcodeMsg, requestCode));
+        }
     }
 }

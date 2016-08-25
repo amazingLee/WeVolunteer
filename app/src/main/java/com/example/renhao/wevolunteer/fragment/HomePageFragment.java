@@ -34,9 +34,11 @@ import com.example.renhao.wevolunteer.OrganizationActivity;
 import com.example.renhao.wevolunteer.ProjectActivity;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.activity.RegisterActivity;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.example.renhao.wevolunteer.view.NoScrollGridView;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -181,7 +183,8 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        initDialog();
+                        intent.setClass(getActivity(), RegisterActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
                         break;
@@ -255,7 +258,6 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private void initImageSliderView() {
         this.imageSliderView = LayoutInflater.from(getActivity()).inflate(R.layout.view_imageslider, null);
         mSliderHomepageImgslider = (SliderLayout) imageSliderView.findViewById(R.id.slider_homepage_imgslider);
-
         getSliderDate();
     }
 
@@ -278,7 +280,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                             // initialize a SliderLayout
                             textSliderView
                                     .description(data.getRows().get(i).getContentName())
-                                    .image(data.getRows().get(i).getOutsideUrl())
+                                    .image(Util.getRealUrl(data.getRows().get(i).getAppLstUrl()))
                                     .setScaleType(BaseSliderView.ScaleType.Fit);
                             //.setOnSliderClickListener(this);
 

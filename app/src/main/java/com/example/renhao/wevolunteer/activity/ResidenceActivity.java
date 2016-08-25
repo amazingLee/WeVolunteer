@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
@@ -24,7 +23,6 @@ import java.util.List;
 public class ResidenceActivity extends AppCompatActivity {
     private static final String TAG = "ResidenceActivity";
 
-    private AppAction mAction;
     private VolunteerViewDto personal_data;
     private String Domicile;
 
@@ -36,11 +34,10 @@ public class ResidenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_residence);
 
-        mAction=new AppActionImpl(this);
         Intent intent = getIntent();
         personal_data = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
         edit_Domicile = (EditText) findViewById(R.id.edit_Domicile);
-        if (personal_data.getWorkunit() != null) {
+        if (personal_data.getDomicile() != null) {
             Domicile = personal_data.getDomicile();
             edit_Domicile.setText(Domicile);
         }
@@ -54,7 +51,7 @@ public class ResidenceActivity extends AppCompatActivity {
                 List<VolunteerViewDto> vl_updates = new ArrayList<>();
                 personal_data.setDomicile(Domicile);
                 vl_updates.add(personal_data);
-                mAction.volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
+                AppActionImpl.getInstance(getApplicationContext()).volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
                     @Override
                     public void onSuccess(String data) {
                         Intent result = new Intent();

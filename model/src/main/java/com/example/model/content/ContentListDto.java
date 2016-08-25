@@ -28,6 +28,16 @@ public class ContentListDto {
     private String PubDateTime;// (string, optional),
     private Integer SortIndex;//(integer, optional)
 
+    private String AppLstUrl;
+
+    public String getAppLstUrl() {
+        return AppLstUrl;
+    }
+
+    public void setAppLstUrl(String appLstUrl) {
+        AppLstUrl = appLstUrl;
+    }
+
     public String getAuthor() {
         return Author;
     }
