@@ -47,7 +47,7 @@ public class ActivityViewDto implements Serializable {
     private String BMealsType;//(number, optional): 获取或设置 提供餐补类型
     private String SafeType;// (number, optional): 获取或设置 是否提供保险 类型
     private String TrafficType;//(number, optional): 获取或设置 供交通补贴类型
-    private String ScopeType;// (number, optional): 获取或设置 签到范围
+    private Number ScopeType;// (number, optional): 获取或设置 签到范围
     private String EndTimeChoiceName;// (string, optional),
     private Integer EndTimeChoice;// (integer, optional),
     private String EndTime;//(string, optional),
@@ -67,8 +67,8 @@ public class ActivityViewDto implements Serializable {
     private Integer Status;// (integer, optional): 获取或设置 状态
     private String StatusName;//(string, optional): 获取或设置 状态
     private Integer RunStatus;//(integer, optional): 获取或设置 执行状态
-    private String Lng;//(number, optional): 获取或设置 经度
-    private String Lat;//(number, optional): 获取或设置 纬度
+    private Number Lng;//(number, optional): 获取或设置 经度
+    private Number Lat;//(number, optional): 获取或设置 纬度
     private String Keywords;//(string, optional): 获取或设置 关键词
     private String AppImgUrl;//(string, optional): 获取或设置 app图片列表
     private Integer Recruited;//(integer, optional): 获取或设置 已招募
@@ -143,6 +143,14 @@ public class ActivityViewDto implements Serializable {
 
     public void setActivityTypeName(String activityTypeName) {
         ActivityTypeName = activityTypeName;
+    }
+
+    public Number getScopeType() {
+        return ScopeType;
+    }
+
+    public void setScopeType(Number scopeType) {
+        ScopeType = scopeType;
     }
 
     public String getAddr() {
@@ -385,14 +393,6 @@ public class ActivityViewDto implements Serializable {
         LanguageTypeName = languageTypeName;
     }
 
-    public String getLat() {
-        return Lat;
-    }
-
-    public void setLat(String lat) {
-        Lat = lat;
-    }
-
     public Number getLengthTime() {
         return LengthTime;
     }
@@ -409,11 +409,19 @@ public class ActivityViewDto implements Serializable {
         Linker = linker;
     }
 
-    public String getLng() {
+    public Number getLat() {
+        return Lat;
+    }
+
+    public void setLat(Number lat) {
+        Lat = lat;
+    }
+
+    public Number getLng() {
         return Lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Number lng) {
         Lng = lng;
     }
 
@@ -519,14 +527,6 @@ public class ActivityViewDto implements Serializable {
 
     public void setSafeType(String safeType) {
         SafeType = safeType;
-    }
-
-    public String getScopeType() {
-        return ScopeType;
-    }
-
-    public void setScopeType(String scopeType) {
-        ScopeType = scopeType;
     }
 
     public Integer getScore() {

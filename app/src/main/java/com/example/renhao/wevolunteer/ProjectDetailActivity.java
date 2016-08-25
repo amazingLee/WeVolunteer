@@ -754,7 +754,6 @@ public class ProjectDetailActivity extends BaseActivity {
                                                     dissMissNormalDialog();
                                                 }
                                             });
-
                                 } else {
                                     dissMissNormalDialog();
                                     showToast("您已报名");

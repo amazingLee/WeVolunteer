@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
+import com.example.model.activity.ActivityViewDto;
 import com.example.model.signRecord.SignInOutDto;
 import com.example.model.volunteer.VolunteerBaseListDto;
 import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
@@ -195,26 +197,57 @@ public class FindPageFragment extends Fragment implements LocationSource,
 
     //接受消息的函数
     @Subscribe
-    public void onEventMainThread(QRCodeResultEvent event) {
-        //0 未知 1 签到 2签退
-        Logger.v(TAG, event.getQrcodeMsg());
-        switch (event.getState()) {
-            case 0:
-                boolean f = LocalDate.getInstance(getActivity()).getLocalDate("flag", false);
-                if (f) {
-                    signOut(event.getQrcodeMsg());
-                } else {
-                    signIn(event.getQrcodeMsg());
-                }
-                break;
-            case 1:
-                signIn(event.getQrcodeMsg());
-                break;
-            case 2:
-                signOut(event.getQrcodeMsg());
-                break;
+    public void onEventMainThread(final QRCodeResultEvent event) {
+
+        final String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
+        boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+        if (TextUtils.isEmpty(volunteerId) || !isLogin) {
+            showToast("请先登录");
+            return;
         }
 
+
+        //判断距离是否符合条件
+        AppActionImpl.getInstance(getActivity()).activityDetail(event.getQrcodeMsg(),
+                new ActionCallbackListener<ActivityViewDto>() {
+                    @Override
+                    public void onSuccess(ActivityViewDto data) {
+                        if (data == null) {
+                            showToast("该活动或岗位不存在");
+                            return;
+                        }
+                        double lat = data.getLat().doubleValue();
+                        double lng = data.getLng().doubleValue();
+                        double distance = getDistance(lat, lng);
+                        if (distance > data.getScopeType().doubleValue()) {
+                            showToast("距离太远");
+                        } else {
+                            //0 未知 1 签到 2签退
+                            Logger.v(TAG, event.getQrcodeMsg());
+                            switch (event.getState()) {
+                                case 0:
+                                    boolean f = LocalDate.getInstance(getActivity()).getLocalDate("flag", false);
+                                    if (f) {
+                                        signOut(event.getQrcodeMsg(), volunteerId);
+                                    } else {
+                                        signIn(event.getQrcodeMsg(), volunteerId);
+                                    }
+                                    break;
+                                case 1:
+                                    signIn(event.getQrcodeMsg(), volunteerId);
+                                    break;
+                                case 2:
+                                    signOut(event.getQrcodeMsg(), volunteerId);
+                                    break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("网络超时，请稍后再试");
+                    }
+                });
     }
 
     private void setmListener() {
@@ -320,7 +353,7 @@ public class FindPageFragment extends Fragment implements LocationSource,
                     Double lng = dto.getLng().doubleValue();
                     Double lat = dto.getLat().doubleValue();
                     String addr = dto.getAddr();
-                    String activityName = dto.getAreaName();
+                    String activityName = dto.getActivityName();
                     LatLng latlng = new LatLng(lat, lng);
                     if (aMap == null || !isShow)
                         break;
@@ -361,7 +394,7 @@ public class FindPageFragment extends Fragment implements LocationSource,
                     Double lng = dto.getLng().doubleValue();
                     Double lat = dto.getLat().doubleValue();
                     String addr = dto.getAddr();
-                    String jobActivityName = dto.getAreaName();
+                    String jobActivityName = dto.getActivityName();
                     LatLng latlng = new LatLng(lat, lng);
                     if (aMap == null || !isShow)
                         break;
@@ -563,12 +596,17 @@ public class FindPageFragment extends Fragment implements LocationSource,
     }
 
     //设置当前位置和活动的距离
-    private void getDistance() {
-        LatLng myLatLng = localLatLng;
-        LatLng centerLatLng = new LatLng(29.86781, 121.55008);//这里是活动的中心位置经纬度
+    private double getDistance(double lat, double lng) {
+        if (aMap == null) {
+            return 1000000;
+        }
+        Location location = aMap.getMyLocation();
+        LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng centerLatLng = new LatLng(lat, lng);//这里是活动的中心位置经纬度
         // 计算量坐标点距离
         double distances = AMapUtils.calculateLineDistance(centerLatLng, myLatLng);
-        Toast.makeText(getActivity(), "当前距离中心点：" + ((int) distances), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), "当前距离中心点：" + ((int) distances), Toast.LENGTH_LONG).show();
+        return distances;
     }
 
 
@@ -644,6 +682,14 @@ public class FindPageFragment extends Fragment implements LocationSource,
 
     @Override
     public void onClick(View v) {
+
+        String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
+        boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+        if (TextUtils.isEmpty(volunteerId) || !isLogin) {
+            showToast("请先登录");
+            return;
+        }
+
         //打开摄像头扫描二维码,扫描到activitytimeId的值返回到activityresult
         Intent intent = new Intent(getActivity(), MipcaActivityCapture.class);
         switch (v.getId()) {
@@ -656,28 +702,19 @@ public class FindPageFragment extends Fragment implements LocationSource,
         }
     }
 
-    private void signIn(String qrcode) {
-
-        String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
-        if (TextUtils.isEmpty(volunteerId)) {
-            showToast("请先登录");
-            return;
-        }
-
+    private void signIn(String qrcode, String volunteerId) {
         //直接发送二维码的内容
+        Location location = aMap.getMyLocation();
         SignInOutDto create = new SignInOutDto();
-        create.setActivityId(qrcode);
-//        create.setActivityRecruitId();
         create.setVolunteerId(volunteerId);
-//        create.setSignCreateUserId();
-//        create.setSignCreateUserName();
-        create.setLng(localLatLng.longitude);
-        create.setLat(localLatLng.latitude);
-//        create.setSignTime();
-//        create.setSignCreateTime();
-//        create.setSource(0);
-        create.setIsSignOut(false);
-        create.setSignIp(Util.getMac());
+        //create.setActivityTimeId();
+        create.setSigntime(Util.getNowDate());
+        create.setDeviceId(Util.getMac());
+        create.setLat(location.getLatitude());
+        create.setLng(location.getLongitude());
+        create.setSourceType(0);
+        create.setComputerStatus(0);
+        create.setSignType(0);
         List<SignInOutDto> creates = new ArrayList<>();
         creates.add(create);
         AppActionImpl.getInstance(getActivity()).signRecordCreate(creates, new ActionCallbackListener<List<String>>() {
@@ -705,28 +742,19 @@ public class FindPageFragment extends Fragment implements LocationSource,
         });
     }
 
-    private void signOut(String qrcode) {
-
-        String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
-        if (TextUtils.isEmpty(volunteerId)) {
-            showToast("请先登录");
-            return;
-        }
-
+    private void signOut(String qrcode, String volunteerId) {
+        Location location = aMap.getMyLocation();
         //直接发送二维码的内容
         SignInOutDto create = new SignInOutDto();
-        create.setActivityId(qrcode);
-//        create.setActivityRecruitId();
         create.setVolunteerId(volunteerId);
-//        create.setSignCreateUserId();
-//        create.setSignCreateUserName();
-        create.setLng(localLatLng.longitude);
-        create.setLat(localLatLng.latitude);
-//        create.setSignTime();
-//        create.setSignCreateTime();
-//        create.setSource(0);
-        create.setIsSignOut(true);
-        create.setSignIp(Util.getMac());
+        //create.setActivityTimeId();
+        create.setSigntime(Util.getNowDate());
+        create.setDeviceId(Util.getMac());
+        create.setLat(location.getLatitude());
+        create.setLng(location.getLongitude());
+        create.setSourceType(0);
+        create.setComputerStatus(0);
+        create.setSignType(1);
         List<SignInOutDto> creates = new ArrayList<>();
         creates.add(create);
         AppActionImpl.getInstance(getActivity()).signRecordCreate(creates, new ActionCallbackListener<List<String>>() {

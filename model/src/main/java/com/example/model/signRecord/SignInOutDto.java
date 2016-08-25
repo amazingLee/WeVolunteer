@@ -4,41 +4,59 @@ package com.example.model.signRecord;
  * Created by Administrator on 2016/8/20.
  */
 public class SignInOutDto {
-    private String ActivityId;// (string, optional): 获取或设置 活动Id ,
-    private String ActivityRecruitId;// (string, optional): 获取或设置 报名Id ,
-    private String VolunteerId;// (string, optional): 获取或设置 志愿者Id ,
-    private String SignTime;// (string, optional): 获取或设置 签到时间 ,
-    private Number Lng;// (number, optional): 获取或设置 经度 ,
-    private Number Lat;// (number, optional): 获取或设置 纬度 ,
-    private Integer Source;// (integer, optional): 获取或设置 来源 0 移动端 1 PC ,
-    private String SignIp;// (string, optional): 获取或设置 签到IP ,
-    private Boolean IsSignOut;// (boolean, optional): 获取或设置 是否签离 true签离 flase签到 ,
-    private String SignCreateTime;// (string, optional): 获取或设置 签到创建时间 ,
-    private String SignCreateUserId;// (string, optional): 获取或设置 签到创建用户ID ,
-    private String SignCreateUserName;// (string, optional): 获取或设置 签到创建用户名,
+    private String Id;//(string, optional): 获取或设置 签到标识
+    private Integer Version;//(integer, optional): 获取或设置 版本号
+    private String VolunteerId;//(string, optional): 获取或设置 志愿者Id
+    private String ActivityTimeId;//(string),
+    private String ActivityTimeActivityActivityName;//(string, optional),
+    private String VolunteerTrueName;//(string, optional): 获取或设置 志愿者
+    private String Signtime;// (string, optional),
+    private String DeviceId;//(string, optional),
+    private Number Lng;//(number, optional),
+    private Number Lat;//(number, optional),
+    private String SignAddress;//(string, optional),
+    private Integer SourceType;//(integer),
+    private Integer ComputerStatus;// (integer),
+    private Integer SignType;// (integer)
 
-    public String getActivityId() {
-        return ActivityId;
+    public String getActivityTimeActivityActivityName() {
+        return ActivityTimeActivityActivityName;
     }
 
-    public void setActivityId(String activityId) {
-        ActivityId = activityId;
+    public void setActivityTimeActivityActivityName(String activityTimeActivityActivityName) {
+        ActivityTimeActivityActivityName = activityTimeActivityActivityName;
     }
 
-    public String getActivityRecruitId() {
-        return ActivityRecruitId;
+    public String getActivityTimeId() {
+        return ActivityTimeId;
     }
 
-    public void setActivityRecruitId(String activityRecruitId) {
-        ActivityRecruitId = activityRecruitId;
+    public void setActivityTimeId(String activityTimeId) {
+        ActivityTimeId = activityTimeId;
     }
 
-    public Boolean getIsSignOut() {
-        return IsSignOut;
+    public Integer getComputerStatus() {
+        return ComputerStatus;
     }
 
-    public void setIsSignOut(Boolean isSignOut) {
-        IsSignOut = isSignOut;
+    public void setComputerStatus(Integer computerStatus) {
+        ComputerStatus = computerStatus;
+    }
+
+    public String getDeviceId() {
+        return DeviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        DeviceId = deviceId;
+    }
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
     }
 
     public Number getLat() {
@@ -57,52 +75,44 @@ public class SignInOutDto {
         Lng = lng;
     }
 
-    public String getSignCreateTime() {
-        return SignCreateTime;
+    public String getSignAddress() {
+        return SignAddress;
     }
 
-    public void setSignCreateTime(String signCreateTime) {
-        SignCreateTime = signCreateTime;
+    public void setSignAddress(String signAddress) {
+        SignAddress = signAddress;
     }
 
-    public String getSignCreateUserId() {
-        return SignCreateUserId;
+    public String getSigntime() {
+        return Signtime;
     }
 
-    public void setSignCreateUserId(String signCreateUserId) {
-        SignCreateUserId = signCreateUserId;
+    public void setSigntime(String signtime) {
+        Signtime = signtime;
     }
 
-    public String getSignCreateUserName() {
-        return SignCreateUserName;
+    public Integer getSignType() {
+        return SignType;
     }
 
-    public void setSignCreateUserName(String signCreateUserName) {
-        SignCreateUserName = signCreateUserName;
+    public void setSignType(Integer signType) {
+        SignType = signType;
     }
 
-    public String getSignIp() {
-        return SignIp;
+    public Integer getSourceType() {
+        return SourceType;
     }
 
-    public void setSignIp(String signIp) {
-        SignIp = signIp;
+    public void setSourceType(Integer sourceType) {
+        SourceType = sourceType;
     }
 
-    public String getSignTime() {
-        return SignTime;
+    public Integer getVersion() {
+        return Version;
     }
 
-    public void setSignTime(String signTime) {
-        SignTime = signTime;
-    }
-
-    public Integer getSource() {
-        return Source;
-    }
-
-    public void setSource(Integer source) {
-        Source = source;
+    public void setVersion(Integer version) {
+        Version = version;
     }
 
     public String getVolunteerId() {
@@ -111,5 +121,13 @@ public class SignInOutDto {
 
     public void setVolunteerId(String volunteerId) {
         VolunteerId = volunteerId;
+    }
+
+    public String getVolunteerTrueName() {
+        return VolunteerTrueName;
+    }
+
+    public void setVolunteerTrueName(String volunteerTrueName) {
+        VolunteerTrueName = volunteerTrueName;
     }
 }
