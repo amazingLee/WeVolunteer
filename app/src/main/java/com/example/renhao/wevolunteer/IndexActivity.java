@@ -41,6 +41,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * 项目名称：WeVolunteer
@@ -85,6 +86,9 @@ public class IndexActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
+
+        //初始化shareSDK
+        ShareSDK.initSDK(this);
         //在使用百度或高德地图时，防止切换Fragment出现闪屏黑屏情况。
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         ButterKnife.bind(this);
@@ -349,6 +353,7 @@ public class IndexActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        ShareSDK.stopSDK(this);
     }
 
     @Override

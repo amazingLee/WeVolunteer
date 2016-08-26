@@ -1,1 +1,1 @@
-include ':app', ':api', ':model', ':core', ':PullToRefresh', ':dropdownmenu', ':dialogplus', ':calendar', ':qrcodescan'
+include ':app', ':api', ':model', ':core', ':PullToRefresh', ':dropdownmenu', ':dialogplus', ':calendar', ':qrcodescan', ':sharesdk', ':onekeyshare'
