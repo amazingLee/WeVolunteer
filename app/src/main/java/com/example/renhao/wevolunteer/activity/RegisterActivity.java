@@ -69,8 +69,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private String verification_code;
     private String areaName;
     private String areaId;
+    private String areaCode;
     private String orgName;
     private String orgCode;
+    private String orgId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,12 +156,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (requestCode == AREA_REGISTER) {
             areaName = data.getStringExtra("areaName");
             areaId = data.getStringExtra("areaId");
+            areaCode = data.getStringExtra("areaCode");
             areaNameTv.setText(areaName);
         }
 
         if (requestCode == ORG_REGISTER) {
             orgName = data.getStringExtra("orgName");
-            orgCode = data.getStringExtra("orgId");
+            orgId = data.getStringExtra("orgId");
             orgNameTv.setText(orgName);
         }
     }
@@ -274,11 +277,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         vl_create.setReUserPassword(Repassword);
         vl_create.setIdNumber(id_number);
         vl_create.setMobile(phone);
-        vl_create.setAreaCode(areaId);
-        vl_create.setOrgId(orgCode);
+        vl_create.setAreaCode(areaCode);
+        vl_create.setOrgId(orgId);
         vl_create.setEmail(email);
         vl_create.setJobStatus(isCheck_Code);
         vl_create.setCardType(Integer.parseInt(cardCode));
+        vl_create.setId(Util.getMac());
         List<VolunteerCreateDto> vl_creates = new ArrayList<>();
         vl_creates.add(vl_create);
         AppActionImpl.getInstance(getApplicationContext()).volunteerCreate(vl_creates, new ActionCallbackListener<List<String>>() {

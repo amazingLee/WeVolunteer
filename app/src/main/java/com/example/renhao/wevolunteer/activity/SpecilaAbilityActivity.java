@@ -96,6 +96,11 @@ public class SpecilaAbilityActivity extends BaseActivity {
                         }
 
                         arrayAdapter.notifyDataSetChanged();
+                       /* for (int i = 0; i < isSelect.size(); i++) {
+                            if (isSelect.get(i)) {
+                                listView.setItemChecked(i, true);
+                            }
+                        }*/
                     }
 
                     @Override
@@ -196,7 +201,6 @@ public class SpecilaAbilityActivity extends BaseActivity {
         //提交
         personalData.setSpecialtyType(serviceIntention);
         personalData.setSpecialty(names);
-
      /*   if (otherSelsec)
         {
             personalData.setsp
@@ -227,6 +231,4 @@ public class SpecilaAbilityActivity extends BaseActivity {
                     });
         }
     }
-
-
 }

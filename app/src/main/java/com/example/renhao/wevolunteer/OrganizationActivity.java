@@ -90,7 +90,7 @@ public class OrganizationActivity extends BaseActivity {
     private Integer StartPosition;// (integer, optional): 记录开始位置
     private Integer EndPosition;//(integer, optional): 记录结束位置
     private Boolean HasPreviousPage;// (boolean, optional): 是否有上一页
-    private Boolean HasNextPage;//(boolean, optional): 是否有下一页
+    private Boolean HasNextPage=true;//(boolean, optional): 是否有下一页
 
 
     @Override

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.core.AppActionImpl;
+import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityListDto;
@@ -30,10 +33,12 @@ import com.example.model.content.ContentListDto;
 import com.example.model.content.ContentQueryOptionDto;
 import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
+import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.OrganizationActivity;
 import com.example.renhao.wevolunteer.ProjectActivity;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.activity.ApplyProBonoActivity;
 import com.example.renhao.wevolunteer.activity.RegisterActivity;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
@@ -181,12 +186,47 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+                String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
                 switch (position) {
                     case 0:
+                        if (isLogin || !TextUtils.isEmpty(volunteerId)) {
+                            showToast("您已注册");
+                            return;
+                        }
                         intent.setClass(getActivity(), RegisterActivity.class);
                         startActivity(intent);
                         break;
                     case 1:
+                        if (!isLogin || TextUtils.isEmpty(volunteerId)) {
+                            showToast("请先登录");
+                            return;
+                        }
+
+                        //查询出用户的信息
+                        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
+                                new ActionCallbackListener<VolunteerViewDto>() {
+                                    @Override
+                                    public void onSuccess(VolunteerViewDto data) {
+                                        if (data == null) {
+                                            showToast("登录错误，请重新登录");
+                                            return;
+                                        }
+                                        boolean isSpecial = data.getSpeciality();
+                                        if (isSpecial) {
+                                            showToast("您已成为专业志愿者");
+                                            return;
+                                        }
+                                        intent.putExtra("personal_data", data);
+                                        intent.setClass(getActivity(), ApplyProBonoActivity.class);
+                                        startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onFailure(String errorEvent, String message) {
+                                        showToast("服务器连接异常，请稍后再试");
+                                    }
+                                });
                         break;
                     case 2:
                         intent.setClass(getActivity(), OrganizationActivity.class);
@@ -224,6 +264,10 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         items.add(new HomePageGridItem(R.drawable.activity, "活动", null, R.color.colorGreen));
         items.add(new HomePageGridItem(R.drawable.shop, "积分商城", null, R.color.colorOrange));
         gridView.setAdapter(new HomePageNoScrollGridAdapter(getActivity(), items));
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     private void initDialog() {

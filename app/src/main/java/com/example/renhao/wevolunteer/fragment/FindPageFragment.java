@@ -707,6 +707,7 @@ public class FindPageFragment extends Fragment implements LocationSource,
         Location location = aMap.getMyLocation();
         SignInOutDto create = new SignInOutDto();
         create.setVolunteerId(volunteerId);
+        create.setActivityId(qrcode);
         //create.setActivityTimeId();
         create.setSigntime(Util.getNowDate());
         create.setDeviceId(Util.getMac());
@@ -747,6 +748,7 @@ public class FindPageFragment extends Fragment implements LocationSource,
         //直接发送二维码的内容
         SignInOutDto create = new SignInOutDto();
         create.setVolunteerId(volunteerId);
+        create.setActivityId(qrcode);
         //create.setActivityTimeId();
         create.setSigntime(Util.getNowDate());
         create.setDeviceId(Util.getMac());
@@ -757,30 +759,31 @@ public class FindPageFragment extends Fragment implements LocationSource,
         create.setSignType(1);
         List<SignInOutDto> creates = new ArrayList<>();
         creates.add(create);
-        AppActionImpl.getInstance(getActivity()).signRecordCreate(creates, new ActionCallbackListener<List<String>>() {
-            @Override
-            public void onSuccess(List<String> data) {
-                if (data == null) {
-                    showToast("签退失败");
-                    return;
-                }
-                if (data.size() < 1) {
-                    showToast("签退失败");
-                    return;
-                }
-                //getDistance();
-                flag = saveFlag(false);
-                sign_in.setVisibility(View.VISIBLE);
-                sign_out.setVisibility(View.GONE);
-                linearLayout.setVisibility(View.GONE);
-                stopChronometer();
-            }
+        AppActionImpl.getInstance(getActivity()).signRecordCreate(creates,
+                new ActionCallbackListener<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> data) {
+                        if (data == null) {
+                            showToast("签退失败");
+                            return;
+                        }
+                        if (data.size() < 1) {
+                            showToast("签退失败");
+                            return;
+                        }
+                        //getDistance();
+                        flag = saveFlag(false);
+                        sign_in.setVisibility(View.VISIBLE);
+                        sign_out.setVisibility(View.GONE);
+                        linearLayout.setVisibility(View.GONE);
+                        stopChronometer();
+                    }
 
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("签退失败");
-            }
-        });
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("签退失败");
+                    }
+                });
     }
 
     /**

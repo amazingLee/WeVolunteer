@@ -27,10 +27,10 @@ import com.example.renhao.wevolunteer.activity.AboutUsActivity;
 import com.example.renhao.wevolunteer.activity.ApplyProBonoActivity;
 import com.example.renhao.wevolunteer.activity.FAQActivity;
 import com.example.renhao.wevolunteer.activity.LoginActivity;
+import com.example.renhao.wevolunteer.activity.MajorAbilityActivity;
 import com.example.renhao.wevolunteer.activity.MyORGActivity;
 import com.example.renhao.wevolunteer.activity.MyProjectActivity;
 import com.example.renhao.wevolunteer.activity.PersonalDataActivity;
-import com.example.renhao.wevolunteer.activity.ProfessionalSelectionActivity;
 import com.example.renhao.wevolunteer.activity.ReportProblemActivity;
 import com.example.renhao.wevolunteer.utils.Util;
 import com.orhanobut.logger.Logger;
@@ -165,12 +165,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         image_portrait.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+               /* boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
                 if (!isLogin) {
                     //如果用户未登录则跳转到登录界面
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
-                }
+                }*/
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -253,7 +255,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
         switch (tag) {
             case PROFESSIONAL_SELECTION:
-                intent.setClass(getActivity(), ProfessionalSelectionActivity.class);
+                if (eventbus_data == null) {
+                    showToast("登录异常");
+                    return;
+                }
+                intent.setClass(getActivity(), MajorAbilityActivity.class);
+                intent.putExtra("personal_data", eventbus_data);
                 startActivity(intent);
                 break;
             case APPLY_PROFESSIONAL:
@@ -491,11 +498,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                             specialty = data.getSpecialty();
 
                         //服务时长
-                        SchoolServiceTime = data.getSchoolservicetime() + "小时";
-                        WorkServiceTime = data.getWorkservicetime() + "小时";
-                        RetireServiceTime = data.getRetireservicetime() + "小时";
-                        AllServiceTime = data.getSchoolservicetime() + data.getWorkservicetime()
-                                + data.getRetireservicetime() + "小时";
+                        double schoolTime = data.getSchoolservicetime() == null ? 0 : data.getSchoolservicetime();
+                        SchoolServiceTime = schoolTime + "小时";
+                        double workTime = data.getWorkservicetime() == null ? 0 : data.getWorkservicetime();
+                        WorkServiceTime = workTime + "小时";
+                        double retireTime = data.getRetireservicetime() == null ? 0 : data.getRetireservicetime();
+                        RetireServiceTime = retireTime + "小时";
+                        AllServiceTime = schoolTime + workTime + retireTime + "小时";
 
                         //非第一次进入时利用handler更新UI
                         if (isCreat) {

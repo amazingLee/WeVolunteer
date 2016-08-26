@@ -44,7 +44,7 @@ public class AttributeAtivity extends BaseActivity {
 
     private VolunteerViewDto personalData;
 
-    private String myPolity;
+    private String mJobStatu;
 
     private int check = -1;
 
@@ -59,7 +59,7 @@ public class AttributeAtivity extends BaseActivity {
 
         Intent intent = getIntent();
         personalData = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
-        myPolity = personalData.getJobStatusStr();
+        mJobStatu = personalData.getJobStatusStr();
         initView();
 
     }
@@ -80,11 +80,10 @@ public class AttributeAtivity extends BaseActivity {
                             String code = data.get(i).getCode();
                             codes.add(code);
                             names.add(name);
-                            if (name.equals(myPolity)) {
+                            if (name.equals(mJobStatu)) {
                                 temp = i;
                                 check=i;
                             }
-
                         }
                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(AttributeAtivity.this, android.R.layout.simple_list_item_multiple_choice, android.R.id.text1, names);
                         mRgSelsec.setAdapter(arrayAdapter);
