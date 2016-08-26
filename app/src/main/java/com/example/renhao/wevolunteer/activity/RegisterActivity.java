@@ -68,9 +68,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private String email;
     private String verification_code;
     private String areaName;
-    private String areaId;
+    private String areaCode;
     private String orgName;
-    private String orgCode;
+    private String orgId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,13 +153,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
         if (requestCode == AREA_REGISTER) {
             areaName = data.getStringExtra("areaName");
-            areaId = data.getStringExtra("areaId");
+            areaCode = data.getStringExtra("areaCode");
             areaNameTv.setText(areaName);
         }
 
         if (requestCode == ORG_REGISTER) {
             orgName = data.getStringExtra("orgName");
-            orgCode = data.getStringExtra("orgId");
+            orgId = data.getStringExtra("orgId");
             orgNameTv.setText(orgName);
         }
     }
@@ -202,13 +202,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.LL_apply_area:
-                //AreaQuery();
                 Intent areaIntent = new Intent(RegisterActivity.this, AreaSelectionActivity.class);
                 areaIntent.putExtra("type", AREA_REGISTER);
                 startActivityForResult(areaIntent, AREA_REGISTER);
                 break;
             case R.id.LL_apply_ORG:
-                //organizationQueryChild();
                 Intent orgIntent = new Intent(RegisterActivity.this, MyORGActivity.class);
                 orgIntent.putExtra("type", ORG_REGISTER);
                 startActivityForResult(orgIntent, ORG_REGISTER);
@@ -274,8 +272,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         vl_create.setReUserPassword(Repassword);
         vl_create.setIdNumber(id_number);
         vl_create.setMobile(phone);
-        vl_create.setAreaCode(areaId);
-        vl_create.setOrgId(orgCode);
+        vl_create.setAreaCode(areaCode);
+        vl_create.setOrgId(orgId);
         vl_create.setEmail(email);
         vl_create.setJobStatus(isCheck_Code);
         vl_create.setCardType(Integer.parseInt(cardCode));
@@ -296,37 +294,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
-
-   /* *//**
-     *
-     *//*
-    private void organizationQueryChild() {
-        AppActionImpl.getInstance(getApplicationContext()).organizationQueryChild("00000000-0000-0000-0000-000000000000", new ActionCallbackListener<List<OrganizationListDto>>() {
-            @Override
-            public void onSuccess(List<OrganizationListDto> data) {
-                showToast("success");
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("fail");
-            }
-        });
-    }
-
-    private void AreaQuery() {
-        AppActionImpl.getInstance(getApplicationContext()).AreaQuery("ac689592-5a3e-4015-8609-cdeed42df6ab", new ActionCallbackListener<List<AreaListDto>>() {
-            @Override
-            public void onSuccess(List<AreaListDto> data) {
-                showToast("success");
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("fail");
-            }
-        });
-    }*/
 
     /**
      * 判断用户注册信息是否为空
@@ -353,9 +320,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             showToast("请选择个人属性");
         } else if (TextUtils.isEmpty(phone)) {
             showToast("请输入手机号");
-        } else if (TextUtils.isEmpty(areaId)) {
+        } else if (TextUtils.isEmpty(areaCode)) {
             showToast("请选择所在区域");
-        } else if (TextUtils.isEmpty(orgCode)) {
+        } else if (TextUtils.isEmpty(orgId)) {
             showToast("请选择所属机构");
         } else if (TextUtils.isEmpty(verification_code)) {
             showToast("请输入验证码");

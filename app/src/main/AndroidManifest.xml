@@ -179,6 +179,8 @@
         <activity
             android:name=".activity.Delete_certificate"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".activity.PersonalAttributeActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

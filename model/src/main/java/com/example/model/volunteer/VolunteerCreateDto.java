@@ -1,9 +1,11 @@
 package com.example.model.volunteer;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/8/3.
  */
-public class VolunteerCreateDto {
+public class VolunteerCreateDto implements Serializable {
 
     public static final String TAG = "VolunteerCreateDto";
 
@@ -75,6 +77,14 @@ public class VolunteerCreateDto {
     private String AuditTime;   // (string, optional): 获取或设置 审核时间
     private String AuditUserId; // (string, optional): 获取或设置 审核人ID
     private String AuditUserName;   // (string, optional): 获取或设置 审核人用户名
+    private String ServiceTimeIntention;// (string, optional): 获取或设置 意向服务时间 ,
+    private String ServiceIntention;// (string, optional): 获取或设置 志愿服务意向 ,
+    private String ServiceIntentionOther;// (string, optional): 获取或设置 志愿服务意向其他 ,
+    private String CertificatePic;// (string, optional): 获取或设置 上传证书 ,
+    private Integer IsVerify;// (integer, optional): 认证状态 ,
+    private String Code;// (string, optional): 志愿者证编号 ,
+    private String  DeviceId;// (string, optional): 设备序列号
+
 
     public String getAcademy() {
         return Academy;
@@ -614,5 +624,85 @@ public class VolunteerCreateDto {
 
     public void setZhLevel(String zhLevel) {
         ZhLevel = zhLevel;
+    }
+
+    public String getCertificatePic() {
+        return CertificatePic;
+    }
+
+    public void setCertificatePic(String certificatePic) {
+        CertificatePic = certificatePic;
+    }
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+        Code = code;
+    }
+
+    public String getDeviceId() {
+        return DeviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        DeviceId = deviceId;
+    }
+
+    public Boolean getIsCertification() {
+        return IsCertification;
+    }
+
+    public void setIsCertification(Boolean isCertification) {
+        IsCertification = isCertification;
+    }
+
+    public Boolean getIsDeleted() {
+        return IsDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        IsDeleted = isDeleted;
+    }
+
+    public Boolean getIsSpeciality() {
+        return IsSpeciality;
+    }
+
+    public void setIsSpeciality(Boolean isSpeciality) {
+        IsSpeciality = isSpeciality;
+    }
+
+    public Integer getIsVerify() {
+        return IsVerify;
+    }
+
+    public void setIsVerify(Integer isVerify) {
+        IsVerify = isVerify;
+    }
+
+    public String getServiceIntention() {
+        return ServiceIntention;
+    }
+
+    public void setServiceIntention(String serviceIntention) {
+        ServiceIntention = serviceIntention;
+    }
+
+    public String getServiceIntentionOther() {
+        return ServiceIntentionOther;
+    }
+
+    public void setServiceIntentionOther(String serviceIntentionOther) {
+        ServiceIntentionOther = serviceIntentionOther;
+    }
+
+    public String getServiceTimeIntention() {
+        return ServiceTimeIntention;
+    }
+
+    public void setServiceTimeIntention(String serviceTimeIntention) {
+        ServiceTimeIntention = serviceTimeIntention;
     }
 }
