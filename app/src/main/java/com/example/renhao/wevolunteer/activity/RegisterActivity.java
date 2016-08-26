@@ -357,9 +357,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             showToast("请选择个人属性");
         } else if (TextUtils.isEmpty(phone)) {
             showToast("请输入手机号");
-        } else if (TextUtils.isEmpty(areaId)) {
+        } else if (TextUtils.isEmpty(areaCode)) {
             showToast("请选择所在区域");
-        } else if (TextUtils.isEmpty(orgCode)) {
+        } else if (TextUtils.isEmpty(orgId)) {
             showToast("请选择所属机构");
         } else if (TextUtils.isEmpty(verification_code)) {
             showToast("请输入验证码");

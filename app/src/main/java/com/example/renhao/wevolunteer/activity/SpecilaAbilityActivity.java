@@ -121,7 +121,7 @@ public class SpecilaAbilityActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 boolean select = isSelect.get(position);
                 isSelect.set(position, !select);
-                if (actionCodes.get(position).equals("QT")) {
+                /*if (actionCodes.get(position).equals("QT")) {
                     //判断是否选中
                     if (select) {
                         otherSelsec = false;
@@ -130,7 +130,7 @@ public class SpecilaAbilityActivity extends BaseActivity {
                         //弹出dialog 输入其它选项
                         showOtherDialog();
                     }
-                }
+                }*/
             }
         });
     }
