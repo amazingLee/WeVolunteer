@@ -82,7 +82,7 @@ public class AttributeAtivity extends BaseActivity {
                             names.add(name);
                             if (name.equals(mJobStatu)) {
                                 temp = i;
-                                check=i;
+                                check = i;
                             }
                         }
                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(AttributeAtivity.this, android.R.layout.simple_list_item_multiple_choice, android.R.id.text1, names);

@@ -295,7 +295,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailure(String errorEvent, String message) {
-                showToast("注册失败");
+                showToast("注册失败  " + message);
             }
         });
     }

@@ -80,7 +80,9 @@ public class PoliticsstatusActivity extends BaseActivity {
                             String code = data.get(i).getCode();
                             codes.add(code);
                             names.add(name);
+                            Logger.v("TTTTTTTTTT", code + " ---- " + myPolity);
                             if (code.equals(myPolity)) {
+                                Logger.v("TTTTTTTTTT", " --check-- " );
                                 temp = i;
                                 check = i;
                             }

@@ -214,7 +214,7 @@ public class ApplyProBonoActivity extends BaseActivity implements View.OnClickLi
 
                                                     @Override
                                                     public void onFailure(String errorEvent, String message) {
-                                                        showToast("网络异常，请检查后重试");
+                                                        showToast("请求失败  " + message);
                                                     }
                                                 });
 

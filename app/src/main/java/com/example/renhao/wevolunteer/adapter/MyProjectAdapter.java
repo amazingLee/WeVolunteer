@@ -79,6 +79,7 @@ public class MyProjectAdapter extends BaseAdapter {
             holder.PIC.setImageResource(R.drawable.img_unload);
         } else {
             Picasso.with(mContext).load(Util.getRealUrl(lists.get(position).getPic()))
+                    .fit().tag("Ptr")
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(holder.PIC);
