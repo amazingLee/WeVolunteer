@@ -2,24 +2,23 @@ package com.example.renhao.wevolunteer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.api.utils.EncryptUtil;
 import com.example.core.AppActionImpl;
 import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 /**
  * 设置密码界面
  */
-public class SetPasswordActivity extends AppCompatActivity {
+public class SetPasswordActivity extends BaseActivity {
     private static final String TAG = "SetPasswordActivity";
 
     private String ID;
@@ -116,7 +115,4 @@ public class SetPasswordActivity extends AppCompatActivity {
         });
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 }

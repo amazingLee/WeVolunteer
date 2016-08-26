@@ -33,6 +33,7 @@ import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class MyProjectActivity extends BaseActivity {
     private int StartPosition;// (integer, optional): 记录开始位置
     private int EndPosition;//(integer, optional): 记录结束位置
     private boolean HasPreviousPage;// (boolean, optional): 是否有上一页
-    private boolean HasNextPage=true;//(boolean, optional): 是否有下一页
+    private boolean HasNextPage = true;//(boolean, optional): 是否有下一页
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +194,7 @@ public class MyProjectActivity extends BaseActivity {
                             item.setPic(listDto.getAppLstUrl());
                             lists.add(item);
                         }
+                        Logger.v("------", dates.size() + "");
                         PageIndex = data.getPageIndex();
                         PageSize = data.getPageSize();
                         TotalCount = data.getTotalCount();
@@ -250,12 +252,21 @@ public class MyProjectActivity extends BaseActivity {
         mMyproject.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Logger.v("-----", "click  " + position);
                 Intent intent = new Intent(MyProjectActivity.this, ProjectDetailActivity.class);
-                intent.putExtra("id", dates.get(position - 1).getId());
-                if (dates.get(position - 1).getActivityType().equals("岗位"))
-                    intent.putExtra("type", 1);
-                else
-                    intent.putExtra("type", 0);
+                if (activitySelect == MY_ATTENTION) {
+                    intent.putExtra("id", attentions.get(position - 1).getActivityId());
+                    if (attentions.get(position - 1).getActivityType().equals("岗位"))
+                        intent.putExtra("type", 1);
+                    else
+                        intent.putExtra("type", 0);
+                } else if (activitySelect == MY_PROJECT) {
+                    intent.putExtra("id", dates.get(position - 1).getActivityId());
+                    if (dates.get(position - 1).getActivityType().equals("岗位"))
+                        intent.putExtra("type", 1);
+                    else
+                        intent.putExtra("type", 0);
+                }
                 startActivity(intent);
             }
         });

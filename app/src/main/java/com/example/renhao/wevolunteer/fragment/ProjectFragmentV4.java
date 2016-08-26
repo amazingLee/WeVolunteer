@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
@@ -27,7 +26,7 @@ import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.ListDropDownAdapter;
-import com.example.renhao.wevolunteer.base.BaseFragment;
+import com.example.renhao.wevolunteer.base.BaseFragmentV4;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -48,7 +47,7 @@ import butterknife.ButterKnife;
  * 创建时间：2016/8/8 13:36
  * 修改备注：
  */
-public class ProjectFragment extends BaseFragment {
+public class ProjectFragmentV4 extends BaseFragmentV4 {
     private static final String TAG = "JobsFragment";
 
 
@@ -316,10 +315,6 @@ public class ProjectFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-    }
-
-    private void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     /**

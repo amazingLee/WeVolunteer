@@ -4,14 +4,12 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
@@ -21,11 +19,12 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.user.UserListDto;
 import com.example.renhao.wevolunteer.IndexActivity;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 /**
  * 登录界面
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     EditText et_username;
     EditText et_password;
     Button btn_login;
@@ -183,7 +182,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 }

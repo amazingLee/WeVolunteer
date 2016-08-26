@@ -2,7 +2,6 @@ package com.example.renhao.wevolunteer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,12 +11,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.utils.Util;
 import com.example.renhao.wevolunteer.view.Btn_TimeCountUtil;
 
@@ -27,7 +26,7 @@ import java.util.List;
 /**
  * 注册界面
  */
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "RegisterActivity";
 
     public static final int AREA_REGISTER = 0;
@@ -381,10 +380,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     });
 
         }
-    }
-
-    private void showToast(String msg) {
-        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

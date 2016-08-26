@@ -1,6 +1,5 @@
 package com.example.renhao.wevolunteer.fragment;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +28,7 @@ import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.SearchActivity;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.OrganizationAdapter;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.example.renhao.wevolunteer.event.SearchHistoryEvent;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -51,7 +51,7 @@ import butterknife.ButterKnife;
  * 创建时间：2016/8/19 9:41
  * 修改备注：
  */
-public class SearchResultFragment extends Fragment {
+public class SearchResultFragment extends BaseFragment {
     private static final String TAG = "SearchResultFragment";
     public static final int REFRESH = 0;
     public static final int ADD = 1;

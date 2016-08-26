@@ -27,11 +27,13 @@ public class BaseActivity extends AppCompatActivity {
 
 
     private ProgressDialog normalDialog;
+    private boolean isActivityExist = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         normalDialog = new ProgressDialog(this);
+        isActivityExist = true;
     }
 
     @Override
@@ -39,8 +41,16 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onDestroy() {
+        isActivityExist = false;
+        super.onDestroy();
+
+    }
+
     protected void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        if (isActivityExist)
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -25,7 +25,6 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
@@ -46,6 +45,7 @@ import com.example.model.volunteer.VolunteerBaseListDto;
 import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.example.renhao.wevolunteer.event.QRCodeResultEvent;
 import com.example.renhao.wevolunteer.utils.Util;
 import com.orhanobut.logger.Logger;
@@ -61,7 +61,7 @@ import java.util.List;
  * 发现地图界面
  * A simple {@link Fragment} subclass.
  */
-public class FindPageFragment extends Fragment implements LocationSource,
+public class FindPageFragment extends BaseFragment implements LocationSource,
         AMapLocationListener, AMap.OnMapLoadedListener, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, View.OnClickListener {
     private static final String TAG = "FindPageFragment";
 
@@ -597,7 +597,8 @@ public class FindPageFragment extends Fragment implements LocationSource,
 
     //设置当前位置和活动的距离
     private double getDistance(double lat, double lng) {
-        if (aMap == null) {
+        return 10;
+        /*if (aMap == null) {
             return 1000000;
         }
         Location location = aMap.getMyLocation();
@@ -606,7 +607,7 @@ public class FindPageFragment extends Fragment implements LocationSource,
         // 计算量坐标点距离
         double distances = AMapUtils.calculateLineDistance(centerLatLng, myLatLng);
         //Toast.makeText(getActivity(), "当前距离中心点：" + ((int) distances), Toast.LENGTH_LONG).show();
-        return distances;
+        return distances;*/
     }
 
 

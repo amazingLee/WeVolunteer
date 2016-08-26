@@ -2,7 +2,6 @@ package com.example.renhao.wevolunteer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +14,7 @@ import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.utils.Util;
 import com.example.renhao.wevolunteer.view.Btn_TimeCountUtil;
 
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 手机号码界面
  */
-public class MobilePhoneActivity extends AppCompatActivity {
+public class MobilePhoneActivity extends BaseActivity {
     private static final String TAG = "MobilePhoneActivity";
 
     private VolunteerViewDto personal_data;
@@ -146,7 +146,4 @@ public class MobilePhoneActivity extends AppCompatActivity {
         return false;
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 }

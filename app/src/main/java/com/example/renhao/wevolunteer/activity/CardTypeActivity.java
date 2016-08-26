@@ -2,7 +2,6 @@ package com.example.renhao.wevolunteer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,12 +15,13 @@ import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardTypeActivity extends AppCompatActivity implements View.OnClickListener {
+public class CardTypeActivity extends BaseActivity implements View.OnClickListener {
 
     ListView listView;
     ImageView imageView;

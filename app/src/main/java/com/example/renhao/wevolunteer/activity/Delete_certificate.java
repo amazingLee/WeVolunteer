@@ -5,7 +5,6 @@ package com.example.renhao.wevolunteer.activity;
  *
  */
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,10 +16,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 import java.io.IOException;
 
-public class Delete_certificate extends Activity {
+public class Delete_certificate extends BaseActivity {
 
     private ImageView pic_show;
     private Button delete;

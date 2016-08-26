@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.renhao.wevolunteer.adapter.FragmentSwitchAdapter;
-import com.example.renhao.wevolunteer.fragment.ProjectFragment;
+import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.fragment.ProjectFragmentV4;
 import com.example.renhao.wevolunteer.view.ChangeColorIconWithTextView;
 import com.orhanobut.logger.Logger;
 
@@ -35,7 +35,7 @@ import butterknife.OnClick;
  * 创建时间：2016/8/8 11:35
  * 修改备注：
  */
-public class ProjectActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,
+public class ProjectActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,
         ViewPager.OnPageChangeListener {
     private static final String TAG = "ProjectActivity";
     public static final int ACTIVITY = 0;
@@ -60,8 +60,8 @@ public class ProjectActivity extends AppCompatActivity implements RadioGroup.OnC
     ImageView magnifierImg;
 
     private View mCustomView;//actionbar的自定义视图
-    private ProjectFragment mActivityFragment;
-    private ProjectFragment mProjectFragment;
+    private ProjectFragmentV4 mActivityFragment;
+    private ProjectFragmentV4 mProjectFragment;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentSwitchAdapter mAdapter;
 
@@ -71,10 +71,10 @@ public class ProjectActivity extends AppCompatActivity implements RadioGroup.OnC
         setContentView(R.layout.activity_project);
         ButterKnife.bind(this);
         switchPage.addOnPageChangeListener(this);
-        mActivityFragment = new ProjectFragment();
-        mActivityFragment.setProjectFragmentType(ProjectFragment.ACTIVITY);
-        mProjectFragment = new ProjectFragment();
-        mProjectFragment.setProjectFragmentType(ProjectFragment.JOBS);
+        mActivityFragment = new ProjectFragmentV4();
+        mActivityFragment.setProjectFragmentType(ProjectFragmentV4.ACTIVITY);
+        mProjectFragment = new ProjectFragmentV4();
+        mProjectFragment.setProjectFragmentType(ProjectFragmentV4.JOBS);
         mFragments.add(mActivityFragment);
         mFragments.add(mProjectFragment);
         mAdapter = new FragmentSwitchAdapter(getSupportFragmentManager(), mFragments);

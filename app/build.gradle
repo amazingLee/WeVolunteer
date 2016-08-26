@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'WeVolunteer'
             keyPassword '15728006904'
-            storeFile file('Z:/E-signature/WeVolunteer.jks')
+            storeFile file('F:/Android/key/WeVolunteer.jks')
             storePassword '15728006904'
         }
     }

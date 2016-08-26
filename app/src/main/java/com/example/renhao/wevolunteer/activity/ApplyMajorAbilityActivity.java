@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,12 +13,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.model.Attachment.AttachmentParaDto;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.List_major_pic_Adapter;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.event.UpLoadFileEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +34,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 /**
  * 专业能力界面
  */
-public class ApplyMajorAbilityActivity extends AppCompatActivity {
+public class ApplyMajorAbilityActivity extends BaseActivity {
 
     private TextView tv_submit;
     private EditText edit_major;
@@ -237,9 +236,4 @@ public class ApplyMajorAbilityActivity extends AppCompatActivity {
         }
         return out.toByteArray();
     }
-
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
 }

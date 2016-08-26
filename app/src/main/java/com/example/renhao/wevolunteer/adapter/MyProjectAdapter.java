@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.model.items.MyProjectItem;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class MyProjectAdapter extends BaseAdapter {
         if (TextUtils.isEmpty(lists.get(position).getPic())) {
             holder.PIC.setImageResource(R.drawable.img_unload);
         } else {
-            Picasso.with(mContext).load(lists.get(position).getPic())
+            Picasso.with(mContext).load(Util.getRealUrl(lists.get(position).getPic()))
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(holder.PIC);

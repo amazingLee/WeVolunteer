@@ -1,6 +1,5 @@
 package com.example.renhao.wevolunteer.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.amap.api.maps.MapView;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.orhanobut.logger.Logger;
 
 /**
@@ -18,7 +18,7 @@ import com.orhanobut.logger.Logger;
  * 创建时间：2016/8/7 21:20
  * 修改备注：
  */
-public class SigninPageFragment extends Fragment {
+public class SigninPageFragment extends BaseFragment {
     private static final String TAG = "SigninPageFragment";
 
     MapView mMapView;

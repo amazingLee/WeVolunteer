@@ -5,7 +5,6 @@ package com.example.renhao.wevolunteer.fragment;
  *
  */
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,10 +31,11 @@ import com.example.renhao.wevolunteer.activity.MyORGActivity;
 import com.example.renhao.wevolunteer.activity.MyProjectActivity;
 import com.example.renhao.wevolunteer.activity.PersonalDataActivity;
 import com.example.renhao.wevolunteer.activity.ReportProblemActivity;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.example.renhao.wevolunteer.utils.Util;
 import com.orhanobut.logger.Logger;
 
-public class PersonalFragment extends Fragment implements View.OnClickListener {
+public class PersonalFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "PersonalFragment";
 
     private View mainview;

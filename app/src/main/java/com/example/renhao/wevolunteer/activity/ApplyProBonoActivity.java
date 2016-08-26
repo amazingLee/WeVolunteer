@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
@@ -21,6 +19,7 @@ import com.example.model.Attachment.AttachmentParaDto;
 import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.event.UpLoadFileEvent;
 import com.example.renhao.wevolunteer.view.Btn_TimeCountUtil;
 import com.example.renhao.wevolunteer.view.Polity_Pop;
@@ -35,7 +34,7 @@ import java.util.List;
 /**
  * 申请专业志愿者界面 （属于我的界面里）
  */
-public class ApplyProBonoActivity extends AppCompatActivity implements View.OnClickListener {
+public class ApplyProBonoActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "ApplyProBonoActivity";
 
     private VolunteerViewDto personal_data;
@@ -386,9 +385,6 @@ public class ApplyProBonoActivity extends AppCompatActivity implements View.OnCl
         this.getWindow().setAttributes(lp);
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     protected void onDestroy() {

@@ -2,7 +2,6 @@ package com.example.renhao.wevolunteer.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.example.model.ActionCallbackListener;
 import com.example.model.company.CompanyViewDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseFragmentV4;
 import com.example.renhao.wevolunteer.event.OrganizationDetailEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * 创建时间：2016/8/12 9:33
  * 修改备注：
  */
-public class OrganizationPage1 extends Fragment {
+public class OrganizationPage1 extends BaseFragmentV4 {
     private static final String TAG = "OrganizationPage1";
     @Bind(R.id.tv_organization_addressName)
     TextView mTvAddressName;

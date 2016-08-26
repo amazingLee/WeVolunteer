@@ -2,18 +2,17 @@ package com.example.renhao.wevolunteer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.List;
 /**
  * 现工作单位界面
  */
-public class WorkunitActivity extends AppCompatActivity {
+public class WorkunitActivity extends BaseActivity {
     private static final String TAG = "ResidenceActivity";
 
     private AppAction mAction;
@@ -51,7 +50,7 @@ public class WorkunitActivity extends AppCompatActivity {
         tv_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nowcompany=edit_nowcompany.getText().toString();
+                nowcompany = edit_nowcompany.getText().toString();
                 List<VolunteerViewDto> vl_updates = new ArrayList<>();
                 personal_data.setWorkunit(nowcompany);
                 vl_updates.add(personal_data);
@@ -83,9 +82,4 @@ public class WorkunitActivity extends AppCompatActivity {
         });
 
     }
-
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
 }
