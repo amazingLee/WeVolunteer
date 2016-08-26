@@ -131,6 +131,7 @@ public class MajorAbilityActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(AttachmentsReturnDto data) {
                                         showToast("全部上传成功");
+                                        finish();
                                     }
 
                                     @Override

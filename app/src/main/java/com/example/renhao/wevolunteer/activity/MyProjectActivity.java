@@ -63,6 +63,7 @@ public class MyProjectActivity extends BaseActivity {
     private MyProjectAdapter myProjectAdapter;
     private List<MyProjectItem> lists = new ArrayList<>();
     private List<ActivityRecruitListDto> dates = new ArrayList<>();
+    private List<ActivityAttentionListDto> attentions = new ArrayList<>();
 
     private String volunteerId;
 
@@ -73,7 +74,7 @@ public class MyProjectActivity extends BaseActivity {
     private int StartPosition;// (integer, optional): 记录开始位置
     private int EndPosition;//(integer, optional): 记录结束位置
     private boolean HasPreviousPage;// (boolean, optional): 是否有上一页
-    private boolean HasNextPage;//(boolean, optional): 是否有下一页
+    private boolean HasNextPage=true;//(boolean, optional): 是否有下一页
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class MyProjectActivity extends BaseActivity {
 
     }
 
-    private void getMyAttention(int type) {
+    private void getMyAttention(final int type) {
         ActivityAttentionQueryOptionDto dto = new ActivityAttentionQueryOptionDto();
         dto.setUserId(volunteerId);
         if (type == ADD) {
@@ -134,6 +135,30 @@ public class MyProjectActivity extends BaseActivity {
                     @Override
                     public void onSuccess(PagedListEntityDto<ActivityAttentionListDto> data) {
                         mMyproject.onRefreshComplete();
+                        if (type == REFRESH) {
+                            lists = new ArrayList<MyProjectItem>();
+                            attentions = new ArrayList<>();
+                        }
+                        for (int i = 0; i < data.getRows().size(); i++) {
+                            attentions.add(data.getRows().get(i));
+                            ActivityAttentionListDto listDto = data.getRows().get(i);
+                            MyProjectItem item = new MyProjectItem();
+                            item.setNeme(listDto.getActivityActivityName());
+                            item.setState(listDto.getActivityState());
+                            item.setTime(listDto.getAttentionTime());
+                            item.setPic(listDto.getAppLstUrl());
+                            lists.add(item);
+                        }
+                        PageIndex = data.getPageIndex();
+                        PageSize = data.getPageSize();
+                        TotalCount = data.getTotalCount();
+                        TotalPages = data.getTotalPages();
+                        StartPosition = data.getStartPosition();
+                        EndPosition = data.getEndPosition();
+                        HasPreviousPage = data.getHasPreviousPage();
+                        HasNextPage = data.getHasNextPage();
+
+                        myProjectAdapter.setDate(lists);
                     }
 
                     @Override

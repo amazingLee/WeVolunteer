@@ -166,39 +166,44 @@ public class ServiceCategoryActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_serverCategory_submit:
-                //获取选择的意向类型code
-                String serviceIntention = "";
-                for (int i = 0; i < actionCodes.size(); i++) {
-                    if (isSelect.get(i)) {
-                        serviceIntention += actionCodes.get(i) + ",";
-                    }
-                }
-                serviceIntention = serviceIntention.substring(0, serviceIntention.length() - 1);
-                //提交
-                personalData.setServiceIntention(serviceIntention);
-                if (otherSelsec) {
-                    personalData.setServiceIntentionOther(other);
-                }
-                List<VolunteerViewDto> list = new ArrayList<>();
-                list.add(personalData);
-                AppActionImpl.getInstance(this).volunteerUpdate(list,
-                        new ActionCallbackListener<String>() {
-                            @Override
-                            public void onSuccess(String data) {
-                                showToast("修改成功");
-                                Intent intent = new Intent();
-                                intent.putExtra("personal_data", personalData);
-                                setResult(RESULT_OK);
-                                finish();
-                            }
+                submit();
 
-                            @Override
-                            public void onFailure(String errorEvent, String message) {
-                                showToast("修改失败，请稍后再试");
-                            }
-                        });
                 break;
         }
+    }
+
+    private void submit() {
+        //获取选择的意向类型code
+        String serviceIntention = "";
+        for (int i = 0; i < actionCodes.size(); i++) {
+            if (isSelect.get(i)) {
+                serviceIntention += actionCodes.get(i) + ",";
+            }
+        }
+        serviceIntention = serviceIntention.substring(0, serviceIntention.length() - 1);
+        //提交
+        personalData.setServiceIntention(serviceIntention);
+        if (otherSelsec) {
+            personalData.setServiceIntentionOther(other);
+        }
+        List<VolunteerViewDto> list = new ArrayList<>();
+        list.add(personalData);
+        AppActionImpl.getInstance(this).volunteerUpdate(list,
+                new ActionCallbackListener<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        showToast("修改成功");
+                        Intent intent = new Intent();
+                        intent.putExtra("personal_data", personalData);
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("修改失败，请稍后再试");
+                    }
+                });
     }
 
 

@@ -6,6 +6,7 @@ package com.example.model.signRecord;
 public class SignInOutDto {
     private String Id;//(string, optional): 获取或设置 签到标识
     private Integer Version;//(integer, optional): 获取或设置 版本号
+    private String ActivityId;//(string, optional): 项目标识
     private String VolunteerId;//(string, optional): 获取或设置 志愿者Id
     private String ActivityTimeId;//(string),
     private String ActivityTimeActivityActivityName;//(string, optional),
@@ -25,6 +26,14 @@ public class SignInOutDto {
 
     public void setActivityTimeActivityActivityName(String activityTimeActivityActivityName) {
         ActivityTimeActivityActivityName = activityTimeActivityActivityName;
+    }
+
+    public String getActivityId() {
+        return ActivityId;
+    }
+
+    public void setActivityId(String activityId) {
+        ActivityId = activityId;
     }
 
     public String getActivityTimeId() {

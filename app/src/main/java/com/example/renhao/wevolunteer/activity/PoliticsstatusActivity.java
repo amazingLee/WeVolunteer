@@ -80,7 +80,7 @@ public class PoliticsstatusActivity extends BaseActivity {
                             String code = data.get(i).getCode();
                             codes.add(code);
                             names.add(name);
-                            if (myPolity.equals(name)) {
+                            if (myPolity.equals(code)) {
                                 temp = i;
                                 check = i;
                             }
@@ -126,7 +126,7 @@ public class PoliticsstatusActivity extends BaseActivity {
             showToast("请选择一项");
             return;
         }
-        personalData.setPolity(names.get(check));
+        personalData.setPolity(codes.get(check));
         if (type > -1) {
             Intent intent = new Intent();
             intent.putExtra("personal_data", personalData);

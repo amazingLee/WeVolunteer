@@ -215,12 +215,12 @@ public class PersonalDataActivity extends BaseActivity implements View.OnClickLi
 
         if (!Personal_Data.getSpeciality()) {
             myPoliticsStatus.setVisibility(View.GONE);
-           // myArea.setVisibility(View.GONE);
-           // myORG.setVisibility(View.GONE);
+            // myArea.setVisibility(View.GONE);
+            // myORG.setVisibility(View.GONE);
             myMajor.setVisibility(View.GONE);
             myNowCompany.setVisibility(View.GONE);
             myHomeAddress.setVisibility(View.GONE);
-           // myImageTime.setVisibility(View.GONE);
+            // myImageTime.setVisibility(View.GONE);
             myImageType.setVisibility(View.GONE);
         }
     }
@@ -588,18 +588,19 @@ public class PersonalDataActivity extends BaseActivity implements View.OnClickLi
     private void personal_data_UpDate() {
         List<VolunteerViewDto> vl_updates = new ArrayList<>();
         vl_updates.add(Personal_Data);
-        AppActionImpl.getInstance(this).volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
-            @Override
-            public void onSuccess(String data) {
-                repeat_update();
-                showToast("修改成功");
-            }
+        AppActionImpl.getInstance(this).volunteerUpdate(vl_updates,
+                new ActionCallbackListener<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        repeat_update();
+                        showToast("修改成功");
+                    }
 
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("网络异常，请检查后重试");
-            }
-        });
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("网络异常，请检查后重试");
+                    }
+                });
     }
 
     //图片转换成二进制流

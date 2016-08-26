@@ -33,7 +33,6 @@
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/textview_bottom_right_marginright"
             android:gravity="left"
-            android:text="法律援助"
             android:textColor="#999"
             android:textSize="@dimen/textview_bottom_right_size" />
 

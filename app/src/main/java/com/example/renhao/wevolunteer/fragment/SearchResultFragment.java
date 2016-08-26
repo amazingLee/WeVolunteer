@@ -70,7 +70,7 @@ public class SearchResultFragment extends Fragment {
     private int StartPosition;// (integer, optional): 记录开始位置
     private int EndPosition;//(integer, optional): 记录结束位置
     private boolean HasPreviousPage;// (boolean, optional): 是否有上一页
-    private boolean HasNextPage;//(boolean, optional): 是否有下一页
+    private boolean HasNextPage=true;//(boolean, optional): 是否有下一页
 
     private SearchActivity mSearchActivity;
 
