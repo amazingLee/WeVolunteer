@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center_vertical"
-            android:text="@string/title_politicsstatus"
+            android:text="@string/title_personal_attribute"
             android:textColor="@color/colorWhite"
             android:textSize="22sp"/>
 
@@ -48,15 +48,6 @@
             android:textSize="@dimen/textview_submit_titlesize"/>
     </RelativeLayout>
 
-    <!--<EditText
-        android:id="@+id/edit_myPolity"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.30"
-        android:background="@color/colorWhite"
-        android:gravity="top"
-        android:hint="@string/hint_politicsstatus"
-        android:paddingTop="15dp" />-->
     <ListView
         android:id="@+id/rg_attribute_selsec"
         android:layout_width="match_parent"

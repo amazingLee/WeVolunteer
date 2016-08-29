@@ -53,6 +53,7 @@
     <string name="hint_major_ability">请输入专业能力</string>
     <string name="title_service_category">意向志愿服务类别</string>
     <string name="title_area_selection">区域选择</string>
+    <string name="title_personal_attribute">个人属性</string>
     <string name="title_forgot_password">找回密码</string>
     <string name="tv_account">账　号</string>
     <string name="hint_account">请输入用户名或证件号</string>

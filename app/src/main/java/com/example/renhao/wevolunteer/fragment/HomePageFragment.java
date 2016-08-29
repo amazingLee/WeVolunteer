@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -266,10 +265,6 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
         gridView.setAdapter(new HomePageNoScrollGridAdapter(getActivity(), items));
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-    }
-
     private void initDialog() {
         Holder holder = new ViewHolder(R.layout.dialog_caldroid);
         final DialogPlus dialogPlus = DialogPlus.newDialog(getActivity())
@@ -305,10 +300,13 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
         getSliderDate();
     }
 
+    /**
+     * 获取首页新闻作为滚动栏
+     */
     private void getSliderDate() {
         ContentQueryOptionDto queryOptionDto = new ContentQueryOptionDto();
-        queryOptionDto.setPic(true);
-        queryOptionDto.setTop(true);
+        queryOptionDto.setPermission(true);
+        queryOptionDto.setCategoryId("434d9fae-f27d-4739-b99a-ceb21f79171a");
         queryOptionDto.setPageSize(4);
         AppActionImpl.getInstance(getActivity()).contentQuery(queryOptionDto,
                 new ActionCallbackListener<PagedListEntityDto<ContentListDto>>() {
@@ -339,7 +337,7 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
 
                     @Override
                     public void onFailure(String errorEvent, String message) {
-
+                        showToast("服务器错误  " + message);
                     }
                 });
     }
@@ -368,6 +366,7 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.v(TAG, "qrcode result in findpageFragment  ");
         //使用EventBus向IndexActivity传值
         EventBus.getDefault().post(new FragmentResultEvent(requestCode, resultCode, data));
     }

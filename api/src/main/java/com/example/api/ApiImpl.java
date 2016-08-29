@@ -14,6 +14,8 @@ import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityTime.ActivityTimeListDto;
+import com.example.model.activityTime.ActivityTimeQueryOptionDto;
 import com.example.model.activityattention.ActivityAttentionDto;
 import com.example.model.activityattention.ActivityAttentionListDto;
 import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
@@ -647,5 +649,18 @@ public class ApiImpl implements Api {
         }
         return new ApiResponse<>(false, "未知错误");
 
+    }
+
+    @Override
+    public ApiResponse<PagedListEntityDto<ActivityTimeListDto>> activityTiemQuery(ActivityTimeQueryOptionDto query, String accessToken) {
+        Gson gson = new Gson();
+        String params = gson.toJson(query);
+        Type typeOft = new TypeToken<ApiResponse<PagedListEntityDto<ActivityTimeListDto>>>(){}.getType();
+        try {
+            return httpEngine.postApiHandler(params,ACTIVITY_TIME_QUERY,typeOft,accessToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,"未知错误");
     }
 }

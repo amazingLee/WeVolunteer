@@ -231,9 +231,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_personal_attribute"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/bg_single_input"
+                android:background="@drawable/linearlayout_select"
+                android:clickable="true"
                 android:orientation="horizontal">
 
                 <TextView
@@ -241,32 +243,21 @@
                     android:layout_height="wrap_content"
                     android:padding="15dp"
                     android:text="@string/tv_personal_attribute"
+                    android:layout_weight="1"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <CheckBox
-                    android:id="@+id/cb_school"
+                    android:textStyle="bold" />
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:hint="@string/hint_school"/>
-
-                <CheckBox
-                    android:id="@+id/cb_job"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:hint="@string/hint_job"/>
-
-
-                <CheckBox
-                    android:id="@+id/cb_retire"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:hint="@string/hint_retire"/>
-
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/icon_right_indicator" />
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d9d9"
+                />
 
             <LinearLayout
                 android:id="@+id/LL_apply_area"
@@ -280,7 +271,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
+
                     android:padding="15dp"
                     android:text="@string/myArea_item_text"
                     android:textSize="16sp"
@@ -290,7 +281,7 @@
                     android:id="@+id/tv_register_areaName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
+                    android:layout_weight="0.9"
                     android:padding="15dp"
                     android:textSize="16sp"/>
 
@@ -319,7 +310,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
                     android:padding="15dp"
                     android:text="@string/myORG_item_text"
                     android:textSize="16sp"
@@ -329,7 +319,7 @@
                     android:id="@+id/tv_register_orgName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
+                    android:layout_weight="0.9"
                     android:padding="15dp"
                     android:textSize="16sp"/>
 
@@ -427,7 +417,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_margin="15dp"
-                android:background="@drawable/btn_login"
+                android:background="@drawable/bg_btn_selected"
                 android:text="@string/btn_register"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"/>
@@ -439,7 +429,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/btn_register"
+                android:background="@drawable/bg_btn_two_selected"
                 android:text="@string/btn_existing_login"
                 android:textColor="@color/colorCyan"
                 android:textSize="18sp"/>

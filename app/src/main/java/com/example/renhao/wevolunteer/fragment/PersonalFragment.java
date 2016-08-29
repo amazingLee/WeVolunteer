@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.core.local.LocalDate;
@@ -466,7 +465,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             }
         }
 
-
+        if (TextUtils.isEmpty(volunteerId))//如果id为空就不获取志愿者的信息
+            return;
         //获取志愿者的信息
         AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
                 new ActionCallbackListener<VolunteerViewDto>() {
@@ -487,7 +487,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                         eventbus_data = data;
 
                         isSpeciality = data.getSpeciality();
-                        isShowTrueName = data.getShowTrueName();
+                        isShowTrueName = data.getShowTrueName() == null ? false : data.getShowTrueName();
 
                         //头部
                         true_name = data.getTrueName();
@@ -550,10 +550,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         super.onDestroy();
     }
 
-    private void showToast(String msg) {
-        if (isCreat)
-            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

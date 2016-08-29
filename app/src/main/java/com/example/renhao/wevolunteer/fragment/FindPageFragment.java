@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.MrL.qrcodescan.MipcaActivityCapture;
 import com.amap.api.location.AMapLocation;
@@ -56,6 +55,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 发现地图界面
@@ -295,7 +295,8 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
         aMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
         aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
 //        aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
-        addMarkersToMap();// 往地图上添加marker
+        if (!tag)
+            addMarkersToMap();// 往地图上添加marker
     }
 
     /**
@@ -704,6 +705,7 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
     }
 
     private void signIn(String qrcode, String volunteerId) {
+        Logger.v(TAG, "sign out ");
         //直接发送二维码的内容
         Location location = aMap.getMyLocation();
         SignInOutDto create = new SignInOutDto();
@@ -713,10 +715,10 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
         create.setSigntime(Util.getNowDate());
         create.setDeviceId(Util.getMac());
         create.setLat(location.getLatitude());
-        create.setLng(location.getLongitude());
+        create.setNg(location.getLongitude());
         create.setSourceType(0);
-        create.setComputerStatus(0);
         create.setSignType(0);
+        create.setId(UUID.randomUUID().toString());
         List<SignInOutDto> creates = new ArrayList<>();
         creates.add(create);
         AppActionImpl.getInstance(getActivity()).signRecordCreate(creates, new ActionCallbackListener<List<String>>() {
@@ -739,12 +741,14 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
 
             @Override
             public void onFailure(String errorEvent, String message) {
+                Logger.v("----------", message);
                 showToast("签到失败");
             }
         });
     }
 
     private void signOut(String qrcode, String volunteerId) {
+        Logger.v(TAG, "sign out ");
         Location location = aMap.getMyLocation();
         //直接发送二维码的内容
         SignInOutDto create = new SignInOutDto();
@@ -754,10 +758,10 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
         create.setSigntime(Util.getNowDate());
         create.setDeviceId(Util.getMac());
         create.setLat(location.getLatitude());
-        create.setLng(location.getLongitude());
+        create.setNg(location.getLongitude());
         create.setSourceType(0);
-        create.setComputerStatus(0);
         create.setSignType(1);
+        create.setId(UUID.randomUUID().toString());
         List<SignInOutDto> creates = new ArrayList<>();
         creates.add(create);
         AppActionImpl.getInstance(getActivity()).signRecordCreate(creates,
@@ -822,13 +826,10 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
         return flag;
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String qrcodeMsg = data.getExtras().getString("result");
+        Logger.v("QRCode", "qrcode result in findpageFragment  " + qrcodeMsg);
         if (qrcodeMsg == null)
             return;
         if (qrcodeMsg.equals("0"))

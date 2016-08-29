@@ -88,6 +88,17 @@ public class Util {
     }
 
     /**
+     * 获取当前时间
+     *
+     * @param formatStr 时间日期格式
+     * @return
+     */
+    public static String getNowDate(String formatStr) {
+        SimpleDateFormat format = new SimpleDateFormat(formatStr, Locale.CHINA);
+        return format.format(new Date());
+    }
+
+    /**
      * 检查设备是否存在SDCard的工具方法
      */
     public static boolean hasSDcard() {

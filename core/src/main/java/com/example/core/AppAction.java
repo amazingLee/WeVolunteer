@@ -12,6 +12,8 @@ import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityTime.ActivityTimeListDto;
+import com.example.model.activityTime.ActivityTimeQueryOptionDto;
 import com.example.model.activityattention.ActivityAttentionDto;
 import com.example.model.activityattention.ActivityAttentionListDto;
 import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
@@ -199,4 +201,6 @@ public interface AppAction {
     //上传专业证书
     public void update_major_attachment(List<AttachmentParaDto> data, ActionCallbackListener<AttachmentsReturnDto> listener);
 
+    //查询活动时间
+    public void activityTimeQuery(ActivityTimeQueryOptionDto query,ActionCallbackListener<PagedListEntityDto<ActivityTimeListDto>> listener);
 }

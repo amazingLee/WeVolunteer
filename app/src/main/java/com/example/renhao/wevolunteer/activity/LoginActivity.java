@@ -134,7 +134,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                         @Override
                         public void onFailure(String errorEvent, String message) {
-                            showToast("登录失败");
+                            showToast(message);
                             LocalDate.getInstance(getApplicationContext()).setLocalDate("volunteerId", "");
                             LocalDate.getInstance(getApplicationContext()).setLocalDate("isLogin", false);
                         }
@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void fail() {
-                    showToast("fail");
+                    showToast("服务器错误");
                 }
             });
 

@@ -11,24 +11,30 @@ public class ContentListDto {
     private String Id;//(string, optional),
     private String CategoryId;//(string, optional),
     private String CategoryName;//(string, optional),
+    private String OrganizationName;//(string, optional),
     private String ContentName;//(string, optional),
-    private String SubContentName;// (string, optional),
+    private String SubContentName;//(string, optional),
     private String Description;//(string, optional),
-    private String CategoryPathId;// (string, optional),
+    private String CategoryPathId;//(string, optional),
     private String CategoryPathName;//(string, optional),
-    private Boolean IsOutsideLink;// (boolean, optional),
+    private Boolean IsOutsideLink;//(boolean, optional),
     private String OutsideUrl;//(string, optional),
-    private String Author;// (string, optional),
+    private String Author;//(string, optional),
     private String Source;//(string, optional),
     private String Keyword;//(string, optional),
-    private Boolean IsTop;//(boolean, optional),
-    private Boolean IsPic;// (boolean, optional),
+    private Boolean IsTop;// (boolean, optional),
+    private Boolean IsPic;//(boolean, optional),
     private Integer VisiteRecord;//(integer, optional),
-    private String PubDepartment;//(string, optional),
-    private String PubDateTime;// (string, optional),
-    private Integer SortIndex;//(integer, optional)
-
-    private String AppLstUrl;
+    private String PubDepartment;// (string, optional),
+    private String PubDateTime;//(string, optional),
+    private Integer SortIndex;// (integer, optional),
+    private Boolean IsPermission;// (boolean, optional),
+    private String PermissionTime;//(string, optional),
+    private String AttchId;//(string, optional),
+    private String PcLstUrl;//(string, optional),
+    private String AppLstUrl;//(string, optional),
+    private Boolean IsNeedTranslate;//(boolean, optional),
+    private Boolean IsTranslate;// (boolean, optional)
 
     public String getAppLstUrl() {
         return AppLstUrl;
@@ -36,6 +42,14 @@ public class ContentListDto {
 
     public void setAppLstUrl(String appLstUrl) {
         AppLstUrl = appLstUrl;
+    }
+
+    public String getAttchId() {
+        return AttchId;
+    }
+
+    public void setAttchId(String attchId) {
+        AttchId = attchId;
     }
 
     public String getAuthor() {
@@ -102,12 +116,28 @@ public class ContentListDto {
         Id = id;
     }
 
+    public Boolean getNeedTranslate() {
+        return IsNeedTranslate;
+    }
+
+    public void setNeedTranslate(Boolean needTranslate) {
+        IsNeedTranslate = needTranslate;
+    }
+
     public Boolean getOutsideLink() {
         return IsOutsideLink;
     }
 
     public void setOutsideLink(Boolean outsideLink) {
         IsOutsideLink = outsideLink;
+    }
+
+    public Boolean getPermission() {
+        return IsPermission;
+    }
+
+    public void setPermission(Boolean permission) {
+        IsPermission = permission;
     }
 
     public Boolean getPic() {
@@ -126,6 +156,14 @@ public class ContentListDto {
         IsTop = top;
     }
 
+    public Boolean getTranslate() {
+        return IsTranslate;
+    }
+
+    public void setTranslate(Boolean translate) {
+        IsTranslate = translate;
+    }
+
     public String getKeyword() {
         return Keyword;
     }
@@ -134,12 +172,36 @@ public class ContentListDto {
         Keyword = keyword;
     }
 
+    public String getOrganizationName() {
+        return OrganizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        OrganizationName = organizationName;
+    }
+
     public String getOutsideUrl() {
         return OutsideUrl;
     }
 
     public void setOutsideUrl(String outsideUrl) {
         OutsideUrl = outsideUrl;
+    }
+
+    public String getPcLstUrl() {
+        return PcLstUrl;
+    }
+
+    public void setPcLstUrl(String pcLstUrl) {
+        PcLstUrl = pcLstUrl;
+    }
+
+    public String getPermissionTime() {
+        return PermissionTime;
+    }
+
+    public void setPermissionTime(String permissionTime) {
+        PermissionTime = permissionTime;
     }
 
     public String getPubDateTime() {

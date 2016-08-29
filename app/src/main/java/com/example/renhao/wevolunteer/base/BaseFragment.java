@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * 项目名称：WeVolunteer
@@ -46,10 +47,16 @@ public class BaseFragment extends Fragment {
         normalDialog.show();
     }
 
+
     /**
      * 提示框消失
      */
     protected void dissMissNormalDialog() {
         normalDialog.dismiss();
+    }
+
+    protected void showToast(String msg) {
+        if (isFragmentExist)
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 }

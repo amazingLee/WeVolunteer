@@ -11,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
@@ -300,10 +299,6 @@ public class SearchResultFragment extends BaseFragment {
                         mSearchResult.onRefreshComplete();
                     }
                 });
-    }
-
-    private void showToast(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     /**
