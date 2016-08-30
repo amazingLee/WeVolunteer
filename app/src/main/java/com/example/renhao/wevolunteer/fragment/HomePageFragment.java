@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -268,10 +267,6 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
         gridView.setAdapter(new HomePageNoScrollGridAdapter(getActivity(), items));
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-    }
-
     private void initDialog() {
         Holder holder = new ViewHolder(R.layout.dialog_caldroid);
         final DialogPlus dialogPlus = DialogPlus.newDialog(getActivity())
@@ -373,6 +368,7 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.v(TAG, "qrcode result in findpageFragment  ");
         //使用EventBus向IndexActivity传值
         EventBus.getDefault().post(new FragmentResultEvent(requestCode, resultCode, data));
     }

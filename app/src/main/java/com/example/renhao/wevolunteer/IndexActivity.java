@@ -360,6 +360,7 @@ public class IndexActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String qrcodeMsg = data.getExtras().getString("result");
+        Logger.v("QRCode", "qrcode result in indexActivity  " + qrcodeMsg);
         if (qrcodeMsg == null)
             return;
         if (qrcodeMsg.equals("0"))
