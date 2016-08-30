@@ -32,13 +32,12 @@ import com.example.model.content.ContentListDto;
 import com.example.model.content.ContentQueryOptionDto;
 import com.example.model.items.HomePageGridItem;
 import com.example.model.items.HomePageListItem;
-import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.OrganizationActivity;
 import com.example.renhao.wevolunteer.ProjectActivity;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
-import com.example.renhao.wevolunteer.activity.ApplyProBonoActivity;
 import com.example.renhao.wevolunteer.activity.RegisterActivity;
+import com.example.renhao.wevolunteer.activity.RegisterProBonoActivity;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
 import com.example.renhao.wevolunteer.base.BaseFragment;
@@ -198,35 +197,38 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
                         startActivity(intent);
                         break;
                     case 1:
-                        if (!isLogin || TextUtils.isEmpty(volunteerId)) {
-                            showToast("请先登录");
-                            return;
-                        }
 
-                        //查询出用户的信息
-                        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
-                                new ActionCallbackListener<VolunteerViewDto>() {
-                                    @Override
-                                    public void onSuccess(VolunteerViewDto data) {
-                                        if (data == null) {
-                                            showToast("登录错误，请重新登录");
-                                            return;
-                                        }
-                                        boolean isSpecial = data.getSpeciality();
-                                        if (isSpecial) {
-                                            showToast("您已成为专业志愿者");
-                                            return;
-                                        }
-                                        intent.putExtra("personal_data", data);
-                                        intent.setClass(getActivity(), ApplyProBonoActivity.class);
-                                        startActivity(intent);
-                                    }
-
-                                    @Override
-                                    public void onFailure(String errorEvent, String message) {
-                                        showToast("服务器连接异常，请稍后再试");
-                                    }
-                                });
+                        intent.setClass(getActivity(), RegisterProBonoActivity.class);
+                        startActivity(intent);
+//                        if (!isLogin || TextUtils.isEmpty(volunteerId)) {
+//                            showToast("请先登录");
+//                            return;
+//                        }
+//
+//                        //查询出用户的信息
+//                        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
+//                                new ActionCallbackListener<VolunteerViewDto>() {
+//                                    @Override
+//                                    public void onSuccess(VolunteerViewDto data) {
+//                                        if (data == null) {
+//                                            showToast("登录错误，请重新登录");
+//                                            return;
+//                                        }
+//                                        boolean isSpecial = data.getSpeciality();
+//                                        if (isSpecial) {
+//                                            showToast("您已成为专业志愿者");
+//                                            return;
+//                                        }
+//                                        intent.putExtra("personal_data", data);
+//                                        intent.setClass(getActivity(), ApplyProBonoActivity.class);
+//                                        startActivity(intent);
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(String errorEvent, String message) {
+//                                        showToast("服务器连接异常，请稍后再试");
+//                                    }
+//                                });
                         break;
                     case 2:
                         intent.setClass(getActivity(), OrganizationActivity.class);
@@ -305,10 +307,13 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
         getSliderDate();
     }
 
+    /**
+     * 获取首页新闻作为滚动栏
+     */
     private void getSliderDate() {
         ContentQueryOptionDto queryOptionDto = new ContentQueryOptionDto();
-        queryOptionDto.setPic(true);
-        queryOptionDto.setTop(true);
+        queryOptionDto.setPermission(true);
+        queryOptionDto.setCategoryId("434d9fae-f27d-4739-b99a-ceb21f79171a");
         queryOptionDto.setPageSize(4);
         AppActionImpl.getInstance(getActivity()).contentQuery(queryOptionDto,
                 new ActionCallbackListener<PagedListEntityDto<ContentListDto>>() {
@@ -324,7 +329,7 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
                             // initialize a SliderLayout
                             textSliderView
                                     .description(data.getRows().get(i).getContentName())
-                                    .image(Util.getRealUrl(data.getRows().get(i).getAppLstUrl()))
+                                    .image(Util.getRealUrl(data.getRows().get(i).getSmallImgViewPc()))
                                     .setScaleType(BaseSliderView.ScaleType.Fit);
                             //.setOnSliderClickListener(this);
 
@@ -339,7 +344,7 @@ public class HomePageFragment extends BaseFragment implements BaseSliderView.OnS
 
                     @Override
                     public void onFailure(String errorEvent, String message) {
-
+                        showToast("服务器错误  " + message);
                     }
                 });
     }

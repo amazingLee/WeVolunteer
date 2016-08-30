@@ -22,7 +22,7 @@ public class ActivityListDto implements Serializable {
     private String StatusName;//(string, optional),
     private Integer SingleRecruit;//(integer, optional),
     private String EndTime;// (string, optional),
-    private String LengthTime;// (number, optional),
+    private Number LengthTime;// (number, optional),
     private String DaySTime;//(string, optional),
     private String DayETime;//(string, optional),
     private String CompanyId;// (string, optional),
@@ -150,11 +150,11 @@ public class ActivityListDto implements Serializable {
     }
 
 
-    public String getLengthTime() {
+    public Number getLengthTime() {
         return LengthTime;
     }
 
-    public void setLengthTime(String lengthTime) {
+    public void setLengthTime(Number lengthTime) {
         LengthTime = lengthTime;
     }
 

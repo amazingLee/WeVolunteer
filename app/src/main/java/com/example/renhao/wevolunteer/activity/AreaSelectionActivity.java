@@ -50,7 +50,7 @@ public class AreaSelectionActivity extends BaseActivity implements TreeNode.Tree
 
     private TreeNode selectNode;
     private VolunteerViewDto mVolunteerViewDto;
-    private String parentId = "00000000-0000-0000-0000-000000000000";
+    private String parentId = "ac689592-5a3e-4015-8609-cdeed42df6ab";
 
     private int type;
 

@@ -40,13 +40,16 @@ public class NickNameActivity extends BaseActivity {
         Intent intent = getIntent();
         personal_data = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
         MyNickName = personal_data.getNickName();
-        IsShowTrueName = personal_data.getShowTrueName();
+        IsShowTrueName = personal_data.getShowTrueName() == null? false:personal_data.getShowTrueName();
 
         tv_nickname = (TextView) findViewById(R.id.edit_NickName_name);
         isShow = (CheckBox) findViewById(R.id.checkBox_NickName_isShow);
         if (MyNickName != null)
             tv_nickname.setText(MyNickName);
-        isShow.setChecked(IsShowTrueName);
+
+        if (isShow != null) {
+            isShow.setChecked(IsShowTrueName);
+        }
 
 
         update_submit = (TextView) findViewById(R.id.tv_nickname_update);

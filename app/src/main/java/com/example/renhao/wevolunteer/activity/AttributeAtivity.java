@@ -50,6 +50,7 @@ public class AttributeAtivity extends BaseActivity {
 
     private List<String> codes;
     private List<String> names;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class AttributeAtivity extends BaseActivity {
         setContentView(R.layout.activity_attribute);
         ButterKnife.bind(this);
 
+        type = getIntent().getIntExtra("type",-1);
         Intent intent = getIntent();
         personalData = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
         mJobStatu = personalData.getJobStatusStr();
@@ -114,31 +116,42 @@ public class AttributeAtivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_myPolity_submit:
-                if (check == -1) {
-                    showToast("请选择一项");
-                    return;
-                }
-                personalData.setJobStatusStr(names.get(check));
-                personalData.setJobStatus(Integer.parseInt(codes.get(check)));
-                List<VolunteerViewDto> list = new ArrayList<>();
-                list.add(personalData);
-                AppActionImpl.getInstance(this).volunteerUpdate(list,
-                        new ActionCallbackListener<String>() {
-                            @Override
-                            public void onSuccess(String data) {
-                                showToast("修改成功");
-                                Intent intent = new Intent();
-                                intent.putExtra("personal_data", personalData);
-                                setResult(RESULT_OK, intent);
-                                finish();
-                            }
-
-                            @Override
-                            public void onFailure(String errorEvent, String message) {
-                                showToast("修改失败，请稍后再试");
-                            }
-                        });
+                submit();
                 break;
+        }
+    }
+
+    private void submit(){
+        if (check == -1) {
+            showToast("请选择一项");
+            return;
+        }
+        personalData.setJobStatusStr(names.get(check));
+        personalData.setJobStatus(Integer.parseInt(codes.get(check)));
+        if (type > -1) {
+            Intent intent = new Intent();
+            intent.putExtra("personal_data", personalData);
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            List<VolunteerViewDto> list = new ArrayList<>();
+            list.add(personalData);
+            AppActionImpl.getInstance(this).volunteerUpdate(list,
+                    new ActionCallbackListener<String>() {
+                        @Override
+                        public void onSuccess(String data) {
+                            showToast("修改成功");
+                            Intent intent = new Intent();
+                            intent.putExtra("personal_data", personalData);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+                            showToast("修改失败，请稍后再试");
+                        }
+                    });
         }
     }
 }

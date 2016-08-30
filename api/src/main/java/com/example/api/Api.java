@@ -11,6 +11,8 @@ import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityTime.ActivityTimeListDto;
+import com.example.model.activityTime.ActivityTimeQueryOptionDto;
 import com.example.model.activityattention.ActivityAttentionDto;
 import com.example.model.activityattention.ActivityAttentionListDto;
 import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
@@ -130,6 +132,8 @@ public interface Api {
     //专业证书批量上传
     public static final String UPDATE_MAJOR_ATTACHMENT = "Nbcei.Plugin.Attachment.Api.Impl/v1/attachments/savefile";
 
+    //查询活动时间
+    public static final String ACTIVITY_TIME_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activitytime/query";
     /**
      * 获取accessToken
      *
@@ -306,4 +310,9 @@ public interface Api {
 
     //证书上传
     public ApiResponse<AttachmentsReturnDto> update_major_attachment(List<AttachmentParaDto> data, String accessToken);
+
+    /**
+     * 查询活动时间
+     */
+    public ApiResponse<PagedListEntityDto<ActivityTimeListDto>> activityTiemQuery(ActivityTimeQueryOptionDto query,String accessToken);
 }

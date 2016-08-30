@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private TextView tv_AllTime, tv_SchoolTime, tv_InJobTime, tv_RetireTime;
     private LinearLayout group;
     private ImageView image_portrait;
+    private Button exit;
 
     private final int UPDATE_UI = 0;
     private final int UPDATE_PORTRAIT = 1;
@@ -191,6 +193,13 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         professional_true = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_true);
         Professional_false = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_false);
 
+        exit = (Button) mainview.findViewById(R.id.btn_personalData_quit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exitLogin();
+            }
+        });
 
         initViewsEven();//设置点击事件的监听以及初始化组件
 
@@ -199,6 +208,20 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         isCreat = true;
 
         return mainview;
+    }
+
+    /**
+     * 退出登录
+     */
+    public void exitLogin() {
+        LocalDate.getInstance(getActivity()).setLocalDate("volunteerId", "");
+        LocalDate.getInstance(getActivity()).setLocalDate("isLogin", false);
+        LocalDate.getInstance(getActivity()).setLocalDate("access_token", "");
+//        getAccessToken();
+//        setResult(RESULT_OK);
+//        finish();
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
     }
 
     private void initViewsEven() {
@@ -466,7 +489,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             }
         }
 
-
+        if (TextUtils.isEmpty(volunteerId))//如果id为空就不获取志愿者的信息
+            return;
         //获取志愿者的信息
         AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
                 new ActionCallbackListener<VolunteerViewDto>() {
@@ -487,7 +511,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                         eventbus_data = data;
 
                         isSpeciality = data.getSpeciality();
-                        isShowTrueName = data.getShowTrueName();
+                        isShowTrueName = data.getShowTrueName()== null ? false : data.getShowTrueName();
 
                         //头部
                         true_name = data.getTrueName();

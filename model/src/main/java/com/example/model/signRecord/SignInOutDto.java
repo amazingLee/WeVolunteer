@@ -13,7 +13,7 @@ public class SignInOutDto {
     private String VolunteerTrueName;//(string, optional): 获取或设置 志愿者
     private String Signtime;// (string, optional),
     private String DeviceId;//(string, optional),
-    private Number Lng;//(number, optional),
+    private Number ng;//(number, optional),
     private Number Lat;//(number, optional),
     private String SignAddress;//(string, optional),
     private Integer SourceType;//(integer),
@@ -76,12 +76,12 @@ public class SignInOutDto {
         Lat = lat;
     }
 
-    public Number getLng() {
-        return Lng;
+    public Number getNg() {
+        return ng;
     }
 
-    public void setLng(Number lng) {
-        Lng = lng;
+    public void setNg(Number ng) {
+        this.ng = ng;
     }
 
     public String getSignAddress() {

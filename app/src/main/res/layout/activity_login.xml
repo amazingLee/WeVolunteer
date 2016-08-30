@@ -105,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_margin="15dp"
-        android:background="@drawable/btn_login"
+        android:background="@drawable/bg_btn_selected"
         android:text="@string/btn_login"
         android:textColor="@color/colorWhite"
         android:textSize="18sp" />
@@ -116,7 +116,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/btn_register"
+        android:background="@drawable/bg_btn_two_selected"
         android:text="@string/btn_register"
         android:textColor="@color/colorCyan"
         android:textSize="18sp" />

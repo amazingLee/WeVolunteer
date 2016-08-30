@@ -181,7 +181,7 @@
             android:padding="15dp"/>
         <EditText
             android:id="@+id/edit_register_workUnit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorWhite"
@@ -207,7 +207,7 @@
             android:padding="15dp"/>
         <EditText
             android:id="@+id/edit_register_Addr"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorWhite"

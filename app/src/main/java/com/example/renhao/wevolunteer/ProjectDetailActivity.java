@@ -23,11 +23,12 @@ import com.example.core.AppActionImpl;
 import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
-import com.example.model.activity.ActivityTimeSimpleDto;
 import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityTime.ActivityTimeListDto;
+import com.example.model.activityTime.ActivityTimeQueryOptionDto;
 import com.example.model.activityattention.ActivityAttentionDto;
 import com.example.model.activityattention.ActivityAttentionListDto;
 import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
@@ -177,18 +178,20 @@ public class ProjectDetailActivity extends BaseActivity {
     private ActivityViewDto mActivityViewDto;
     private JobActivityViewDto mJobActivityViewDto;
 
-    private List<ActivityTimeSimpleDto> times = new ArrayList<>();
+    private List<ActivityTimeListDto> times = new ArrayList<>();
     private List<String> sTime = new ArrayList<>();
 
     private String id;
     private int type;
     private Map<String, String> notes = new HashMap<>();
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 
     private boolean isAttention = false;
     private boolean isInitAttention = false;
     private String volunteerId;
     private String attentionId;
+
+    private String activityName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -289,17 +292,19 @@ public class ProjectDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(ActivityViewDto data) {
                 dissMissNormalDialog();
-
-                if (data == null)
+                if (data == null) {
+                    showToast("服务器错误   找不到该项目");
                     return;
-
+                }
                 mActivityViewDto = data;
-                times = data.getActivityTimes();
+                //times = data.getActivityTimes();
+                activityName = data.getActivityName();
                 setActivityDetail(data);
             }
 
             @Override
             public void onFailure(String errorEvent, String message) {
+                showToast("服务器错误   " + message);
                 dissMissNormalDialog();
             }
         });
@@ -310,7 +315,7 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvNum.setText(data.getRecruited() + "/" + data.getRecruitNumber() + "人");
 
-        float h = data.getLengthTime().floatValue() / 60;
+        Number h = data.getLengthTime();
         DecimalFormat df = new DecimalFormat("#.##");
         mTvTime.setText(df.format(h) + "小时");
 
@@ -362,7 +367,8 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvMaxNum.setText("/" + data.getRecruitNumber());
 
-        sTime = new ArrayList<>();
+        //写完了才告诉我们报名的时间段是从activityTime中获取
+        /*sTime = new ArrayList<>();
         for (int i = 0; i < data.getActivityTimes().size(); i++) {
             ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
 
@@ -375,7 +381,7 @@ public class ProjectDetailActivity extends BaseActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         /*for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
             ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
@@ -390,17 +396,19 @@ public class ProjectDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(JobActivityViewDto data) {
                 dissMissNormalDialog();
-
-                if (data == null)
+                if (data == null) {
+                    showToast("服务器错误   找不到该项目");
                     return;
-
+                }
                 mJobActivityViewDto = data;
-                times = data.getActivityTimes();
+                //times = data.getActivityTimes();
+                activityName = data.getActivityName();
                 setJobActivityDetail(data);
             }
 
             @Override
             public void onFailure(String errorEvent, String message) {
+                showToast("服务器错误   " + message);
                 dissMissNormalDialog();
             }
         });
@@ -411,7 +419,7 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvNum.setText(data.getRecruited() + "/" + data.getRecruitNumber() + "人");
 
-        float h = data.getLengthTime().floatValue() / 60;
+        Number h = data.getLengthTime();
         DecimalFormat df = new DecimalFormat("#.##");
         mTvTime.setText(df.format(h) + "小时");
 
@@ -461,7 +469,8 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvDetail.setText(Html.fromHtml(data.getJobText(), null, new MxgsaTagHandler(this)));
 
-        sTime = new ArrayList<>();
+        //写完了才告诉我们报名的时间段是从activityTime中获取
+      /*  sTime = new ArrayList<>();
         for (int i = 0; i < data.getActivityTimes().size(); i++) {
             ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
 
@@ -473,7 +482,7 @@ public class ProjectDetailActivity extends BaseActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         mTvSignedNum.setText(data.getRecruited() + "");
 
@@ -502,7 +511,7 @@ public class ProjectDetailActivity extends BaseActivity {
             mTvEffectiveTimeName.setText("活动有效时间");
             mTvLocationName.setText("活动服务地址");
             mTvFoundersName.setText("活动发起单位");
-            mTvDetailName.setText("活动详情");
+            mTvDetailName.setText("活动要求");
             mTvSignedName.setText("活动详情");
             mTvNumName.setText("活动招募人数");
             mTvTimeName.setText("活动服务时长");
@@ -513,7 +522,7 @@ public class ProjectDetailActivity extends BaseActivity {
             mTvEffectiveTimeName.setText("岗位起始时间:");
             mTvLocationName.setText("岗位服务地址:");
             mTvFoundersName.setText("岗位发起单位:");
-            mTvDetailName.setText("岗位详情");
+            mTvDetailName.setText("岗位要求");
             mTvSignedName.setText("岗位详情");
             mTvNumName.setText("岗位招募人数");
             mTvTimeName.setText("岗位服务时长");
@@ -657,6 +666,49 @@ public class ProjectDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 根据活动的ID和name,来查询activityTime的时间
+     */
+    private void getActivityTime() {
+        ActivityTimeQueryOptionDto avTimeDto = new ActivityTimeQueryOptionDto();
+        avTimeDto.setActivityId(id);
+        avTimeDto.setActivityName(activityName);
+        avTimeDto.setPageIndex(1);
+        avTimeDto.setPageSize(30);
+        AppActionImpl.getInstance(this).activityTimeQuery(avTimeDto, new ActionCallbackListener<PagedListEntityDto<ActivityTimeListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<ActivityTimeListDto> data) {
+                if (data.getRows().isEmpty()) {
+                    showToast("有效的报名时间段已经过期");
+                } else {
+                    sTime = new ArrayList<>();//储存报名的时间，已天为单位
+                    notes = new HashMap<String, String>();//日历上的标记  时间 剩余报名人数
+                    times = data.getRows();//所有报名时间段的数据
+                    for (int i = 0; i < data.getRows().size(); i++) {
+                        ActivityTimeListDto dto = data.getRows().get(i);//获取时间段对象
+                        try {
+                            Date date = format.parse(dto.getSTime());
+                            CalendarDay temp = new CalendarDay(date);
+                            notes.put(temp.toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+                            sTime.add(i, temp.getYear() + "-" + (temp.getMonth() + 1) + "-" + temp.getDay());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    dissMissNormalDialog();
+                    //显示日历选择器
+                    showSiginInDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+                showToast("服务器错误  " + message);
+                dissMissNormalDialog();
+            }
+        });
+    }
+
     private void siginIn() {
         //判断是否已经登录
         boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);
@@ -664,7 +716,11 @@ public class ProjectDetailActivity extends BaseActivity {
             showToast("请先登录");
             return;
         }
+        showNormalDialog("正在从服务器获取数据...");
+        getActivityTime();//获取到activityTime数据的接口方法
+    }
 
+    private void showSiginInDialog() {
         Holder holder = new ViewHolder(R.layout.dialog_caldroid);
         final DialogPlus dialogPlus = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
@@ -706,7 +762,7 @@ public class ProjectDetailActivity extends BaseActivity {
                     }
                 }
                 //判断是否还有剩余
-                final ActivityTimeSimpleDto dto = times.get(select);
+                final ActivityTimeListDto dto = times.get(select);
                 if (dto.getRecruitedNum().intValue() == dto.getAllowNum().intValue()) {
                     showToast("报名人数已满");
                     return;
@@ -729,7 +785,8 @@ public class ProjectDetailActivity extends BaseActivity {
                                     recruitDto.setActivityId(id);
                                     recruitDto.setVolunteerId(volunteerId);
                                     recruitDto.setActivityTimeId(dto.getId());
-                                    recruitDto.setBaoMingDate(Util.getNowDate());
+                                    recruitDto.setBaoMingDate(Util.getNowDate("yyyy-MM-dd HH:mm:ss"));
+                                    recruitDto.setExecuteTime(Util.getNowDate(dto.getSTime()));//参加的活动或岗位时间
                                     recruitDto.setAuditStatus(0);
                                     recruitDto.setSign(0);
                                     recruitDto.setSignout(0);
@@ -747,13 +804,14 @@ public class ProjectDetailActivity extends BaseActivity {
                                                         showToast("报名成功");
                                                         dialogPlus.dismiss();
                                                     } else {
-                                                        showToast("报名失败");
+                                                        showToast("服务器错误 报名失败");
                                                     }
                                                     dissMissNormalDialog();
                                                 }
 
                                                 @Override
                                                 public void onFailure(String errorEvent, String message) {
+                                                    showToast("服务器错误  " + message);
                                                     dissMissNormalDialog();
                                                 }
                                             });

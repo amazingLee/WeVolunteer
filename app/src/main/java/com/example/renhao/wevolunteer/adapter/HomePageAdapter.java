@@ -94,7 +94,7 @@ public class HomePageAdapter extends BaseAdapter {
         viewHolder.titleTv.setText(item.getTitle());
 
         viewHolder.numTv.setText(item.getNum() + "/" + item.getMaxNum() + " 人");
-        float h = Float.parseFloat(item.getTime()) / 60;
+        Number h = item.getTime();
         java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
         viewHolder.timeTv.setText(df.format(h) + "小时");
 

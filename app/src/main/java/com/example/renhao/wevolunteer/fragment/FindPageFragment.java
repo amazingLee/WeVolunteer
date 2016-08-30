@@ -25,6 +25,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
@@ -56,6 +57,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 发现地图界面
@@ -295,6 +297,7 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
         aMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
         aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
 //        aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
+        if (!tag)
         addMarkersToMap();// 往地图上添加marker
     }
 
@@ -581,13 +584,14 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
             if (aMapLocation != null
                     && aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
-                //this.mlocationClient.stopLocation();//停止定位
+                this.mlocationClient.stopLocation();//停止定位
                 // 获取当前地图中心点的坐标
                 localLatLng = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
-                //this.aMap.moveCamera(CameraUpdateFactory.changeLatLng(localLatLng));
+                //视图中心移动至当前定位的地点
+                this.aMap.moveCamera(CameraUpdateFactory.changeLatLng(localLatLng));
                 //地图缩放级别为4-20级，缩放级别不必是一个整数。
                 //缩放级别较低时，您可以看到更多地区的地图；缩放级别高时，您可以查看地区更加详细的地图。
-                //this.aMap.moveCamera(CameraUpdateFactory.zoomTo(12.0F));// 改变缩放级别为一个定值，同时保持其他相同的属性。
+                this.aMap.moveCamera(CameraUpdateFactory.zoomTo(17.0F));// 改变缩放级别为一个定值，同时保持其他相同的属性。
             } else {
                 String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
                 Log.e("AmapErr", errText);
@@ -713,10 +717,10 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
         create.setSigntime(Util.getNowDate());
         create.setDeviceId(Util.getMac());
         create.setLat(location.getLatitude());
-        create.setLng(location.getLongitude());
+        create.setNg(location.getLongitude());
         create.setSourceType(0);
-        create.setComputerStatus(0);
         create.setSignType(0);
+        create.setId(UUID.randomUUID().toString());
         List<SignInOutDto> creates = new ArrayList<>();
         creates.add(create);
         AppActionImpl.getInstance(getActivity()).signRecordCreate(creates, new ActionCallbackListener<List<String>>() {
@@ -739,7 +743,7 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
 
             @Override
             public void onFailure(String errorEvent, String message) {
-                showToast("签到失败");
+                showToast("签到失败——"+message);
             }
         });
     }
@@ -754,10 +758,10 @@ public class FindPageFragment extends BaseFragment implements LocationSource,
         create.setSigntime(Util.getNowDate());
         create.setDeviceId(Util.getMac());
         create.setLat(location.getLatitude());
-        create.setLng(location.getLongitude());
+        create.setNg(location.getLongitude());
         create.setSourceType(0);
-        create.setComputerStatus(0);
         create.setSignType(1);
+        create.setId(UUID.randomUUID().toString());
         List<SignInOutDto> creates = new ArrayList<>();
         creates.add(create);
         AppActionImpl.getInstance(getActivity()).signRecordCreate(creates,

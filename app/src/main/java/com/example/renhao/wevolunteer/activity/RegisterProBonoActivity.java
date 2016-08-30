@@ -40,7 +40,8 @@ import butterknife.OnClick;
 public class RegisterProBonoActivity extends BaseActivity {
     private static final String TAG = "RegisterProBonoActivity";
 
-    public static final int AREA_REGISTER = 0;
+    public static final int PERSONAL_ATTRIBUTE = 0;
+    public static final int AREA_REGISTER = 1;
     public static final int ORG_REGISTER = 2;
     public static final int MY_POLIT = 3;
     public static final int MY_MAJOR = 4;
@@ -156,7 +157,7 @@ public class RegisterProBonoActivity extends BaseActivity {
                 tvCredentialsType.setText(cardType_text);
                 cardCode = data.getStringExtra("typeCode");
             }
-            personalCode = data.getStringExtra("personCode");
+//            personalCode = data.getStringExtra("personCode");
         }
 
         if (requestCode == AREA_REGISTER && resultCode == RESULT_OK) {
@@ -174,6 +175,14 @@ public class RegisterProBonoActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             Bundle result = new Bundle();
             switch (requestCode) {
+                case PERSONAL_ATTRIBUTE:
+                    result = data.getExtras();
+                    personal_data = (VolunteerViewDto) result.getSerializable("personal_data");
+                    if (personal_data != null) {
+                        personalCode = String.valueOf(personal_data.getJobStatus());
+                        System.out.println("personalCode------" + personalCode);
+                    }
+                    break;
                 case MY_POLIT:
                     result = data.getExtras();
                     personal_data = (VolunteerViewDto) result.getSerializable("personal_data");
@@ -263,8 +272,8 @@ public class RegisterProBonoActivity extends BaseActivity {
                 break;
             case R.id.ll_personal_attribute:
                 intent.setClass(RegisterProBonoActivity.this, AttributeAtivity.class);
-                intent.putExtra("type",1);
-                startActivityForResult(intent, 1);
+                intent.putExtra("type", 0);
+                startActivityForResult(intent, PERSONAL_ATTRIBUTE);
                 break;
             case R.id.LL_apply_area:
                 intent.setClass(RegisterProBonoActivity.this, AreaSelectionActivity.class);
@@ -367,9 +376,8 @@ public class RegisterProBonoActivity extends BaseActivity {
         vl_create.setServiceIntention(serviceIntention);//服务意向
         vl_create.setSkilled(skill);//专业类型
         vl_create.setMobile(phone);
-
         vl_create.setAuditStatus(0);//审核状态  0未审核 1审核通过 2审核不通过 ,这里到时候需要加一个字段为3的
-
+//        vl_create.setId(Util.getMac());
         List<VolunteerCreateDto> vl_creates = new ArrayList<>();
         vl_creates.add(vl_create);
         AppActionImpl.getInstance(getApplicationContext()).volunteerCreate(vl_creates, new ActionCallbackListener<List<String>>() {
@@ -383,7 +391,7 @@ public class RegisterProBonoActivity extends BaseActivity {
 
             @Override
             public void onFailure(String errorEvent, String message) {
-                showToast("网络异常，请检查后重试");
+                showToast("注册失败 "+message);
             }
         });
     }
@@ -453,7 +461,7 @@ public class RegisterProBonoActivity extends BaseActivity {
 
                                             @Override
                                             public void onFailure(String errorEvent, String message) {
-                                                showToast("证书上传失败");
+                                                showToast("服务器错误  证书上传失败");
                                             }
                                         });
                             } else {

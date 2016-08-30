@@ -129,6 +129,7 @@
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
         android:clickable="true"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView

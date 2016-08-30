@@ -15,13 +15,13 @@ public class HomePageListItem {
     private String title;
     private int num;
     private int maxNum;
-    private String time;
+    private Number time;
     private String img;
 
     public HomePageListItem() {
     }
 
-    public HomePageListItem(String img, int maxNum, int num, String state, String time, String title, int type) {
+    public HomePageListItem(String img, int maxNum, int num, String state, Number time, String title, int type) {
         this.img = img;
         this.maxNum = maxNum;
         this.num = num;
@@ -67,11 +67,11 @@ public class HomePageListItem {
         return TAG;
     }
 
-    public String getTime() {
+    public Number getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Number time) {
         this.time = time;
     }
 

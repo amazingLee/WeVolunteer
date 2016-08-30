@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerCreateDto;
+import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.base.BaseActivity;
 import com.example.renhao.wevolunteer.utils.Util;
@@ -29,7 +30,8 @@ import java.util.List;
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "RegisterActivity";
 
-    public static final int AREA_REGISTER = 0;
+    public static final int PERSONAL_ATTRIBUTE = 0;
+    public static final int AREA_REGISTER = 1;
     public static final int ORG_REGISTER = 2;
 
     CheckBox cb_school;
@@ -51,10 +53,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     LinearLayout ll_area;
     LinearLayout ll_org;
     LinearLayout ll_credentials_type;
+    LinearLayout ll_personal_attribute;
     TextView tv_cardType;
     TextView areaNameTv, orgNameTv;
 
-    private int isCheck_Code = -1;
+    private VolunteerViewDto personal_data;
+
     private String isCheck_register_agree;
     private String nickname;
     private String truename;
@@ -70,24 +74,21 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private String areaId;
     private String areaCode;
     private String orgName;
-    private String orgCode;
     private String orgId;
+    private String personalCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_register);
-
+        personal_data = new VolunteerViewDto();
         initView();
         initViewListener();
 
     }
 
     private void initView() {
-        cb_school = (CheckBox) findViewById(R.id.cb_school);
-        cb_job = (CheckBox) findViewById(R.id.cb_job);
-        cb_retire = (CheckBox) findViewById(R.id.cb_retire);
         cb_register_agree = (CheckBox) findViewById(R.id.cb_register_agree);
         et_nickname = (EditText) findViewById(R.id.et_register_nickname);
         et_truename = (EditText) findViewById(R.id.et_register_trueName);
@@ -104,6 +105,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_area = (LinearLayout) findViewById(R.id.LL_apply_area);
         ll_org = (LinearLayout) findViewById(R.id.LL_apply_ORG);
         ll_credentials_type = (LinearLayout) findViewById(R.id.ll_credentials_type);
+        ll_personal_attribute = (LinearLayout) findViewById(R.id.ll_personal_attribute);
         tv_cardType = (TextView) findViewById(R.id.tv_credentials_type);
         areaNameTv = (TextView) findViewById(R.id.tv_register_areaName);
         orgNameTv = (TextView) findViewById(R.id.tv_register_orgName);
@@ -111,9 +113,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initViewListener() {
-        cb_school.setOnClickListener(this);
-        cb_job.setOnClickListener(this);
-        cb_retire.setOnClickListener(this);
         cb_register_agree.setOnClickListener(this);
         btn_verification_code.setOnClickListener(this);
         btn_register_volunteer.setOnClickListener(this);
@@ -122,6 +121,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_area.setOnClickListener(this);
         ll_org.setOnClickListener(this);
         ll_credentials_type.setOnClickListener(this);
+        ll_personal_attribute.setOnClickListener(this);
     }
 
     //用户填写的注册的信息
@@ -152,17 +152,26 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 cardCode = data.getStringExtra("typeCode");
             }
         }
-        if (requestCode == AREA_REGISTER) {
+        if (requestCode == AREA_REGISTER && resultCode == RESULT_OK) {
             areaName = data.getStringExtra("areaName");
             areaId = data.getStringExtra("areaId");
             areaCode = data.getStringExtra("areaCode");
             areaNameTv.setText(areaName);
         }
 
-        if (requestCode == ORG_REGISTER) {
+        if (requestCode == ORG_REGISTER && resultCode == RESULT_OK) {
             orgName = data.getStringExtra("orgName");
             orgId = data.getStringExtra("orgId");
             orgNameTv.setText(orgName);
+        }
+        if (requestCode == PERSONAL_ATTRIBUTE && resultCode == RESULT_OK){
+            Bundle result = new Bundle();
+            result = data.getExtras();
+            personal_data = (VolunteerViewDto) result.getSerializable("personal_data");
+            if (personal_data !=null){
+                personalCode = String.valueOf(personal_data.getJobStatus());
+                System.out.println("personalCode------"+personalCode);
+            }
         }
     }
 
@@ -173,44 +182,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.ll_credentials_type:
                 startActivityForResult(new Intent(RegisterActivity.this, CardTypeActivity.class), 1);
                 break;
-            case R.id.cb_school:
-                //根据选中的状态实现不同的功能
-                if (((CheckBox) v).isChecked()) {
-                    cb_job.setChecked(false);
-                    cb_retire.setChecked(false);
-                    isCheck_Code = 0;
-                } else {
-                    isCheck_Code = -1;
-                }
-                break;
-            case R.id.cb_job:
-                //根据选中的状态实现不同的功能
-                if (((CheckBox) v).isChecked()) {
-                    cb_school.setChecked(false);
-                    cb_retire.setChecked(false);
-                    isCheck_Code = 1;
-                } else {
-                    isCheck_Code = -1;
-                }
-                break;
-            case R.id.cb_retire:
-                //根据选中的状态实现不同的功能
-                if (((CheckBox) v).isChecked()) {
-                    cb_job.setChecked(false);
-                    cb_school.setChecked(false);
-                    isCheck_Code = 2;
-                } else {
-                    isCheck_Code = -1;
-                }
+            case R.id.ll_personal_attribute:
+                Intent intent = new Intent();
+                intent.putExtra("personal_data", personal_data);
+                intent.setClass(this, AttributeAtivity.class);
+                intent.putExtra("type",0);
+                startActivityForResult(intent, PERSONAL_ATTRIBUTE);
                 break;
             case R.id.LL_apply_area:
-                //AreaQuery();
                 Intent areaIntent = new Intent(RegisterActivity.this, AreaSelectionActivity.class);
                 areaIntent.putExtra("type", AREA_REGISTER);
                 startActivityForResult(areaIntent, AREA_REGISTER);
                 break;
             case R.id.LL_apply_ORG:
-                //organizationQueryChild();
+
                 Intent orgIntent = new Intent(RegisterActivity.this, MyORGActivity.class);
                 orgIntent.putExtra("type", ORG_REGISTER);
                 startActivityForResult(orgIntent, ORG_REGISTER);
@@ -218,7 +203,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.cb_register_agree:
                 if (((CheckBox) v).isChecked()) {
                     isCheck_register_agree = cb_register_agree.getText().toString();
-                    showToast(isCheck_register_agree);
                 } else {
                     isCheck_register_agree = null;
                     showToast("已取消");
@@ -279,9 +263,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         vl_create.setAreaCode(areaCode);
         vl_create.setOrgId(orgId);
         vl_create.setEmail(email);
-        vl_create.setJobStatus(isCheck_Code);
+        vl_create.setJobStatus(Integer.valueOf(personalCode));
         vl_create.setCardType(Integer.parseInt(cardCode));
-        vl_create.setId(Util.getMac());
+        vl_create.setAuditStatus(0);
         List<VolunteerCreateDto> vl_creates = new ArrayList<>();
         vl_creates.add(vl_create);
         AppActionImpl.getInstance(getApplicationContext()).volunteerCreate(vl_creates, new ActionCallbackListener<List<String>>() {
@@ -299,37 +283,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
         });
     }
-
-   /* *//**
-     *
-     *//*
-    private void organizationQueryChild() {
-        AppActionImpl.getInstance(getApplicationContext()).organizationQueryChild("00000000-0000-0000-0000-000000000000", new ActionCallbackListener<List<OrganizationListDto>>() {
-            @Override
-            public void onSuccess(List<OrganizationListDto> data) {
-                showToast("success");
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("fail");
-            }
-        });
-    }
-
-    private void AreaQuery() {
-        AppActionImpl.getInstance(getApplicationContext()).AreaQuery("ac689592-5a3e-4015-8609-cdeed42df6ab", new ActionCallbackListener<List<AreaListDto>>() {
-            @Override
-            public void onSuccess(List<AreaListDto> data) {
-                showToast("success");
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("fail");
-            }
-        });
-    }*/
 
     /**
      * 判断用户注册信息是否为空
@@ -352,7 +305,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             showToast("确认密码不能为空");
         } else if (!Repassword.equals(password)) {
             showToast("两次密码不同，请重新确认");
-        } else if (isCheck_Code == -1) {
+        } else if (TextUtils.isEmpty(personalCode)) {
             showToast("请选择个人属性");
         } else if (TextUtils.isEmpty(phone)) {
             showToast("请输入手机号");

@@ -110,6 +110,18 @@
                     android:id="@+id/bottom_part"
                     layout="@layout/personal_bottom_part"/>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_personalData_quit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/btn_personalData_quitLogin_margin"
+                android:layout_marginLeft="@dimen/btn_personalData_quitLogin_margin"
+                android:layout_marginRight="@dimen/btn_personalData_quitLogin_margin"
+                android:layout_marginTop="@dimen/btn_personalData_quitLogin_marginTop"
+                android:background="@drawable/rounded_rectangle_btn"
+                android:text="@string/btn_quit_text"
+                android:textColor="@color/colorWhite"/>
         </LinearLayout>
     </ScrollView>
 </com.example.renhao.wevolunteer.view.FractionTranslateLayout>

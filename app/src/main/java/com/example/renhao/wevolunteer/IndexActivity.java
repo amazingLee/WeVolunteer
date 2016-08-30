@@ -154,8 +154,9 @@ public class IndexActivity extends BaseActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setFragment(SIGNIN);
                 Intent intent = new Intent(IndexActivity.this, MipcaActivityCapture.class);
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 1);
             }
         });
         magnifier.setOnClickListener(new View.OnClickListener() {
@@ -384,7 +385,7 @@ public class IndexActivity extends BaseActivity {
             builder.create().show();
         } else if (requestCode == 1) {
             //将获取到的二维码的值传到FindPageFragment
-            EventBus.getDefault().post(new QRCodeResultEvent(qrcodeMsg, requestCode));
+            EventBus.getDefault().post(new QRCodeResultEvent(qrcodeMsg, 0));
         }
     }
 }
