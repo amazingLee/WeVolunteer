@@ -1,9 +1,11 @@
 package com.example.model.volunteer;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/8/3.
  */
-public class VolunteerCreateDto {
+public class VolunteerCreateDto implements Serializable {
 
     public static final String TAG = "VolunteerCreateDto";
 
@@ -16,7 +18,7 @@ public class VolunteerCreateDto {
     private String TrueName;    //(string): 获取或设置 姓名
     private String OrgId;   //(string): 获取或设置 所属机构Id
     private String OrganizationName;     //(string, optional): 获取或设置 所属机构
-    private int CardType;   //(integer, optional): 获取或设置 证件类型
+    private Integer CardType;   //(integer, optional): 获取或设置 证件类型
     private String IdNumber;    // (string): 获取或设置 证件号码
     private String Nation;  // (string, optional): 获取或设置 国藉
     private String Volk;    // (string, optional): 获取或设置 民族
@@ -35,46 +37,53 @@ public class VolunteerCreateDto {
     private String Telephone;    //(string, optional): 获取或设置 固定电话
     private String Mobile;   //(string): 获取或设置 移动电话
     private String Email;   //(string, optional): 获取或设置 电子邮箱
-    private int JobStatus;  //(integer, optional): 获取或设置 从业状态
-    private double WorkTime;   //(number, optional): 获取或设置 工作年限
+    private Integer JobStatus;  //(integer, optional): 获取或设置 从业状态
+    private Double WorkTime;   //(number, optional): 获取或设置 工作年限
     private String Grade;   // (string, optional): 获取或设置 职称
     private String Job;     // (string, optional): 获取或设置 职务
-    private double ServiceTime;     // (number, optional): 获取或设置 服务时间(小时)
-    private double TrainTime;   // (number, optional): 获取或设置 培训时间
+    private Double ServiceTime;     // (number, optional): 获取或设置 服务时间(小时)
+    private Double TrainTime;   // (number, optional): 获取或设置 培训时间
     private String Skilled;     // (string, optional): 获取或设置 特长
-    private int LevelType;      // (integer, optional): 获取或设置 志愿者等级
-    private double Score;      // (number, optional): 获取或设置 积分
-    private int ChronographyType;    // (integer, optional): 获取或设置 计时类型
+    private Integer LevelType;      // (integer, optional): 获取或设置 志愿者等级
+    private Number Score;      // (number, optional): 获取或设置 积分
+    private Integer ChronographyType;    // (integer, optional): 获取或设置 计时类型
     private String ChronographyId;   // (string, optional): 获取或设置 计时工具编号
     private String Profession;      // (string, optional): 获取或设置 职业
-    private double Height;     // (number, optional): 获取或设置 身高
+    private Number Height;     // (number, optional): 获取或设置 身高
     private String Workunit;     // (string, optional): 获取或设置 工作单位
-    private double Historytime;  // (number, optional): 获取或设置 历时时数
-    private double Credit;      // (number, optional): 获取或设置 征信
+    private Number Historytime;  // (number, optional): 获取或设置 历时时数
+    private Number Credit;      // (number, optional): 获取或设置 征信
     private String Domicile;    // (string, optional): 获取或设置 现居地
     private String Describe;    // (string, optional): 获取或设置 描述
-    private int LoginCount;  // (integer, optional): 获取或设置 登录次数
+    private Integer LoginCount;  // (integer, optional): 获取或设置 登录次数
     private String LastLoginTime;   // (string, optional): 获取或设置 最后次登录时间
-    private int FailCount;      // (integer, optional): 获取或设置 密码错误次数
+    private Integer FailCount;      // (integer, optional): 获取或设置 密码错误次数
     private String IP;      // (string, optional): 获取或设置 上次登录IP
-    private int IsCompleteInfo;     // (integer, optional): 获取或设置 是否完成信息
+    private Integer IsCompleteInfo;     // (integer, optional): 获取或设置 是否完成信息
     private String ZhLevel;     // (string, optional): 获取或设置 中文水平
     private String EnLevel;     // (string, optional): 获取或设置 外语水平
     private String UnitProperty;    // (string, optional): 获取或设置 单位性质
-    private int SrcScore;       // (integer, optional): 获取或设置 原积分
-    private double Workservicetime;     // (number, optional): 获取或设置 在职服务时长
-    private double Schoolservicetime;   // (number, optional): 获取或设置 在校服务时长
-    private double Retireservicetime;   // (number, optional): 获取或设置 退休服务时长
-    private boolean IsSpeciality;       // (boolean, optional): 获取或设置 是否专业志愿者
-    private boolean IsCertification;    // (boolean, optional): 获取或设置 是否认证
+    private Integer SrcScore;       // (integer, optional): 获取或设置 原积分
+    private Number Workservicetime;     // (number, optional): 获取或设置 在职服务时长
+    private Number Schoolservicetime;   // (number, optional): 获取或设置 在校服务时长
+    private Number Retireservicetime;   // (number, optional): 获取或设置 退休服务时长
+    private Boolean IsSpeciality;       // (boolean, optional): 获取或设置 是否专业志愿者
+    private Boolean IsCertification;    // (boolean, optional): 获取或设置 是否认证
     private String CertificationTime;   // (string, optional): 获取或设置 认证时间
     private String LanguageType;    // (string, optional): 获取或设置 语种
     private String WeiXinOPENID;    // (string, optional): 获取或设置 微信ID
-    private boolean IsDeleted;  // (boolean, optional): 获取或设置 删除状态
-    private int AuditStatus;    // (integer, optional): 获取或设置 审核状态0未审核 1审核通过 2审核不通过
+    private Boolean IsDeleted;  // (boolean, optional): 获取或设置 删除状态
+    private Integer AuditStatus;    // (integer, optional): 获取或设置 审核状态0未审核 1审核通过 2审核不通过
     private String AuditTime;   // (string, optional): 获取或设置 审核时间
     private String AuditUserId; // (string, optional): 获取或设置 审核人ID
     private String AuditUserName;   // (string, optional): 获取或设置 审核人用户名
+    private String ServiceTimeIntention;// (string, optional): 获取或设置 意向服务时间 ,
+    private String ServiceIntention;// (string, optional): 获取或设置 志愿服务意向 ,
+    private String ServiceIntentionOther;// (string, optional): 获取或设置 志愿服务意向其他 ,
+    private String CertificatePic;// (string, optional): 获取或设置 上传证书 ,
+    private Integer IsVerify;// (integer, optional): 认证状态 ,
+    private String Code;// (string, optional): 志愿者证编号 ,
+    private String  DeviceId;// (string, optional): 设备序列号
 
 
     public String getAcademy() {
@@ -83,14 +92,6 @@ public class VolunteerCreateDto {
 
     public void setAcademy(String academy) {
         Academy = academy;
-    }
-
-    public String getZhLevel() {
-        return ZhLevel;
-    }
-
-    public void setZhLevel(String zhLevel) {
-        ZhLevel = zhLevel;
     }
 
     public String getAddr() {
@@ -125,11 +126,11 @@ public class VolunteerCreateDto {
         AreaName = areaName;
     }
 
-    public int getAuditStatus() {
+    public Integer getAuditStatus() {
         return AuditStatus;
     }
 
-    public void setAuditStatus(int auditStatus) {
+    public void setAuditStatus(Integer auditStatus) {
         AuditStatus = auditStatus;
     }
 
@@ -165,11 +166,11 @@ public class VolunteerCreateDto {
         Blood = blood;
     }
 
-    public int getCardType() {
+    public Integer getCardType() {
         return CardType;
     }
 
-    public void setCardType(int cardType) {
+    public void setCardType(Integer cardType) {
         CardType = cardType;
     }
 
@@ -189,19 +190,19 @@ public class VolunteerCreateDto {
         ChronographyId = chronographyId;
     }
 
-    public int getChronographyType() {
+    public Integer getChronographyType() {
         return ChronographyType;
     }
 
-    public void setChronographyType(int chronographyType) {
+    public void setChronographyType(Integer chronographyType) {
         ChronographyType = chronographyType;
     }
 
-    public double getCredit() {
+    public Number getCredit() {
         return Credit;
     }
 
-    public void setCredit(double credit) {
+    public void setCredit(Number credit) {
         Credit = credit;
     }
 
@@ -245,11 +246,11 @@ public class VolunteerCreateDto {
         EnLevel = enLevel;
     }
 
-    public int getFailCount() {
+    public Integer getFailCount() {
         return FailCount;
     }
 
-    public void setFailCount(int failCount) {
+    public void setFailCount(Integer failCount) {
         FailCount = failCount;
     }
 
@@ -261,19 +262,19 @@ public class VolunteerCreateDto {
         Grade = grade;
     }
 
-    public double getHeight() {
+    public Number getHeight() {
         return Height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(Number height) {
         Height = height;
     }
 
-    public double getHistorytime() {
+    public Number getHistorytime() {
         return Historytime;
     }
 
-    public void setHistorytime(double historytime) {
+    public void setHistorytime(Number historytime) {
         Historytime = historytime;
     }
 
@@ -301,36 +302,36 @@ public class VolunteerCreateDto {
         this.IP = IP;
     }
 
-    public boolean isCertification() {
+    public Boolean getCertification() {
         return IsCertification;
     }
 
-    public void setIsCertification(boolean isCertification) {
-        IsCertification = isCertification;
+    public void setCertification(Boolean certification) {
+        IsCertification = certification;
     }
 
-    public int getIsCompleteInfo() {
+    public Integer getIsCompleteInfo() {
         return IsCompleteInfo;
     }
 
-    public void setIsCompleteInfo(int isCompleteInfo) {
+    public void setIsCompleteInfo(Integer isCompleteInfo) {
         IsCompleteInfo = isCompleteInfo;
     }
 
-    public boolean isDeleted() {
+    public Boolean getDeleted() {
         return IsDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
-        IsDeleted = isDeleted;
+    public void setDeleted(Boolean deleted) {
+        IsDeleted = deleted;
     }
 
-    public boolean isSpeciality() {
+    public Boolean getSpeciality() {
         return IsSpeciality;
     }
 
-    public void setIsSpeciality(boolean isSpeciality) {
-        IsSpeciality = isSpeciality;
+    public void setSpeciality(Boolean speciality) {
+        IsSpeciality = speciality;
     }
 
     public String getJob() {
@@ -341,11 +342,11 @@ public class VolunteerCreateDto {
         Job = job;
     }
 
-    public int getJobStatus() {
+    public Integer getJobStatus() {
         return JobStatus;
     }
 
-    public void setJobStatus(int jobStatus) {
+    public void setJobStatus(Integer jobStatus) {
         JobStatus = jobStatus;
     }
 
@@ -365,19 +366,19 @@ public class VolunteerCreateDto {
         LastLoginTime = lastLoginTime;
     }
 
-    public int getLevelType() {
+    public Integer getLevelType() {
         return LevelType;
     }
 
-    public void setLevelType(int levelType) {
+    public void setLevelType(Integer levelType) {
         LevelType = levelType;
     }
 
-    public int getLoginCount() {
+    public Integer getLoginCount() {
         return LoginCount;
     }
 
-    public void setLoginCount(int loginCount) {
+    public void setLoginCount(Integer loginCount) {
         LoginCount = loginCount;
     }
 
@@ -453,11 +454,11 @@ public class VolunteerCreateDto {
         Profession = profession;
     }
 
-    public double getRetireservicetime() {
+    public Number getRetireservicetime() {
         return Retireservicetime;
     }
 
-    public void setRetireservicetime(double retireservicetime) {
+    public void setRetireservicetime(Number retireservicetime) {
         Retireservicetime = retireservicetime;
     }
 
@@ -469,27 +470,27 @@ public class VolunteerCreateDto {
         ReUserPassword = reUserPassword;
     }
 
-    public double getSchoolservicetime() {
+    public Number getSchoolservicetime() {
         return Schoolservicetime;
     }
 
-    public void setSchoolservicetime(double schoolservicetime) {
+    public void setSchoolservicetime(Number schoolservicetime) {
         Schoolservicetime = schoolservicetime;
     }
 
-    public double getScore() {
+    public Number getScore() {
         return Score;
     }
 
-    public void setScore(double score) {
+    public void setScore(Number score) {
         Score = score;
     }
 
-    public double getServiceTime() {
+    public Double getServiceTime() {
         return ServiceTime;
     }
 
-    public void setServiceTime(double serviceTime) {
+    public void setServiceTime(Double serviceTime) {
         ServiceTime = serviceTime;
     }
 
@@ -517,12 +518,16 @@ public class VolunteerCreateDto {
         SpecialtyType = specialtyType;
     }
 
-    public int getSrcScore() {
+    public Integer getSrcScore() {
         return SrcScore;
     }
 
-    public void setSrcScore(int srcScore) {
+    public void setSrcScore(Integer srcScore) {
         SrcScore = srcScore;
+    }
+
+    public static String getTAG() {
+        return TAG;
     }
 
     public String getTelephone() {
@@ -533,11 +538,11 @@ public class VolunteerCreateDto {
         Telephone = telephone;
     }
 
-    public double getTrainTime() {
+    public Double getTrainTime() {
         return TrainTime;
     }
 
-    public void setTrainTime(double trainTime) {
+    public void setTrainTime(Double trainTime) {
         TrainTime = trainTime;
     }
 
@@ -589,19 +594,19 @@ public class VolunteerCreateDto {
         WeiXinOPENID = weiXinOPENID;
     }
 
-    public double getWorkservicetime() {
+    public Number getWorkservicetime() {
         return Workservicetime;
     }
 
-    public void setWorkservicetime(double workservicetime) {
+    public void setWorkservicetime(Number workservicetime) {
         Workservicetime = workservicetime;
     }
 
-    public double getWorkTime() {
+    public Double getWorkTime() {
         return WorkTime;
     }
 
-    public void setWorkTime(double workTime) {
+    public void setWorkTime(Double workTime) {
         WorkTime = workTime;
     }
 
@@ -611,5 +616,93 @@ public class VolunteerCreateDto {
 
     public void setWorkunit(String workunit) {
         Workunit = workunit;
+    }
+
+    public String getZhLevel() {
+        return ZhLevel;
+    }
+
+    public void setZhLevel(String zhLevel) {
+        ZhLevel = zhLevel;
+    }
+
+    public String getCertificatePic() {
+        return CertificatePic;
+    }
+
+    public void setCertificatePic(String certificatePic) {
+        CertificatePic = certificatePic;
+    }
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+        Code = code;
+    }
+
+    public String getDeviceId() {
+        return DeviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        DeviceId = deviceId;
+    }
+
+    public Boolean getIsCertification() {
+        return IsCertification;
+    }
+
+    public void setIsCertification(Boolean isCertification) {
+        IsCertification = isCertification;
+    }
+
+    public Boolean getIsDeleted() {
+        return IsDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        IsDeleted = isDeleted;
+    }
+
+    public Boolean getIsSpeciality() {
+        return IsSpeciality;
+    }
+
+    public void setIsSpeciality(Boolean isSpeciality) {
+        IsSpeciality = isSpeciality;
+    }
+
+    public Integer getIsVerify() {
+        return IsVerify;
+    }
+
+    public void setIsVerify(Integer isVerify) {
+        IsVerify = isVerify;
+    }
+
+    public String getServiceIntention() {
+        return ServiceIntention;
+    }
+
+    public void setServiceIntention(String serviceIntention) {
+        ServiceIntention = serviceIntention;
+    }
+
+    public String getServiceIntentionOther() {
+        return ServiceIntentionOther;
+    }
+
+    public void setServiceIntentionOther(String serviceIntentionOther) {
+        ServiceIntentionOther = serviceIntentionOther;
+    }
+
+    public String getServiceTimeIntention() {
+        return ServiceTimeIntention;
+    }
+
+    public void setServiceTimeIntention(String serviceTimeIntention) {
+        ServiceTimeIntention = serviceTimeIntention;
     }
 }

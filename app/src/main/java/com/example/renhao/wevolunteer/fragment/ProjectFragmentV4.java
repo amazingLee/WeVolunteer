@@ -1,16 +1,18 @@
 package com.example.renhao.wevolunteer.fragment;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
@@ -24,10 +26,11 @@ import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.ListDropDownAdapter;
-import com.example.renhao.wevolunteer.base.BaseFragment;
+import com.example.renhao.wevolunteer.base.BaseFragmentV4;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.squareup.picasso.Picasso;
 import com.yyydjk.library.DropDownMenu;
 
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ import butterknife.ButterKnife;
  * 创建时间：2016/8/8 13:36
  * 修改备注：
  */
-public class ProjectFragment extends BaseFragment {
+public class ProjectFragmentV4 extends BaseFragmentV4 {
     private static final String TAG = "JobsFragment";
 
 
@@ -85,7 +88,7 @@ public class ProjectFragment extends BaseFragment {
     private int StartPosition;// (integer, optional): 记录开始位置
     private int EndPosition;//(integer, optional): 记录结束位置
     private boolean HasPreviousPage;// (boolean, optional): 是否有上一页
-    private boolean HasNextPage;//(boolean, optional): 是否有下一页
+    private boolean HasNextPage=true;//(boolean, optional): 是否有下一页
 
     /**
      * 设置此fragment的类型
@@ -250,8 +253,25 @@ public class ProjectFragment extends BaseFragment {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     private void initPtrListView(final PullToRefreshListView mPtr) {
+        mPtr.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                final Picasso picasso = Picasso.with(getContext());
 
+                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                    picasso.resumeTag("Ptr");
+                } else {
+                    picasso.pauseTag("Ptr");
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
         mPtr.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -295,10 +315,6 @@ public class ProjectFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-    }
-
-    private void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     /**

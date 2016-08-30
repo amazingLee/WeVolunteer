@@ -2,19 +2,21 @@ package com.example.core;
 
 import com.example.core.listener.AccessTokenListener;
 import com.example.model.ActionCallbackListener;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
 import com.example.model.activity.ActivityQueryOptionDto;
 import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
-import com.example.model.PagedListEntityDto;
-import com.example.model.activity.ActivityCreateBO;
-import com.example.model.activity.ActivityListDto;
-import com.example.model.activity.ActivityQueryOptionDto;
-import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityTime.ActivityTimeListDto;
+import com.example.model.activityTime.ActivityTimeQueryOptionDto;
+import com.example.model.activityattention.ActivityAttentionDto;
+import com.example.model.activityattention.ActivityAttentionListDto;
+import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
 import com.example.model.area.AreaListDto;
 import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
@@ -30,10 +32,13 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
@@ -64,6 +69,14 @@ public interface AppAction {
     public void activityCreate(List<ActivityCreateBO> activityCreateBOs, ActionCallbackListener<List<String>> listener);
 
     public void activityQuery(ActivityQueryOptionDto activityQueryOptionDto, ActionCallbackListener<PagedListEntityDto<ActivityListDto>> listener);
+
+    public void activityRecruitCreate(List<ActivityRecruitDto> create, ActionCallbackListener<List<String>> listener);
+
+    public void activityAttentionCreate(List<ActivityAttentionDto> create, ActionCallbackListener<List<String>> listener);
+
+    public void activityAttentionDelete(List<String> id, ActionCallbackListener<String> listener);
+
+    public void activityAttentionQuery(ActivityAttentionQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<ActivityAttentionListDto>> listener);
 
     public void jobActivityDetail(String jobActivityId, ActionCallbackListener<JobActivityViewDto> listener);
 
@@ -132,6 +145,7 @@ public interface AppAction {
     public void dictionaryQueryDetailDefault(String typeCode, String code, ActionCallbackListener<DictionaryViewDto> listener);
 
 
+
     /**
      * dictionary 类型 查询
      *
@@ -147,6 +161,8 @@ public interface AppAction {
      * @param listener
      */
     public void organizationQuery(OrganizationQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<OrganizationListDto>> listener);
+
+    public void organizationQueryChild(String parentId,ActionCallbackListener<List<OrganizationListDto>> listener);
 
     /**
      * 所在区域  get
@@ -170,4 +186,21 @@ public interface AppAction {
 
 
     public void activityRecruitQuery(ActivityRecruitQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>> listener);
+
+
+    /**
+     * 志愿者服务站点
+     */
+    public void volunteerBaseQuery(VolunteerBaseQueryOptionDto query, ActionCallbackListener<PagedListEntityDto<VolunteerBaseListDto>> listener);
+
+    /**
+     * 签到签退明细
+     */
+    public void signRecordCreate(List<SignInOutDto> signInOutDtos, ActionCallbackListener<List<String>> listener);
+
+    //上传专业证书
+    public void update_major_attachment(List<AttachmentParaDto> data, ActionCallbackListener<AttachmentsReturnDto> listener);
+
+    //查询活动时间
+    public void activityTimeQuery(ActivityTimeQueryOptionDto query,ActionCallbackListener<PagedListEntityDto<ActivityTimeListDto>> listener);
 }

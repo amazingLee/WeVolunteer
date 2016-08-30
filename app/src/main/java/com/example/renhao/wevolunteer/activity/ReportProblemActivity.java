@@ -1,15 +1,15 @@
 package com.example.renhao.wevolunteer.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 /*问题反馈界面*/
 
-public class ReportProblemActivity extends AppCompatActivity {
+public class ReportProblemActivity extends BaseActivity {
     private static final String TAG = "ReportProblemActivity";
 
     @Override

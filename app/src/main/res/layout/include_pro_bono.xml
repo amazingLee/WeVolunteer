@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:showDividers="middle"
+    android:divider="@drawable/underline"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/LL_apply_area"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:clickable="true"
+        android:background="@drawable/linearlayout_select"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="所在区域"
+            android:text="@string/tv_area"
             android:textSize="16sp"
             android:textStyle="bold"
             android:padding="15dp"/>
@@ -25,9 +29,11 @@
             android:src="@drawable/icon_right_indicator"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/LL_apply_ORG"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:clickable="true"
+        android:background="@drawable/linearlayout_select"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -46,9 +52,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_PoliticalAttribute"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:clickable="true"
+        android:background="@drawable/linearlayout_select"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -67,9 +75,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_speciality_advantages"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:clickable="true"
+        android:background="@drawable/linearlayout_select"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -88,50 +98,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_intention_time"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tv_work_unit"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tv_family_address"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="15dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_right_indicator"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:clickable="true"
+        android:background="@drawable/linearlayout_select"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -150,9 +121,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_intention_type"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:clickable="true"
+        android:background="@drawable/linearlayout_select"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -171,9 +144,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_professional_ability"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_single_input"
+        android:clickable="true"
+        android:background="@drawable/linearlayout_select"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -189,6 +164,58 @@
             android:layout_weight="0.2"
             android:layout_gravity="center"
             android:src="@drawable/icon_right_indicator"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_work_unit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_single_input"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_work_unit"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="15dp"/>
+        <EditText
+            android:id="@+id/edit_register_workUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorWhite"
+            android:hint="在此输入您的工作单位"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_family_address"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_single_input"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_family_address"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="15dp"/>
+        <EditText
+            android:id="@+id/edit_register_Addr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorWhite"
+            android:hint="在此输入您的家庭住址"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:singleLine="true"
+            android:textSize="16sp" />
     </LinearLayout>
 
 

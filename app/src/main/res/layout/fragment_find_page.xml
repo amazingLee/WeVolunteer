@@ -16,51 +16,54 @@
         android:id="@+id/btn_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="@string/btn_sign_in"
-        android:textSize="18sp"
-        android:visibility="visible"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/btn_login"
         android:layout_alignParentBottom="true"
-        android:layout_margin="15dp"/>
+        android:layout_margin="15dp"
+        android:background="@drawable/btn_login"
+        android:text="@string/btn_sign_in"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
+        android:visibility="visible"/>
+
     <Button
         android:id="@+id/btn_sign_out"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="@string/btn_sign_out"
-        android:textSize="18sp"
-        android:visibility="gone"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/btn_login"
         android:layout_alignParentBottom="true"
-        android:layout_margin="15dp"/>
+        android:layout_margin="15dp"
+        android:background="@drawable/btn_login"
+        android:text="@string/btn_sign_out"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/time_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_above="@+id/btn_sign_out"
-        android:background="@drawable/btn_register"
-        android:visibility="gone"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:background="@drawable/btn_register"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="签到时间"
-            android:textSize="18sp"
-            android:textColor="@color/colorOrange"/>
+            android:textColor="@color/colorOrange"
+            android:textSize="18sp"/>
 
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorOrange"
-            android:textSize="18sp"
-            android:format="H:MM:SS"
             android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp"
+            android:format="HH:MM:SS"
+            android:textColor="@color/colorOrange"
+            android:textSize="18sp"
             />
     </LinearLayout>
 </com.example.renhao.wevolunteer.view.FractionTranslateLayout>

@@ -1,11 +1,13 @@
 package com.example.renhao.wevolunteer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,26 +23,28 @@ import com.example.core.AppActionImpl;
 import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
-import com.example.model.activity.ActivityTimeSimpleDto;
 import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityTime.ActivityTimeListDto;
+import com.example.model.activityTime.ActivityTimeQueryOptionDto;
+import com.example.model.activityattention.ActivityAttentionDto;
+import com.example.model.activityattention.ActivityAttentionListDto;
+import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
 import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.handler.MxgsaTagHandler;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.orhanobut.logger.Logger;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +59,8 @@ import java.util.regex.Pattern;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * 项目名称：WeVolunteer
@@ -173,19 +178,28 @@ public class ProjectDetailActivity extends BaseActivity {
     private ActivityViewDto mActivityViewDto;
     private JobActivityViewDto mJobActivityViewDto;
 
-    private List<ActivityTimeSimpleDto> times = new ArrayList<>();
+    private List<ActivityTimeListDto> times = new ArrayList<>();
     private List<String> sTime = new ArrayList<>();
 
     private String id;
     private int type;
     private Map<String, String> notes = new HashMap<>();
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+    private boolean isAttention = false;
+    private boolean isInitAttention = false;
+    private String volunteerId;
+    private String attentionId;
+
+    private String activityName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projectdetail);
         ButterKnife.bind(this);
+
+        volunteerId = LocalDate.getInstance(this).getLocalDate("volunteerId", "");
 
         type = getIntent().getIntExtra("type", 0);
         origin = getIntent().getIntExtra("origin", 0);
@@ -196,6 +210,68 @@ public class ProjectDetailActivity extends BaseActivity {
         initView();
         getDetail();
 
+        isAttention();
+
+        getSiginInVolunteer();
+
+    }
+
+
+    /**
+     * 获取已经报名的志愿者，并获取其头像显示
+     */
+    private void getSiginInVolunteer() {
+        ActivityRecruitQueryOptionDto queryOptionDto = new ActivityRecruitQueryOptionDto();
+        queryOptionDto.setActivityId(id);
+        AppActionImpl.getInstance(this).activityRecruitQuery(queryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<ActivityRecruitListDto> data) {
+                        if (data.getRows() == null || data.getRows().size() < 1)
+                            return;
+                        setVolunteerPhoto(data.getRows(), 0);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+    }
+
+    /**
+     * 利用迭代的方法获取并显示用户的头像
+     *
+     * @param list
+     * @param position
+     */
+    private void setVolunteerPhoto(final List<ActivityRecruitListDto> list, final int position) {
+        if (list == null || list.size() < (position + 1))
+            return;
+        //取得头像
+        AppActionImpl.getInstance(this).get_portrait(list.get(position).getVolunteerId(),
+                new ActionCallbackListener<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        if (data == null)
+                            return;
+                        Bitmap bitmap = Util.getBitmapFromByte(data);
+                        ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(position);
+                        view.setVisibility(View.VISIBLE);
+                        //设置图片
+                        view.setImageBitmap(bitmap);
+                        setVolunteerPhoto(list, position + 1);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(position);
+                        view.setVisibility(View.VISIBLE);
+                        //设置图片
+                        view.setImageResource(R.drawable.personal_no_portrait);
+                        setVolunteerPhoto(list, position + 1);
+                    }
+                });
     }
 
     /**
@@ -216,13 +292,19 @@ public class ProjectDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(ActivityViewDto data) {
                 dissMissNormalDialog();
+                if (data == null) {
+                    showToast("服务器错误   找不到该项目");
+                    return;
+                }
                 mActivityViewDto = data;
-                times = data.getActivityTimes();
+                //times = data.getActivityTimes();
+                activityName = data.getActivityName();
                 setActivityDetail(data);
             }
 
             @Override
             public void onFailure(String errorEvent, String message) {
+                showToast("服务器错误   " + message);
                 dissMissNormalDialog();
             }
         });
@@ -233,16 +315,16 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvNum.setText(data.getRecruited() + "/" + data.getRecruitNumber() + "人");
 
-        float h = data.getLengthTime().floatValue() / 60;
+        Number h = data.getLengthTime();
         DecimalFormat df = new DecimalFormat("#.##");
         mTvTime.setText(df.format(h) + "小时");
 
         mTvState.setText(data.getOperationState());
 
         String imagUrl = "";
-        if (TextUtils.isEmpty(data.getAppImgUrl())) {
-            imagUrl = data.getAppImgUrl();
-            Picasso.with(getApplicationContext()).load(imagUrl)
+        if (!TextUtils.isEmpty(data.getAppLstUrl())) {
+            imagUrl = data.getAppLstUrl();
+            Picasso.with(getApplicationContext()).load(Util.getRealUrl(imagUrl))
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(mImageview);
@@ -279,13 +361,14 @@ public class ProjectDetailActivity extends BaseActivity {
         contactStr += TextUtils.isEmpty(data.getMobile()) ? "" : data.getMobile();
         mTvContact.setText(contactStr);
 
-        mTvDetail.setText(data.getJobText());
+        mTvDetail.setText(Html.fromHtml(data.getJobText(), null, new MxgsaTagHandler(this)));
 
         mTvSignedNum.setText(data.getRecruited() + "");
 
         mTvMaxNum.setText("/" + data.getRecruitNumber());
 
-        sTime = new ArrayList<>();
+        //写完了才告诉我们报名的时间段是从activityTime中获取
+        /*sTime = new ArrayList<>();
         for (int i = 0; i < data.getActivityTimes().size(); i++) {
             ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
 
@@ -298,28 +381,34 @@ public class ProjectDetailActivity extends BaseActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
-        for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
+        /*for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
             ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
             view.setVisibility(View.VISIBLE);
             //设置图片
             view.setImageResource(R.mipmap.ic_launcher);
-        }
+        }*/
     }
 
     private void getJobActivityDetail() {
         AppActionImpl.getInstance(this).jobActivityDetail(id, new ActionCallbackListener<JobActivityViewDto>() {
             @Override
             public void onSuccess(JobActivityViewDto data) {
-                mJobActivityViewDto = data;
                 dissMissNormalDialog();
-                times = data.getActivityTimes();
+                if (data == null) {
+                    showToast("服务器错误   找不到该项目");
+                    return;
+                }
+                mJobActivityViewDto = data;
+                //times = data.getActivityTimes();
+                activityName = data.getActivityName();
                 setJobActivityDetail(data);
             }
 
             @Override
             public void onFailure(String errorEvent, String message) {
+                showToast("服务器错误   " + message);
                 dissMissNormalDialog();
             }
         });
@@ -330,16 +419,16 @@ public class ProjectDetailActivity extends BaseActivity {
 
         mTvNum.setText(data.getRecruited() + "/" + data.getRecruitNumber() + "人");
 
-        float h = data.getLengthTime().floatValue() / 60;
+        Number h = data.getLengthTime();
         DecimalFormat df = new DecimalFormat("#.##");
         mTvTime.setText(df.format(h) + "小时");
 
         mTvState.setText(data.getOperationState());
 
         String imagUrl = "";
-        if (TextUtils.isEmpty(data.getAppImgUrl())) {
-            imagUrl = data.getAppImgUrl();
-            Picasso.with(getApplicationContext()).load(imagUrl)
+        if (!TextUtils.isEmpty(data.getAppLstUrl())) {
+            imagUrl = data.getAppLstUrl();
+            Picasso.with(getApplicationContext()).load(Util.getRealUrl(imagUrl))
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(mImageview);
@@ -378,9 +467,10 @@ public class ProjectDetailActivity extends BaseActivity {
 
         getSpecialType(data.getSpecialityType());
 
-        mTvDetail.setText(data.getJobText());
+        mTvDetail.setText(Html.fromHtml(data.getJobText(), null, new MxgsaTagHandler(this)));
 
-        sTime = new ArrayList<>();
+        //写完了才告诉我们报名的时间段是从activityTime中获取
+      /*  sTime = new ArrayList<>();
         for (int i = 0; i < data.getActivityTimes().size(); i++) {
             ActivityTimeSimpleDto dto = data.getActivityTimes().get(i);
 
@@ -392,18 +482,18 @@ public class ProjectDetailActivity extends BaseActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         mTvSignedNum.setText(data.getRecruited() + "");
 
         mTvMaxNum.setText("/" + data.getRecruitNumber());
 
-        for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
+       /* for (int i = (data.getRecruited() > 5 ? 5 : data.getRecruited()) - 1; i >= 0; i--) {
             ImageView view = (ImageView) mRelativeSignedPeople.getChildAt(i);
             view.setVisibility(View.VISIBLE);
             //设置图片
             view.setImageResource(R.mipmap.ic_launcher);
-        }
+        }*/
     }
 
     private void initView() {
@@ -421,7 +511,7 @@ public class ProjectDetailActivity extends BaseActivity {
             mTvEffectiveTimeName.setText("活动有效时间");
             mTvLocationName.setText("活动服务地址");
             mTvFoundersName.setText("活动发起单位");
-            mTvDetailName.setText("活动详情");
+            mTvDetailName.setText("活动要求");
             mTvSignedName.setText("活动详情");
             mTvNumName.setText("活动招募人数");
             mTvTimeName.setText("活动服务时长");
@@ -432,7 +522,7 @@ public class ProjectDetailActivity extends BaseActivity {
             mTvEffectiveTimeName.setText("岗位起始时间:");
             mTvLocationName.setText("岗位服务地址:");
             mTvFoundersName.setText("岗位发起单位:");
-            mTvDetailName.setText("岗位详情");
+            mTvDetailName.setText("岗位要求");
             mTvSignedName.setText("岗位详情");
             mTvNumName.setText("岗位招募人数");
             mTvTimeName.setText("岗位服务时长");
@@ -532,18 +622,27 @@ public class ProjectDetailActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_projectdetail_share:
-                Holder share = new ViewHolder(R.layout.dialog_share);
-                DialogPlus dialogShare = DialogPlus.newDialog(this)
-                        .setContentHolder(share)
-                        .setCancelable(true)
-                        .setGravity(Gravity.BOTTOM)
-                        .create();
-                dialogShare.show();
+//                Holder share = new ViewHolder(R.layout.dialog_share);
+//                DialogPlus dialogShare = DialogPlus.newDialog(this)
+//                        .setContentHolder(share)
+//                        .setCancelable(true)
+//                        .setGravity(Gravity.BOTTOM)
+//                        .create();
+//                dialogShare.show();
+                showShare();
                 break;
             case R.id.btn_projectdetail_apply:
                 siginIn();
                 break;
             case R.id.btn_projectdetail_focuson:
+                if (TextUtils.isEmpty(volunteerId)) {
+                    showToast("请先登录");
+                    return;
+                }
+                if (isInitAttention)
+                    setOrCelAttention();
+                else
+                    isAttention();
                 break;
             case R.id.imageview_projectdetail_itemImage:
                 break;
@@ -567,15 +666,61 @@ public class ProjectDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 根据活动的ID和name,来查询activityTime的时间
+     */
+    private void getActivityTime() {
+        ActivityTimeQueryOptionDto avTimeDto = new ActivityTimeQueryOptionDto();
+        avTimeDto.setActivityId(id);
+        avTimeDto.setActivityName(activityName);
+        avTimeDto.setPageIndex(1);
+        avTimeDto.setPageSize(30);
+        AppActionImpl.getInstance(this).activityTimeQuery(avTimeDto, new ActionCallbackListener<PagedListEntityDto<ActivityTimeListDto>>() {
+            @Override
+            public void onSuccess(PagedListEntityDto<ActivityTimeListDto> data) {
+                if (data.getRows().isEmpty()) {
+                    showToast("有效的报名时间段已经过期");
+                } else {
+                    sTime = new ArrayList<>();//储存报名的时间，已天为单位
+                    notes = new HashMap<String, String>();//日历上的标记  时间 剩余报名人数
+                    times = data.getRows();//所有报名时间段的数据
+                    for (int i = 0; i < data.getRows().size(); i++) {
+                        ActivityTimeListDto dto = data.getRows().get(i);//获取时间段对象
+                        try {
+                            Date date = format.parse(dto.getSTime());
+                            CalendarDay temp = new CalendarDay(date);
+                            notes.put(temp.toString(), "余" + (dto.getAllowNum() - dto.getRecruitedNum()));
+                            sTime.add(i, temp.getYear() + "-" + (temp.getMonth() + 1) + "-" + temp.getDay());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    dissMissNormalDialog();
+                    //显示日历选择器
+                    showSiginInDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+                showToast("服务器错误  " + message);
+                dissMissNormalDialog();
+            }
+        });
+    }
+
     private void siginIn() {
         //判断是否已经登录
         boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);
-        final String volunteerId = LocalDate.getInstance(this).getLocalDate("volunteerId", "");
-                /*if (!isLogin || TextUtils.isEmpty(volunteerId)) {
-                    showToast("请先登录");
-                    return;
-                }*/
+        if (!isLogin || TextUtils.isEmpty(volunteerId)) {
+            showToast("请先登录");
+            return;
+        }
+        showNormalDialog("正在从服务器获取数据...");
+        getActivityTime();//获取到activityTime数据的接口方法
+    }
 
+    private void showSiginInDialog() {
         Holder holder = new ViewHolder(R.layout.dialog_caldroid);
         final DialogPlus dialogPlus = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
@@ -617,7 +762,7 @@ public class ProjectDetailActivity extends BaseActivity {
                     }
                 }
                 //判断是否还有剩余
-                final ActivityTimeSimpleDto dto = times.get(select);
+                final ActivityTimeListDto dto = times.get(select);
                 if (dto.getRecruitedNum().intValue() == dto.getAllowNum().intValue()) {
                     showToast("报名人数已满");
                     return;
@@ -633,25 +778,25 @@ public class ProjectDetailActivity extends BaseActivity {
                         new ActionCallbackListener<PagedListEntityDto<ActivityRecruitListDto>>() {
                             @Override
                             public void onSuccess(PagedListEntityDto<ActivityRecruitListDto> data) {
-                                if (data.getRows() == null) {
+                                if (data.getRows() == null || data.getRows().size() == 0) {
                                     //报名
                                     List<ActivityRecruitDto> recruitDtos = new ArrayList<ActivityRecruitDto>();
                                     ActivityRecruitDto recruitDto = new ActivityRecruitDto();
                                     recruitDto.setActivityId(id);
                                     recruitDto.setVolunteerId(volunteerId);
                                     recruitDto.setActivityTimeId(dto.getId());
-                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-                                    recruitDto.setBaoMingDate(format.format(new Date()));
+                                    recruitDto.setBaoMingDate(Util.getNowDate("yyyy-MM-dd HH:mm:ss"));
+                                    recruitDto.setExecuteTime(Util.getNowDate(dto.getSTime()));//参加的活动或岗位时间
                                     recruitDto.setAuditStatus(0);
                                     recruitDto.setSign(0);
                                     recruitDto.setSignout(0);
                                     recruitDto.setSource(0);
                                     //获取Mac地址
-                                    recruitDto.setIP(getMac());
+                                    recruitDto.setIP(Util.getMac());
                                     recruitDto.setDeleted(false);
                                     recruitDtos.add(recruitDto);
 
-                                    AppActionImpl.getInstance(getApplicationContext()).activityRecruitCreat(recruitDtos,
+                                    AppActionImpl.getInstance(getApplicationContext()).activityRecruitCreate(recruitDtos,
                                             new ActionCallbackListener<List<String>>() {
                                                 @Override
                                                 public void onSuccess(List<String> data) {
@@ -659,17 +804,17 @@ public class ProjectDetailActivity extends BaseActivity {
                                                         showToast("报名成功");
                                                         dialogPlus.dismiss();
                                                     } else {
-                                                        showToast("报名失败");
+                                                        showToast("服务器错误 报名失败");
                                                     }
                                                     dissMissNormalDialog();
                                                 }
 
                                                 @Override
                                                 public void onFailure(String errorEvent, String message) {
+                                                    showToast("服务器错误  " + message);
                                                     dissMissNormalDialog();
                                                 }
                                             });
-
                                 } else {
                                     dissMissNormalDialog();
                                     showToast("您已报名");
@@ -687,43 +832,119 @@ public class ProjectDetailActivity extends BaseActivity {
         dialogPlus.show();
     }
 
-    private void isSignUp() {
-        //判断是否已经报名
-        ActivityRecruitQueryOptionDto queryOptionDto = new ActivityRecruitQueryOptionDto();
-        if (type == 0) {
-            queryOptionDto.setActivityId(mActivityViewDto.getId());
-        } else if (type == 1) {
-            queryOptionDto.setActivityId(mJobActivityViewDto.getId());
+    /**
+     * 查看用户是否已经关注此项目，是为已关注，否为关注
+     */
+    private void isAttention() {
+        if (TextUtils.isEmpty(volunteerId))
+            return;
+        ActivityAttentionQueryOptionDto queryOptionDto = new ActivityAttentionQueryOptionDto();
+        queryOptionDto.setActivityId(id);
+        queryOptionDto.setUserId(volunteerId);
+        AppActionImpl.getInstance(this).activityAttentionQuery(queryOptionDto,
+                new ActionCallbackListener<PagedListEntityDto<ActivityAttentionListDto>>() {
+                    @Override
+                    public void onSuccess(PagedListEntityDto<ActivityAttentionListDto> data) {
+                        if (data.getRows() != null && data.getRows().size() > 0) {
+                            isAttention = true;
+                            mBtnFocuson.setText("已关注");
+                            attentionId = data.getRows().get(0).getId();
+                        } else {
+                            isAttention = false;
+                            mBtnFocuson.setText("关注");
+                        }
+                        isInitAttention = true;
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
+    }
+
+    /**
+     * 关注或取消关注
+     */
+    private void setOrCelAttention() {
+        if (isAttention) {
+            if (TextUtils.isEmpty(attentionId))
+                return;
+            List<String> id = new ArrayList<>();
+            id.add(attentionId);
+            AppActionImpl.getInstance(this).activityAttentionDelete(id, new ActionCallbackListener<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    mBtnFocuson.setText("关注");
+                    isAttention = false;
+                }
+
+                @Override
+                public void onFailure(String errorEvent, String message) {
+
+                }
+            });
+        } else {
+            List<ActivityAttentionDto> dtos = new ArrayList<>();
+            ActivityAttentionDto dto = new ActivityAttentionDto();
+            dto.setActivityId(id);
+            dto.setUserId(volunteerId);
+            dto.setAttentionTime(Util.getNowDate());
+            dtos.add(dto);
+
+            AppActionImpl.getInstance(this).activityAttentionCreate(dtos,
+                    new ActionCallbackListener<List<String>>() {
+                        @Override
+                        public void onSuccess(List<String> data) {
+                            if (data == null)
+                                return;
+                            attentionId = data.get(0);
+                            mBtnFocuson.setText("已关注");
+                            isAttention = true;
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+                            showToast("关注失败，请稍后再试");
+                        }
+                    });
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 0)
-            finish();
+        /*if (resultCode == 0)
+            finish();*/
     }
 
-    private String getMac() {
-        String macSerial = null;
-        String str = "";
+    private void showShare() {
+        ShareSDK.initSDK(this);
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+        // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+        //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+        //oks.setTitle(getString(R.string.ssdk_oks_share));
+        oks.setTitle("We志愿");
+        // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+        oks.setTitleUrl("http://www.nbzyz.org");
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText("来自We志愿的分享");
+        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+        //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+        // url仅在微信（包括好友和朋友圈）中使用
+        oks.setUrl("http://www.nbzyz.org");
+        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+        oks.setComment("来自We志愿的分享");
+        // site是分享此内容的网站名称，仅在QQ空间使用
+        //oks.setSite(getString(R.string.app_name));
+        oks.setSite("来自We志愿的分享");
+        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+        oks.setSiteUrl("http://www.nbzyz.org");
 
-        try {
-            Process pp = Runtime.getRuntime().exec("cat /sys/class/net/wlan0/address ");
-            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
-            LineNumberReader input = new LineNumberReader(ir);
-
-            for (; null != str; ) {
-                str = input.readLine();
-                if (str != null) {
-                    macSerial = str.trim();// 去空格
-                    break;
-                }
-            }
-        } catch (IOException ex) {
-            // 赋予默认值
-            ex.printStackTrace();
-        }
-        Logger.v(TAG, macSerial);
-        return macSerial;
+        // 启动分享GUI
+        oks.show(this);
     }
+
 }

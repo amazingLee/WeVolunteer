@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.core.listener.AccessTokenListener;
+import com.example.core.local.LocalDate;
 import com.example.model.AccessTokenBO;
 import com.orhanobut.logger.Logger;
 
@@ -26,11 +27,13 @@ public class BaseActivity extends AppCompatActivity {
 
 
     private ProgressDialog normalDialog;
+    private boolean isActivityExist = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         normalDialog = new ProgressDialog(this);
+        isActivityExist = true;
     }
 
     @Override
@@ -38,8 +41,16 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onDestroy() {
+        isActivityExist = false;
+        super.onDestroy();
+
+    }
+
     protected void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        if (isActivityExist)
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -65,7 +76,11 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected void getAccessToken() {
         showNormalDialog("正在连接服务器");
-        AppActionImpl.getInstance(this).getAccessToken(null, null, new AccessTokenListener() {
+        boolean isLogin = LocalDate.getInstance(this).getLocalDate("isLogin", false);
+        String username = isLogin ? LocalDate.getInstance(this).getLocalDate("username", "") : "";
+        String password = isLogin ? LocalDate.getInstance(this).getLocalDate("password", "") : "";
+
+        AppActionImpl.getInstance(this).getAccessToken(username, password, new AccessTokenListener() {
             @Override
             public void success(AccessTokenBO accessTokenBO) {
                 Logger.v(TAG, "get token success");

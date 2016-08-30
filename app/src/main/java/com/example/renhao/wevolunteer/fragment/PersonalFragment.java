@@ -5,55 +5,53 @@ package com.example.renhao.wevolunteer.fragment;
  *
  */
 
-import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
-import com.example.core.listener.AccessTokenListener;
-import com.example.model.AccessTokenBO;
+import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.activity.AboutUsActivity;
 import com.example.renhao.wevolunteer.activity.ApplyProBonoActivity;
 import com.example.renhao.wevolunteer.activity.FAQActivity;
+import com.example.renhao.wevolunteer.activity.LoginActivity;
+import com.example.renhao.wevolunteer.activity.MajorAbilityActivity;
 import com.example.renhao.wevolunteer.activity.MyORGActivity;
 import com.example.renhao.wevolunteer.activity.MyProjectActivity;
 import com.example.renhao.wevolunteer.activity.PersonalDataActivity;
-import com.example.renhao.wevolunteer.activity.ProfessionalSelectionActivity;
 import com.example.renhao.wevolunteer.activity.ReportProblemActivity;
+import com.example.renhao.wevolunteer.base.BaseFragment;
+import com.example.renhao.wevolunteer.utils.Util;
+import com.orhanobut.logger.Logger;
 
-public class PersonalFragment extends Fragment implements View.OnClickListener {
+public class PersonalFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "PersonalFragment";
 
     private View mainview;
     private boolean isCreat = false;
 
-    private AppAction mAction;
-
-    private VolunteerViewDto personal_data;
+    private VolunteerViewDto eventbus_data;
     private View bottomView;
     private LinearLayout professional_true;
     private LinearLayout Professional_false;
-    private TextView tv_true_name, tv_top_specialty, tv_item_specialty, tv_integral;
+    private TextView tv_true_name, tv_specialty, tv_integral;
     private View middleView;
     private TextView tv_AllTime, tv_SchoolTime, tv_InJobTime, tv_RetireTime;
     private LinearLayout group;
     private ImageView image_portrait;
+    private Button exit;
 
     private final int UPDATE_UI = 0;
     private final int UPDATE_PORTRAIT = 1;
@@ -70,9 +68,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     private final int TO_WIPE_CACHE = 8;
     private final int TO_REPORT_PROBLEM = 9;
     private final int TO_FAQ = 10;
+    private final int LOGIN = 11;
 
     private boolean isSpeciality;
     private boolean isShowTrueName;
+    private boolean isInit = false;//为了让第一次显示时用户未登录进入登录界面
     private String true_name;
     private String nick_name;
     private String specialty;
@@ -85,7 +85,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     private byte[] my_portrait;
 
     /*Handler更新UI*/
-    Handler myHandler = new Handler() {
+   /* Handler myHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case UPDATE_UI:
@@ -95,28 +95,26 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 case UPDATE_PORTRAIT:
                     //头像显示
                     if (my_portrait != null) {
-                        image_portrait.setImageBitmap(getBitmapFromByte(my_portrait));
+                        image_portrait.setImageBitmap(Util.getBitmapFromByte(my_portrait));
                     }
                     break;
             }
             super.handleMessage(msg);
         }
-    };
+    };*/
 
 
     private void repeat_update() {
-
         //判断是否为专业志愿志愿者，显示不同按钮
         if (isSpeciality) {
             //专业志愿者
-            tv_top_specialty.setVisibility(View.VISIBLE);
-            tv_top_specialty.setText(specialty);
-            tv_item_specialty.setText(specialty);
+            tv_specialty.setVisibility(View.VISIBLE);
+            tv_specialty.setText(specialty);
             professional_true.setVisibility(View.VISIBLE);
             Professional_false.setVisibility(View.GONE);
         } else {
             //普通志愿者
-            tv_top_specialty.setVisibility(View.INVISIBLE);
+            tv_specialty.setVisibility(View.INVISIBLE);
             professional_true.setVisibility(View.GONE);
             Professional_false.setVisibility(View.VISIBLE);
         }
@@ -161,11 +159,24 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        isInit = true;
         mainview = inflater.inflate(R.layout.fragment_personal, container, false);
 
         /*头部*/
         image_portrait = (ImageView) mainview.findViewById(R.id.image_personal_portrait);
+        image_portrait.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               /* boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+                if (!isLogin) {
+                    //如果用户未登录则跳转到登录界面
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }*/
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         /*find UI界面组件
         include的middle_view*/
@@ -176,16 +187,20 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         tv_RetireTime = (TextView) middleView.findViewById(R.id.tv_personal_ServiceRetireTime);
         /*include的bottom_view*/
         bottomView = mainview.findViewById(R.id.bottom_part);
-        tv_true_name = (TextView) mainview.findViewById(R.id.tv_PersonalTop_true_name);
-        tv_top_specialty = (TextView) mainview.findViewById(R.id.tv_PersonalTop_specialty);
-        tv_item_specialty = (TextView) bottomView.findViewById(R.id.tv_personalItem_specialtytype);
-        tv_integral = (TextView) mainview.findViewById(R.id.tv_PersonalTop_integral);
+        tv_true_name = (TextView) mainview.findViewById(R.id.tv_LL_true_name);
+        tv_specialty = (TextView) mainview.findViewById(R.id.tv_LL_specialty);
+        tv_integral = (TextView) mainview.findViewById(R.id.tv_LL_integral);
         professional_true = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_true);
         Professional_false = (LinearLayout) bottomView.findViewById(R.id.LL_PF_Professional_false);
 
+        exit = (Button) mainview.findViewById(R.id.btn_personalData_quit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exitLogin();
+            }
+        });
 
-        //初始化连接
-        mAction = new AppActionImpl(getActivity());
         initViewsEven();//设置点击事件的监听以及初始化组件
 
         //初次进入设置UI
@@ -193,6 +208,20 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         isCreat = true;
 
         return mainview;
+    }
+
+    /**
+     * 退出登录
+     */
+    public void exitLogin() {
+        LocalDate.getInstance(getActivity()).setLocalDate("volunteerId", "");
+        LocalDate.getInstance(getActivity()).setLocalDate("isLogin", false);
+        LocalDate.getInstance(getActivity()).setLocalDate("access_token", "");
+//        getAccessToken();
+//        setResult(RESULT_OK);
+//        finish();
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
     }
 
     private void initViewsEven() {
@@ -239,49 +268,59 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int tag = (int) v.getTag();
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
+
+        boolean isLigon = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+        if (!isLigon) {
+            showToast("请先登录");
+            return;
+        }
+
         switch (tag) {
             case PROFESSIONAL_SELECTION:
-                intent.setClass(getActivity(), ProfessionalSelectionActivity.class);
+                if (eventbus_data == null) {
+                    showToast("登录异常");
+                    return;
+                }
+                intent.setClass(getActivity(), MajorAbilityActivity.class);
+                intent.putExtra("personal_data", eventbus_data);
                 startActivity(intent);
                 break;
             case APPLY_PROFESSIONAL:
-                intent.setClass(getActivity(), ApplyProBonoActivity.class);
-                startActivity(intent);
+                toSpecialRegister(intent);
                 break;
             case TO_MYPROJECT:
                 intent.putExtra("title", this.getResources().getString(R.string.title_myproject));
+                intent.putExtra("activityType", MyProjectActivity.MY_PROJECT);
                 intent.setClass(getActivity(), MyProjectActivity.class);
                 startActivity(intent);
                 break;
             case TO_ATTENTION:
                 intent.putExtra("title", this.getResources().getString(R.string.title_myattention));
+                intent.putExtra("activityType", MyProjectActivity.MY_ATTENTION);
                 intent.setClass(getActivity(), MyProjectActivity.class);
                 startActivity(intent);
                 break;
             case TO_ORG:
+                if (eventbus_data == null) {
+                    showToast("登录异常");
+                    return;
+                }
                 intent.setClass(getActivity(), MyORGActivity.class);
+                intent.putExtra("personal_data", eventbus_data);
                 startActivity(intent);
                 break;
             case TO_RANK:
                 break;
             case TO_INFORMATION:
-                if (my_portrait != null) {
-                    intent.putExtra("portrait", my_portrait);
-                }
-                if (personal_data != null) {
-                    intent.putExtra("data", personal_data);
-                    intent.setClass(getActivity(), PersonalDataActivity.class);
-                    startActivity(intent);
-                } else {
-                    showToast("数据加载中，请稍候");
-                }
+                toInformation(intent);
                 break;
             case TO_ABOUTUS:
                 intent.setClass(getActivity(), AboutUsActivity.class);
                 startActivity(intent);
                 break;
             case TO_WIPE_CACHE:
+               /* LocalDate.getInstance(getActivity()).setLocalDate("isLogin", false);*/
                 break;
             case TO_REPORT_PROBLEM:
                 intent.setClass(getActivity(), ReportProblemActivity.class);
@@ -294,15 +333,89 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void toSpecialRegister(final Intent intent) {
+        String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
+        if (TextUtils.isEmpty(volunteerId)) {
+            showToast("请先登录");
+            return;
+        }
+
+        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
+                new ActionCallbackListener<VolunteerViewDto>() {
+                    @Override
+                    public void onSuccess(VolunteerViewDto data) {
+                        if (data == null) {
+                            showToast("服务器连接失败");
+                            return;
+                        }
+                        intent.putExtra("personal_data", data);
+                        intent.setClass(getActivity(), ApplyProBonoActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("服务器连接失败");
+                    }
+                });
+    }
+
+    private void toInformation(final Intent intent) {
+        if (my_portrait != null) {
+            intent.putExtra("portrait", my_portrait);
+        }
+        String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
+        if (TextUtils.isEmpty(volunteerId)) {
+            showToast("请先登录");
+            return;
+        }
+
+        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
+                new ActionCallbackListener<VolunteerViewDto>() {
+                    @Override
+                    public void onSuccess(VolunteerViewDto data) {
+                        if (data == null) {
+                            showToast("服务器连接失败");
+                            return;
+                        }
+                        intent.putExtra("data", data);
+                        intent.setClass(getActivity(), PersonalDataActivity.class);
+                        startActivityForResult(intent, TO_INFORMATION);
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("服务器连接失败");
+                    }
+                });
+    }
+
     @Override
     public void onResume() {
-        //暂时获取票据
-        mAction.getAccessToken("15728006854", "123456", new AccessTokenListener() {
+        //注册登录时需写的
+      /*  LocalDate.getInstance(getActivity()).setLocalDate("volunteerId", "ecb8263d-4559-4dff-8db5-13be1059d6fa");
+        LocalDate.getInstance(getActivity()).setLocalDate("isLogin", true);
+        LocalDate.getInstance(getActivity()).setLocalDate("username", "15728006854");
+        LocalDate.getInstance(getActivity()).setLocalDate("password", "123456");*/
+        super.onResume();
+
+        if (!LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false)) {
+            image_portrait.setImageResource(R.drawable.personal_no_portrait);
+            tv_true_name.setText("");
+        }
+        getVolunteerDate();
+
+        /*LocalDate.getInstance(getActivity()).setLocalDate("volunteerId", "");
+        LocalDate.getInstance(getActivity()).setLocalDate("isLogin", false);*/
+
+
+/*        //暂时获取票据
+        AppActionImpl.getInstance(getActivity()).getAccessToken("15728006854", "123456", new AccessTokenListener() {
             @Override
             public void success(AccessTokenBO accessTokenBO) {
 
                 //取得头像
-                mAction.get_portrait("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<String>() {
+                AppActionImpl.getInstance(getActivity()).get_portrait("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<String>() {
 
                             @Override
                             public void onSuccess(String data) {
@@ -330,48 +443,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             public void fail() {
                 showToast("fail");
             }
-        });
-
-        mAction.get_volunteerDetail("ecb8263d-4559-4dff-8db5-13be1059d6fa", new ActionCallbackListener<VolunteerViewDto>() {
-
-            @Override
-            public void onSuccess(VolunteerViewDto data) {
-                //EventBus将data传到另一个activity中备用
-                personal_data = data;
-
-                isSpeciality = data.getSpeciality();
-                isShowTrueName = data.getShowTrueName();
-
-                //头部
-                true_name = data.getTrueName();
-                nick_name = data.getNickName();
-                integral = data.getScore().toString();
-                LevelType = data.getLevelType();
-                if (data.getSpecialty() != null)
-                    specialty = data.getSpecialty();
-
-                //服务时长
-                SchoolServiceTime = data.getSchoolservicetime() + "小时";
-                WorkServiceTime = data.getWorkservicetime() + "小时";
-                RetireServiceTime = data.getRetireservicetime() + "小时";
-                AllServiceTime = data.getSchoolservicetime() + data.getWorkservicetime()
-                        + data.getRetireservicetime() + "小时";
-
-                //非第一次进入时利用handler更新UI
-                if (isCreat) {
-                    Message message = new Message();
-                    message.what = UPDATE_UI;
-                    myHandler.sendMessage(message);
-                }
-
-            }
-
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                showToast("网络异常，请检查后重试");
-            }
-        });
-
+        });*/
 
 //        //志愿者信息post查询
 //        VolunteerQueryDto vl_query = new VolunteerQueryDto();
@@ -402,28 +474,116 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 //                showToast("fail");
 //            }
 //        });
-
-        super.onResume();
     }
 
-    //二进制流转换为图片
-    public Bitmap getBitmapFromByte(byte[] temp) {
-        if (temp != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);
-            return bitmap;
-        } else {
-            return null;
+    private void getVolunteerDate() {
+        final String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
+        boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+        if (isInit) {
+            isInit = false;
+            if (TextUtils.isEmpty(volunteerId) || !isLogin) {
+                //如果用户未登录则跳转到登录界面
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(intent, LOGIN);
+                return;
+            }
         }
+
+        if (TextUtils.isEmpty(volunteerId))//如果id为空就不获取志愿者的信息
+            return;
+        //获取志愿者的信息
+        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
+                new ActionCallbackListener<VolunteerViewDto>() {
+
+                    @Override
+                    public void onSuccess(VolunteerViewDto data) {
+                        if (data == null) {
+                            //如果用户登录失败则跳转到登录界面
+                            if (isInit) {
+                                isInit = false;
+                                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                startActivityForResult(intent, LOGIN);
+                            }
+                            return;
+                        }
+                        getVolunteerPhoto(volunteerId);
+                        //EventBus将data传到另一个activity中备用
+                        eventbus_data = data;
+
+                        isSpeciality = data.getSpeciality();
+                        isShowTrueName = data.getShowTrueName()== null ? false : data.getShowTrueName();
+
+                        //头部
+                        true_name = data.getTrueName();
+                        nick_name = data.getNickName();
+                        integral = data.getScore().toString();
+                        LevelType = data.getLevelType();
+                        if (specialty != null)
+                            specialty = data.getSpecialty();
+
+                        //服务时长
+                        double schoolTime = data.getSchoolservicetime() == null ? 0 : data.getSchoolservicetime();
+                        SchoolServiceTime = schoolTime + "小时";
+                        double workTime = data.getWorkservicetime() == null ? 0 : data.getWorkservicetime();
+                        WorkServiceTime = workTime + "小时";
+                        double retireTime = data.getRetireservicetime() == null ? 0 : data.getRetireservicetime();
+                        RetireServiceTime = retireTime + "小时";
+                        AllServiceTime = schoolTime + workTime + retireTime + "小时";
+
+                        //非第一次进入时利用handler更新UI
+                        if (isCreat) {
+                           /* Message message = new Message();
+                            message.what = UPDATE_UI;
+                            myHandler.sendMessage(message);*/
+                            repeat_update();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+                        showToast("网络异常，请检查后重试");
+                    }
+                });
+    }
+
+    private void getVolunteerPhoto(String volunteerId) {
+        //获取头像
+        AppActionImpl.getInstance(getActivity()).get_portrait(volunteerId,
+                new ActionCallbackListener<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        if (!TextUtils.isEmpty(data)) {
+                            my_portrait = Base64.decode(data.getBytes(), Base64.DEFAULT);
+                            image_portrait.setImageBitmap(Util.getBitmapFromByte(data));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errorEvent, String message) {
+
+                    }
+                });
     }
 
     @Override
     public void onDestroy() {
         if (group != null)
             group.removeAllViews();
+        isCreat = false;
         super.onDestroy();
     }
 
     private void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        if (isCreat)
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TO_INFORMATION) {
+            Logger.v(TAG, "onActivityResult");
+            getVolunteerDate();
+        }
     }
 }

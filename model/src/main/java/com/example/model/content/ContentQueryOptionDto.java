@@ -9,24 +9,20 @@ package com.example.model.content;
  */
 public class ContentQueryOptionDto {
     private String CategoryId;//(string, optional),
+    private String OrganizationName;//(string, optional),
+    private String OrgId;//(string, optional),
     private String ContentName;//(string, optional),
-    private String SubContentName;//(string, optional),
-    private String Description;//(string, optional),
-    private String CategoryPathId;//(string, optional),
+    private String CategoryPathId;// (string, optional),
     private String CategoryPathName;//(string, optional),
-    private Boolean IsOutsideLink;//(boolean, optional),
-    private String Author;// (string, optional),
-    private String Source;//(string, optional),
-    private String Comment;//(string, optional),
-    private Boolean IsTop;//(boolean, optional),
-    private Boolean IsPic;//(boolean, optional),
-    private String PubDepartment;//(string, optional),
-    private String PubDateTimeBeg;// (string, optional),
-    private String PubDateTimeEnd;// (string, optional),
-    private Boolean IsPermission;//(boolean, optional),
-    private String PermissionTime;//(string, optional),
-    private String PermissionUserId;// (string, optional),
-    private String PermissionUserName;//(string, optional),
+    private Boolean IsOutsideLink;// (boolean, optional),
+    private String PubDateTimeBeg;//(string, optional),
+    private String PubDateTimeEnd;//(string, optional),
+    private Boolean IsPermission;// (boolean, optional),
+    private String PermissionUserId;//(string, optional),
+    private String Author;//(string, optional),
+    private Boolean IsNeedTranslate;//(boolean, optional),
+    private Boolean IsTranslate;// (boolean, optional),
+    private String Cn_ID;//(string, optional),
     private String KeyWord;//(string, optional): 查询关键词
     private Integer PageIndex;//(integer, optional): 当前页索引，默认1
     private Integer PageSize;//(integer, optional): 每页记录条数，默认20
@@ -64,12 +60,12 @@ public class ContentQueryOptionDto {
         CategoryPathName = categoryPathName;
     }
 
-    public String getComment() {
-        return Comment;
+    public String getCn_ID() {
+        return Cn_ID;
     }
 
-    public void setComment(String comment) {
-        Comment = comment;
+    public void setCn_ID(String cn_ID) {
+        Cn_ID = cn_ID;
     }
 
     public String getContentName() {
@@ -80,12 +76,12 @@ public class ContentQueryOptionDto {
         ContentName = contentName;
     }
 
-    public String getDescription() {
-        return Description;
+    public Boolean getNeedTranslate() {
+        return IsNeedTranslate;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public void setNeedTranslate(Boolean needTranslate) {
+        IsNeedTranslate = needTranslate;
     }
 
     public Boolean getOutsideLink() {
@@ -104,20 +100,12 @@ public class ContentQueryOptionDto {
         IsPermission = permission;
     }
 
-    public Boolean getPic() {
-        return IsPic;
+    public Boolean getTranslate() {
+        return IsTranslate;
     }
 
-    public void setPic(Boolean pic) {
-        IsPic = pic;
-    }
-
-    public Boolean getTop() {
-        return IsTop;
-    }
-
-    public void setTop(Boolean top) {
-        IsTop = top;
+    public void setTranslate(Boolean translate) {
+        IsTranslate = translate;
     }
 
     public String getKeyWord() {
@@ -126,6 +114,22 @@ public class ContentQueryOptionDto {
 
     public void setKeyWord(String keyWord) {
         KeyWord = keyWord;
+    }
+
+    public String getOrganizationName() {
+        return OrganizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        OrganizationName = organizationName;
+    }
+
+    public String getOrgId() {
+        return OrgId;
+    }
+
+    public void setOrgId(String orgId) {
+        OrgId = orgId;
     }
 
     public Integer getPageIndex() {
@@ -144,28 +148,12 @@ public class ContentQueryOptionDto {
         PageSize = pageSize;
     }
 
-    public String getPermissionTime() {
-        return PermissionTime;
-    }
-
-    public void setPermissionTime(String permissionTime) {
-        PermissionTime = permissionTime;
-    }
-
     public String getPermissionUserId() {
         return PermissionUserId;
     }
 
     public void setPermissionUserId(String permissionUserId) {
         PermissionUserId = permissionUserId;
-    }
-
-    public String getPermissionUserName() {
-        return PermissionUserName;
-    }
-
-    public void setPermissionUserName(String permissionUserName) {
-        PermissionUserName = permissionUserName;
     }
 
     public String getPubDateTimeBeg() {
@@ -184,35 +172,11 @@ public class ContentQueryOptionDto {
         PubDateTimeEnd = pubDateTimeEnd;
     }
 
-    public String getPubDepartment() {
-        return PubDepartment;
-    }
-
-    public void setPubDepartment(String pubDepartment) {
-        PubDepartment = pubDepartment;
-    }
-
     public Object getSorts() {
         return Sorts;
     }
 
     public void setSorts(Object sorts) {
         Sorts = sorts;
-    }
-
-    public String getSource() {
-        return Source;
-    }
-
-    public void setSource(String source) {
-        Source = source;
-    }
-
-    public String getSubContentName() {
-        return SubContentName;
-    }
-
-    public void setSubContentName(String subContentName) {
-        SubContentName = subContentName;
     }
 }

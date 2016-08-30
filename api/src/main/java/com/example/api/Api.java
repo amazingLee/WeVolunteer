@@ -1,6 +1,8 @@
 package com.example.api;
 
 import com.example.model.AccessTokenBO;
+import com.example.model.Attachment.AttachmentParaDto;
+import com.example.model.Attachment.AttachmentsReturnDto;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityCreateBO;
 import com.example.model.activity.ActivityListDto;
@@ -9,6 +11,11 @@ import com.example.model.activity.ActivityViewDto;
 import com.example.model.activityRecruit.ActivityRecruitDto;
 import com.example.model.activityRecruit.ActivityRecruitListDto;
 import com.example.model.activityRecruit.ActivityRecruitQueryOptionDto;
+import com.example.model.activityTime.ActivityTimeListDto;
+import com.example.model.activityTime.ActivityTimeQueryOptionDto;
+import com.example.model.activityattention.ActivityAttentionDto;
+import com.example.model.activityattention.ActivityAttentionListDto;
+import com.example.model.activityattention.ActivityAttentionQueryOptionDto;
 import com.example.model.area.AreaListDto;
 import com.example.model.area.AreaViewDto;
 import com.example.model.company.CompanyListDto;
@@ -24,10 +31,13 @@ import com.example.model.dictionary.DictionaryViewDto;
 import com.example.model.jobActivity.JobActivityViewDto;
 import com.example.model.organization.OrganizationListDto;
 import com.example.model.organization.OrganizationQueryOptionDto;
+import com.example.model.signRecord.SignInOutDto;
 import com.example.model.user.UserDto;
 import com.example.model.user.UserListDto;
 import com.example.model.user.UserPhotoDto;
 import com.example.model.user.UserViewDto;
+import com.example.model.volunteer.VolunteerBaseListDto;
+import com.example.model.volunteer.VolunteerBaseQueryOptionDto;
 import com.example.model.volunteer.VolunteerCreateDto;
 import com.example.model.volunteer.VolunteerDto;
 import com.example.model.volunteer.VolunteerQueryDto;
@@ -57,6 +67,11 @@ public interface Api {
     public static final String ACTIVITY_RECRUIT_CREAT = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/create";
     public static final String ACTIVITY_RECRUIT_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityrecruit/query";
 
+    //关注
+    public static final String ACTIVITY_ATTENTION_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityattention/create";
+    public static final String ACTIVITY_ATTENTION_DELETE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityattention/delete";
+    public static final String ACTIVITY_ATTENTION_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activityattention/query";
+
     //岗位
     public static final String JOBACTIVITY_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/jobactivity/details";
 
@@ -83,6 +98,7 @@ public interface Api {
     //组织
     public static final String ORGANIZATION_QUERY = "Nbcei.Framework.Api.Impl/v1/organization/query";
     public static final String ORGANIZATION_DETAIL = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/company/details";
+    public static final String ORGANIZATION_QUERY_CHILD = "Nbcei.Framework.Api.Impl/v1/organization/query/child";
 
     //所在区域
     public static final String AREA_QUERY = "Nbcei.Framework.Api.Impl/v1/area/query/child";
@@ -92,7 +108,6 @@ public interface Api {
     public static final String CONTENT_QUERY = "Nbcei.Plugin.CMS.Api.Impl/v1/Content/query";
 
     //
-
 
 
     //发送验证码
@@ -107,6 +122,18 @@ public interface Api {
     public static final String UPDATE_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/update/photo";
     public static final String GET_PORTRAIT = "Nbcei.Framework.Api.Impl/v1/user/query/photo";
 
+
+    //志愿者服务站点
+    public static final String VOLUNTEER_BASE_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/volunteerbase/query";
+
+    //签到签退明细
+    public static final String SIGNRECORD_CREATE = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/signrecord/create";
+
+    //专业证书批量上传
+    public static final String UPDATE_MAJOR_ATTACHMENT = "Nbcei.Plugin.Attachment.Api.Impl/v1/attachments/savefile";
+
+    //查询活动时间
+    public static final String ACTIVITY_TIME_QUERY = "Nbcei.Plugin.NbVolunteer.Api.Impl/v1/activitytime/query";
     /**
      * 获取accessToken
      *
@@ -161,6 +188,12 @@ public interface Api {
      * @return
      */
     public ApiResponse<PagedListEntityDto<ActivityRecruitListDto>> activityRecuitQuery(ActivityRecruitQueryOptionDto query, String accessToken);
+
+    public ApiResponse<List<String>> activityAttentionCreate(List<ActivityAttentionDto> create, String accessToken);
+
+    public ApiResponse<String> activityAttentionDelete(List<String> id, String accessToken);
+
+    public ApiResponse<PagedListEntityDto<ActivityAttentionListDto>> activityAttentionQuery(ActivityAttentionQueryOptionDto query, String accessToken);
 
     /**
      * 岗位详细查询
@@ -245,6 +278,11 @@ public interface Api {
     public ApiResponse<CompanyViewDto> organizationDetail(String id,String accessToken);*/
 
     /**
+     * 所属机构查询
+     */
+    public ApiResponse<List<OrganizationListDto>>  organizationQueryChild(String parentId,String accessToken);
+
+    /**
      * 所在区域查询
      */
     public ApiResponse<List<AreaListDto>> AreaQuery(String parentId, String accessToken);
@@ -261,4 +299,20 @@ public interface Api {
      */
     public ApiResponse<PagedListEntityDto<ContentListDto>> contentQuery(ContentQueryOptionDto query, String accessToken);
 
+    /**
+     * 志愿者服务站点
+     */
+    public ApiResponse<PagedListEntityDto<VolunteerBaseListDto>> volunteerBaseQuery(VolunteerBaseQueryOptionDto query, String accessToken);
+    /**
+     * 签到签退明细
+     */
+    public ApiResponse<List<String>> signRecordCreate(List<SignInOutDto> creates, String accessToken);
+
+    //证书上传
+    public ApiResponse<AttachmentsReturnDto> update_major_attachment(List<AttachmentParaDto> data, String accessToken);
+
+    /**
+     * 查询活动时间
+     */
+    public ApiResponse<PagedListEntityDto<ActivityTimeListDto>> activityTiemQuery(ActivityTimeQueryOptionDto query,String accessToken);
 }

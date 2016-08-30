@@ -2,91 +2,157 @@ package com.example.renhao.wevolunteer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
+import com.example.model.dictionary.DictionaryListDto;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * 政治面貌
  */
-public class PoliticsstatusActivity extends AppCompatActivity {
+public class PoliticsstatusActivity extends BaseActivity {
     private static final String TAG = "ResidenceActivity";
+    @Bind(R.id.imageView_btn_back)
+    ImageView mBack;
+    @Bind(R.id.textView)
+    TextView mTitle;
+    @Bind(R.id.tv_myPolity_submit)
+    TextView mSubmit;
+    @Bind(R.id.rg_politicsstatus_selsec)
+    ListView mRgSelsec;
 
-    private AppAction mAction;
-
-    private VolunteerViewDto personal_data;
-    private TextView submit;
-    private EditText edit_myPolity;
+    private VolunteerViewDto personalData;
 
     private String myPolity;
+
+    private int check = -1;
+
+    private List<String> codes;
+    private List<String> names;
+
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_politicsstatus);
+        ButterKnife.bind(this);
 
-        mAction = new AppActionImpl(this);
+        type = getIntent().getIntExtra("type", -1);
 
         Intent intent = getIntent();
-        personal_data = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
-        submit = (TextView) findViewById(R.id.tv_myPolity_submit);
-        edit_myPolity = (EditText) findViewById(R.id.edit_myPolity);
+        personalData = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
+        myPolity = personalData.getPolity();
+        initView();
 
-        if (personal_data.getPolity() != null) {
-            myPolity = personal_data.getPolity();
-            edit_myPolity.setText(myPolity);
-        }
+    }
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myPolity=edit_myPolity.getText().toString();
-                List<VolunteerViewDto> vl_updates = new ArrayList<>();
-                personal_data.setPolity(myPolity);
-                vl_updates.add(personal_data);
-                mAction.volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
+    private void initView() {
+        //获取字典选项
+        AppActionImpl.getInstance(this).dictionaryQueryDefault("PoliticalAttribute", "",
+                new ActionCallbackListener<List<DictionaryListDto>>() {
                     @Override
-                    public void onSuccess(String data) {
-                        Intent result = new Intent();
-                        result.putExtra("personal_data", personal_data);
-                        setResult(RESULT_OK, result);
-                        showToast("修改成功");
-                        PoliticsstatusActivity.this.finish();
+                    public void onSuccess(List<DictionaryListDto> data) {
+                        if (data == null || data.size() < 1)
+                            return;
+                        codes = new ArrayList<String>();
+                        names = new ArrayList<String>();
+                        int temp = -1;
+                        for (int i = 0; i < data.size(); i++) {
+                            String name = data.get(i).getName();
+                            String code = data.get(i).getCode();
+                            codes.add(code);
+                            names.add(name);
+                            Logger.v("TTTTTTTTTT", code + " ---- " + myPolity);
+                            if (code.equals(myPolity)) {
+                                Logger.v("TTTTTTTTTT", " --check-- " );
+                                temp = i;
+                                check = i;
+                            }
+                        }
+
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(PoliticsstatusActivity.this, android.R.layout.simple_list_item_multiple_choice, android.R.id.text1, names);
+                        mRgSelsec.setAdapter(arrayAdapter);
+                        mRgSelsec.setChoiceMode(ListView.CHOICE_MODE_SINGLE);//这里我们直接在源代码中设置选择模式
+                        if (temp > -1)
+                            mRgSelsec.setItemChecked(temp, true);
+                        mRgSelsec.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Logger.v(TAG, position + "");
+                                check = position;
+                            }
+                        });
                     }
 
                     @Override
                     public void onFailure(String errorEvent, String message) {
-                        showToast("网络异常，请检查后重试");
+
                     }
                 });
-            }
-        });
-
-        //回退按钮
-        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PoliticsstatusActivity.this.finish();
-            }
-        });
 
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
+    @OnClick({R.id.imageView_btn_back, R.id.tv_myPolity_submit})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.imageView_btn_back:
+                finish();
+                break;
+            case R.id.tv_myPolity_submit:
+                submit();
+                break;
+        }
     }
 
+    private void submit() {
+        if (check == -1) {
+            showToast("请选择一项");
+            return;
+        }
+        personalData.setPolity(codes.get(check));
+        if (type > -1) {
+            Intent intent = new Intent();
+            intent.putExtra("personal_data", personalData);
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            List<VolunteerViewDto> list = new ArrayList<>();
+            list.add(personalData);
+            AppActionImpl.getInstance(this).volunteerUpdate(list,
+                    new ActionCallbackListener<String>() {
+                        @Override
+                        public void onSuccess(String data) {
+                            showToast("修改成功");
+                            Intent intent = new Intent();
+                            intent.putExtra("personal_data", personalData);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(String errorEvent, String message) {
+                            showToast("修改失败，请稍后再试");
+                        }
+                    });
+        }
+    }
 }

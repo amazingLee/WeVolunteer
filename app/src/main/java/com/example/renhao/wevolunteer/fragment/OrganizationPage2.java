@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
@@ -23,6 +21,7 @@ import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
+import com.example.renhao.wevolunteer.base.BaseFragmentV4;
 import com.example.renhao.wevolunteer.event.OrganizationDetailEvent;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -45,7 +44,7 @@ import butterknife.OnClick;
  * 创建时间：2016/8/12 9:34
  * 修改备注：
  */
-public class OrganizationPage2 extends Fragment {
+public class OrganizationPage2 extends BaseFragmentV4 {
     private static final String TAG = "OrganizationPage2";
 
     public static final int REFRESH = 0;
@@ -65,7 +64,7 @@ public class OrganizationPage2 extends Fragment {
     private Integer StartPosition;// (integer, optional): 记录开始位置
     private Integer EndPosition;//(integer, optional): 记录结束位置
     private Boolean HasPreviousPage;// (boolean, optional): 是否有上一页
-    private Boolean HasNextPage;//(boolean, optional): 是否有下一页
+    private Boolean HasNextPage=true;//(boolean, optional): 是否有下一页
 
     @Bind(R.id.listvew_organization_projectItem)
     PullToRefreshListView mListvew;
@@ -213,10 +212,6 @@ public class OrganizationPage2 extends Fragment {
                     }
                 });
 
-    }
-
-    private void showToast(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override

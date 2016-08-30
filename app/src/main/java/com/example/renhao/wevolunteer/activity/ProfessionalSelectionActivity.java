@@ -1,7 +1,6 @@
 package com.example.renhao.wevolunteer.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 专业选择界面
  */
-public class ProfessionalSelectionActivity extends AppCompatActivity {
+public class ProfessionalSelectionActivity extends BaseActivity {
     private static final String TAG = "ProfessionalSelectionActivity";
 
     private List<String> actions;
@@ -35,7 +35,7 @@ public class ProfessionalSelectionActivity extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProfessionalSelectionActivity.this.finish();
+                finish();
             }
         });
 

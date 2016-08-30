@@ -1,66 +1,185 @@
 package com.example.renhao.wevolunteer.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.core.AppActionImpl;
+import com.example.model.ActionCallbackListener;
+import com.example.model.organization.OrganizationListDto;
+import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
+import com.example.renhao.wevolunteer.holder.TreeViewHolder;
+import com.unnamed.b.atv.model.TreeNode;
+import com.unnamed.b.atv.view.AndroidTreeView;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 所属机构界面
  */
-public class MyORGActivity extends AppCompatActivity {
+public class MyORGActivity extends BaseActivity implements TreeNode.TreeNodeClickListener {
     private static final String TAG = "MyORGActivity";
+    @Bind(R.id.imageView_myorg_back)
+    ImageView mBack;
+    @Bind(R.id.tv_myorg_title)
+    TextView mTitle;
+    @Bind(R.id.tv_myorg_submit)
+    TextView mSubmit;
+    @Bind(R.id.relativeLayout)
+    RelativeLayout mRelativeLayout;
+    @Bind(R.id.tv_myorg_chose)
+    TextView mTvChose;
+    @Bind(R.id.ll_myorg)
+    LinearLayout mLlMyorg;
+    @Bind(R.id.listView_myorg_selection)
+    RelativeLayout mSelection;
 
-    private List<String> actions;
-    private ListView listView;
+    private AndroidTreeView tView;
+
+    private TreeNode selectNode;
+    private VolunteerViewDto mVolunteerViewDto;
+    private String parentId = "00000000-0000-0000-0000-000000000000";
+
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myorg);
-        listView = (ListView) findViewById(R.id.listView_myORG);
+        ButterKnife.bind(this);
+        type = getIntent().getIntExtra("type", -1);
+        mVolunteerViewDto = (VolunteerViewDto) getIntent().getSerializableExtra("personal_data");
 
-        //回退按钮
-        ImageView btn_back = (ImageView) findViewById(R.id.imageView_btn_back);
-        btn_back.setOnClickListener(new View.OnClickListener() {
+        initTreeNode();
+    }
+
+    private void initTreeNode() {
+        TreeNode root = TreeNode.root();
+        TreeViewHolder.IconTreeItem iconTreeItem = new TreeViewHolder.IconTreeItem("", parentId, "全部");
+        TreeNode s1 = new TreeNode(iconTreeItem).setViewHolder(new TreeViewHolder(this));
+        root.addChildren(s1);
+        tView = new AndroidTreeView(this, root);
+        tView.setDefaultAnimation(true);
+        tView.setUse2dScroll(true);
+        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
+        tView.setDefaultNodeClickListener(this);
+       /* tView.setDefaultViewHolder(ArrowExpandSelectableHeaderHolder.class);*/
+        mSelection.addView(tView.getView());
+        tView.setUseAutoToggle(false);
+
+        tView.expandAll();
+    }
+
+    private void queryOrg(final TreeNode parent, TreeViewHolder.IconTreeItem item) {
+        AppActionImpl.getInstance(this).organizationQueryChild(item.id, new ActionCallbackListener<List<OrganizationListDto>>() {
             @Override
-            public void onClick(View v) {
-                MyORGActivity.this.finish();
+            public void onSuccess(List<OrganizationListDto> data) {
+                if (data == null || data.size() < 1) {
+                    return;
+                }
+                List<TreeViewHolder.IconTreeItem> childs = new ArrayList<TreeViewHolder.IconTreeItem>();
+                for (int i = 0; i < data.size(); i++) {
+                    OrganizationListDto dto = data.get(i);
+                    childs.add(new TreeViewHolder.IconTreeItem(dto.getCode(), dto.getId(), dto.getName()));
+                }
+                addChildTreeView(parent, childs);
+                tView.expandNode(parent);
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+
             }
         });
+    }
 
-        String[] s = new String[]{
-                "海曙区志愿协会",
-                "江东区志愿协会",
-                "江北区志愿协会",
-                "鄞州区志愿协会",
-                "镇海区志愿协会",
-                "北仑区志愿协会",
-                "慈溪市志愿协会",
-                "余姚市志愿协会",
-                "奉化市志愿协会",
-                "宁海县志愿协会",
-                "象山县志愿协会",
-        };
-        actions = Arrays.asList(s);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this, R.layout.myorg_item, R.id.tv_Institution, actions);
-        listView.setAdapter(arrayAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+    @OnClick({R.id.imageView_myorg_back, R.id.tv_myorg_submit})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.imageView_myorg_back:
+                finish();
+                break;
+            case R.id.tv_myorg_submit:
+                submit();
+                break;
+        }
+    }
+
+    private void submit() {
+        if (selectNode == null) {
+            showToast("请选择");
+            return;
+        }
+        TreeViewHolder.IconTreeItem item = (TreeViewHolder.IconTreeItem) selectNode.getValue();
+
+        if (type > -1) {
+            Intent intent = new Intent();
+            intent.putExtra("orgName", item.text);
+            intent.putExtra("orgId", item.id);
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            mVolunteerViewDto.setOrganizationId(item.id);
+            mVolunteerViewDto.setOrganizationName(item.text);
+            List<VolunteerViewDto> list = new ArrayList<>();
+            list.add(mVolunteerViewDto);
+            AppActionImpl.getInstance(this).volunteerUpdate(list, new ActionCallbackListener<String>() {
+                @Override
+                public void onSuccess(String data) {
+                /*Intent intent = new Intent();
+                intent.putExtra("", mVolunteerViewDto);
+                setResult(RESULT_OK, intent);*/
+                    finish();
+                }
+
+                @Override
+                public void onFailure(String errorEvent, String message) {
+                    showToast("连接错误，请稍后再试");
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onClick(TreeNode node, Object value) {
+        TreeViewHolder.IconTreeItem item = (TreeViewHolder.IconTreeItem) value;
+        mTvChose.setText(item.text);
+        selectNode = node;
+        if (node.isSelected()) {
+            if (node.isExpanded()) {
+                node.setExpanded(false);
+                tView.collapseNode(node);
+            } else {
+                node.setExpanded(true);
+                tView.expandNode(node);
             }
-        });
+        } else {
+            node.setSelected(true);
+            queryOrg(node, item);
+        }
+    }
+
+    private void addChildTreeView(TreeNode parent, List<TreeViewHolder.IconTreeItem> childs) {
+        for (int i = 0; i < childs.size(); i++) {
+            /*parent.addChildren(new TreeNode(childs.get(i)).setViewHolder(new TreeViewHolder(this)));*/
+            tView.addNode(parent, new TreeNode(childs.get(i)).setViewHolder(new TreeViewHolder(this)));
+        }
+        /*tView.expandAll();*/
+    }
+
+    private void addChildTreeView(TreeNode parent, TreeViewHolder.IconTreeItem child) {
+       /* parent.addChildren(new TreeNode(child).setViewHolder(new TreeViewHolder(this)));*/
+        tView.addNode(parent, new TreeNode(child).setViewHolder(new TreeViewHolder(this)));
     }
 }

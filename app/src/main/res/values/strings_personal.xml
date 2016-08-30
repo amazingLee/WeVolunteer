@@ -11,7 +11,7 @@
     <string name="personal_myAttention">我的关注</string>
     <string name="personal_myORG">所属机构</string>
     <string name="personal_myRank">我的排名</string>
-    <string name="personal_myInformation">我的资料</string>
+    <string name="personal_myInformation">个人资料</string>
     <string name="personal_aboutUS">关于我们</string>
     <string name="personal_WIPE_CACHE">清空缓存</string>
     <string name="personal_REPORT_PROBLEM">问题反馈</string>
@@ -53,6 +53,7 @@
     <string name="hint_major_ability">请输入专业能力</string>
     <string name="title_service_category">意向志愿服务类别</string>
     <string name="title_area_selection">区域选择</string>
+    <string name="title_personal_attribute">个人属性</string>
     <string name="title_forgot_password">找回密码</string>
     <string name="tv_account">账　号</string>
     <string name="hint_account">请输入用户名或证件号</string>

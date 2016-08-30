@@ -30,6 +30,35 @@ public class ActivityRecruitListDto {
     private String Explain;//(string, optional): 获取或设置 个人说明
     private String IP;//(string, optional): 获取或设置 报名ID
 
+    private String ActivityState;// (string, optional): 当前项目运行状态
+    private String AppLstUrl;// (string, optional): App图片
+    private String ActivityType;// (integer, optional): 获取或设置 类型0 活动1 岗位
+
+    public String getActivityState() {
+        return ActivityState;
+    }
+
+    public void setActivityState(String activityState) {
+        ActivityState = activityState;
+    }
+
+    public String getActivityType() {
+        return ActivityType;
+    }
+
+    public void setActivityType(String activityType) {
+        ActivityType = activityType;
+    }
+
+    public String getAppLstUrl() {
+        return AppLstUrl;
+    }
+
+    public void setAppLstUrl(String appLstUrl) {
+        AppLstUrl = appLstUrl;
+    }
+
+
     public String getActivityActivityName() {
         return ActivityActivityName;
     }

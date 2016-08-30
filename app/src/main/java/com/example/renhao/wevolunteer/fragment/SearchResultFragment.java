@@ -1,6 +1,5 @@
 package com.example.renhao.wevolunteer.fragment;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
@@ -28,10 +27,12 @@ import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.SearchActivity;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.OrganizationAdapter;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.example.renhao.wevolunteer.event.SearchHistoryEvent;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,7 +50,7 @@ import butterknife.ButterKnife;
  * 创建时间：2016/8/19 9:41
  * 修改备注：
  */
-public class SearchResultFragment extends Fragment {
+public class SearchResultFragment extends BaseFragment {
     private static final String TAG = "SearchResultFragment";
     public static final int REFRESH = 0;
     public static final int ADD = 1;
@@ -68,7 +69,7 @@ public class SearchResultFragment extends Fragment {
     private int StartPosition;// (integer, optional): 记录开始位置
     private int EndPosition;//(integer, optional): 记录结束位置
     private boolean HasPreviousPage;// (boolean, optional): 是否有上一页
-    private boolean HasNextPage;//(boolean, optional): 是否有下一页
+    private boolean HasNextPage=true;//(boolean, optional): 是否有下一页
 
     private SearchActivity mSearchActivity;
 
@@ -105,6 +106,25 @@ public class SearchResultFragment extends Fragment {
      * 初始化下拉刷新上拉加载控件
      */
     private void initPullToRefreshListView() {
+
+        mSearchResult.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                final Picasso picasso = Picasso.with(getActivity());
+
+                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                    picasso.resumeTag("Ptr");
+                } else {
+                    picasso.pauseTag("Ptr");
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+
         mSearchResult.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -279,10 +299,6 @@ public class SearchResultFragment extends Fragment {
                         mSearchResult.onRefreshComplete();
                     }
                 });
-    }
-
-    private void showToast(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.example.renhao.wevolunteer.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -9,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 常见问题界面
  */
-public class FAQActivity extends AppCompatActivity {
+public class FAQActivity extends BaseActivity {
     private static final String TAG = "FAQActivity";
 
     private List<String> actions;

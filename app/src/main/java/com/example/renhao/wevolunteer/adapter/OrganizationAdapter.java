@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.model.items.OrganizationListItem;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -71,7 +72,9 @@ public class OrganizationAdapter extends BaseAdapter {
         OrganizationListItem item = mDate.get(position);
 
         if (!TextUtils.isEmpty(item.getIconUrl())) {
-            Picasso.with(mContext).load(item.getIconUrl())
+            Picasso.with(mContext).load(Util.getRealUrl(item.getIconUrl()))
+                    .fit()
+                    .tag("Ptr")
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(viewHolder.mIcon);//加载图片

@@ -10,14 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_homepage_height"
         android:background="@color/colorCyan">
-        <ImageView
-            android:layout_width="@dimen/imageview_homepage_magnifierSize"
-            android:layout_height="@dimen/imageview_homepage_magnifierSize"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/actionbar_homepage_margin"
-            android:layout_marginStart="@dimen/actionbar_homepage_margin"
-            android:src="@drawable/icon_indicator"
-            android:id="@+id/imageView" />
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/linearlayout_back"
+            android:onClick="back">
+            <ImageView
+                android:layout_width="@dimen/imageview_homepage_magnifierSize"
+                android:layout_height="@dimen/imageview_homepage_magnifierSize"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/actionbar_homepage_margin"
+                android:layout_marginStart="@dimen/actionbar_homepage_margin"
+                android:src="@drawable/icon_indicator"
+                android:id="@+id/imageView" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,18 +36,6 @@
             android:layout_centerInParent="true"
             android:id="@+id/textView" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_next"
-            android:textSize="@dimen/textview_right_titlesize"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorWhite"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/textview_homepage_titlesize"
-            android:layout_marginEnd="@dimen/textview_homepage_titlesize"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <ScrollView
@@ -54,6 +50,30 @@
                 android:layout_height="50dp"
                 android:background="@drawable/bg_single_input"
                 android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/tv_register_nickname"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_register_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:background="@color/colorWhite"
+                    android:hint="@string/hint_register_nickname"
+                    android:textSize="15sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_single_input"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,6 +82,7 @@
                     android:textStyle="bold"
                     android:padding="15dp"/>
                 <EditText
+                    android:id="@+id/et_register_trueName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
@@ -69,6 +90,40 @@
                     android:layout_marginStart="23dp"
                     android:hint="@string/hint_register_name"
                     android:textSize="15sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_credentials_type"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/linearlayout_select"
+                android:clickable="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/tv_id_number_type"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_credentials_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="==请选择=="
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="15sp"
+                    android:layout_weight="0.9"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/icon_right_indicator" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -84,6 +139,7 @@
                     android:textStyle="bold"
                     android:padding="15dp"/>
                 <EditText
+                    android:id="@+id/et_register_id_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
@@ -92,41 +148,111 @@
                     android:hint="@string/hint_id_number"
                     android:textSize="15sp"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/bg_single_input"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tv_personal_attribute"
+                    android:padding="15dp"
+                    android:text="@string/tv_Email"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:padding="15dp"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_register_email"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_school"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_job"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_retire"/>
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@color/colorWhite"
+                    android:hint="@string/hint_Email"
+                    android:textSize="15sp"
+                    android:inputType="textEmailAddress" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_single_input"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/tv_register_password"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_register_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:inputType="textPassword"
+                    android:background="@color/colorWhite"
+                    android:hint="@string/hint_register_password"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_single_input"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/tv_register_Repassword"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_register_Repassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:inputType="textPassword"
+                    android:background="@color/colorWhite"
+                    android:hint="@string/hint_register_Repassword"
+                    android:textSize="15sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_personal_attribute"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/linearlayout_select"
+                android:clickable="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/tv_personal_attribute"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/icon_right_indicator" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d9d9"
+                />
 
             <include layout="@layout/include_pro_bono"/>
 
@@ -141,9 +267,9 @@
                     android:text="@string/tv_mobile_phone"
                     android:textSize="16sp"
                     android:textStyle="bold"
-
                     android:padding="15dp"/>
                 <EditText
+                    android:id="@+id/et_register_phone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
@@ -154,6 +280,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"/>
                 <Button
+                    android:id="@+id/btn_register_verification_code"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -176,6 +303,7 @@
                     android:textStyle="bold"
                     android:padding="15dp"/>
                 <EditText
+                    android:id="@+id/et_register_verification_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
@@ -190,9 +318,7 @@
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
                 <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
+                    android:id="@+id/cb_register_agree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tv_register_agree"
@@ -200,19 +326,20 @@
                     android:textColor="@color/colorCyan"/>
             </LinearLayout>
 
-
             <Button
+                android:id="@+id/btn_register_volunteer"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:background="@drawable/btn_login"
+                android:background="@drawable/bg_btn_selected"
                 android:layout_margin="15dp"
                 android:text="@string/btn_register"
                 android:textSize="18sp"
                 android:textColor="@color/colorWhite"/>
             <Button
+                android:id="@+id/btn_back_login"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:background="@drawable/btn_register"
+                android:background="@drawable/bg_btn_two_selected"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
@@ -222,6 +349,5 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

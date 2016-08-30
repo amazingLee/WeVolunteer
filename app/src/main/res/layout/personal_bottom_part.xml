@@ -33,7 +33,6 @@
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/textview_bottom_right_marginright"
             android:gravity="left"
-            android:text="法律援助"
             android:textColor="#999"
             android:textSize="@dimen/textview_bottom_right_size" />
 
@@ -130,6 +129,7 @@
         android:layout_height="@dimen/bottom_item_height"
         android:background="@drawable/linearlayout_select"
         android:clickable="true"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -176,7 +176,6 @@
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/textview_bottom_right_marginright"
             android:gravity="left"
-            android:text="10000+"
             android:textColor="#999"
             android:textSize="16sp" />
 

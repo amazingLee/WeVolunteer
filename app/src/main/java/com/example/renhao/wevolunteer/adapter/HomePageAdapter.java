@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.model.items.HomePageListItem;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
@@ -78,9 +79,10 @@ public class HomePageAdapter extends BaseAdapter {
         HomePageListItem item = mDate.get(position);
 
         if (!TextUtils.isEmpty(item.getImg())) {
-            Logger.v(TAG, mContext.getResources().getString(R.string.url) + item.getImg());
+            Logger.v(TAG, Util.getRealUrl(item.getImg()));
             Picasso.with(mContext)
-                    .load(mContext.getResources().getString(R.string.url) + item.getImg())
+                    .load(Util.getRealUrl(item.getImg()))
+                    .fit().tag("Ptr")
                     .placeholder(R.drawable.img_unload)
                     .error(R.drawable.img_unload)
                     .into(viewHolder.imageView);//加载图片
@@ -92,7 +94,7 @@ public class HomePageAdapter extends BaseAdapter {
         viewHolder.titleTv.setText(item.getTitle());
 
         viewHolder.numTv.setText(item.getNum() + "/" + item.getMaxNum() + " 人");
-        float h = Float.parseFloat(item.getTime()) / 60;
+        Number h = item.getTime();
         java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
         viewHolder.timeTv.setText(df.format(h) + "小时");
 

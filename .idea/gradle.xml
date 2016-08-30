@@ -16,10 +16,27 @@
             <option value="$PROJECT_DIR$/dialogplus" />
             <option value="$PROJECT_DIR$/dropdownmenu" />
             <option value="$PROJECT_DIR$/model" />
+            <option value="$PROJECT_DIR$/onekeyshare" />
             <option value="$PROJECT_DIR$/qrcodescan" />
+            <option value="$PROJECT_DIR$/sharesdk" />
           </set>
         </option>
-        <option name="resolveModulePerSourceSet" value="false" />
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/PullToRefresh" />
+            <option value="$PROJECT_DIR$/api" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/calendar" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/dialogplus" />
+            <option value="$PROJECT_DIR$/dropdownmenu" />
+            <option value="$PROJECT_DIR$/model" />
+            <option value="$PROJECT_DIR$/onekeyshare" />
+            <option value="$PROJECT_DIR$/qrcodescan" />
+            <option value="$PROJECT_DIR$/sharesdk" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

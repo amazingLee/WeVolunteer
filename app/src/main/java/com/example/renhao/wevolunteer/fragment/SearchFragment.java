@@ -1,6 +1,5 @@
 package com.example.renhao.wevolunteer.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import com.example.renhao.wevolunteer.R;
 import com.example.renhao.wevolunteer.SearchActivity;
 import com.example.renhao.wevolunteer.adapter.HistoryAdapter;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import butterknife.OnClick;
  * 创建时间：2016/8/19 9:40
  * 修改备注：
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends BaseFragment {
     private static final String TAG = "SearchFragment";
 
     public static final int ACTIVITY = 0;

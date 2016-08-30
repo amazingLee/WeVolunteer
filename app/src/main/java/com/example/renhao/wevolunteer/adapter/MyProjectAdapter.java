@@ -1,7 +1,7 @@
 package com.example.renhao.wevolunteer.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,47 +9,44 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.model.items.MyProjectItem;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.utils.Util;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class MyProjectAdapter extends BaseAdapter {
+    private Context mContext;
     private LayoutInflater mInflater;
-    private ArrayList<HashMap<String, Object>> listItem;
+    private List<MyProjectItem> lists;
 
-    public MyProjectAdapter(Context context) {
+    public MyProjectAdapter(Context context, List<MyProjectItem> lists) {
+        mContext = context;
+        this.lists = lists;
         this.mInflater = LayoutInflater.from(context);
 
     }
 
-    //适配器与数据数组绑定
-    private ArrayList<HashMap<String, Object>> getDate() {
-        listItem = new ArrayList<HashMap<String, Object>>();
-        {
-            for (int i = 0; i < 4; i++) {
-                HashMap<String, Object> map = new HashMap<String, Object>();
-                String get_date = "项目测试";
-                map.put("ItemDate", get_date);
-                listItem.add(map);
-            }
-            return listItem;
-        }
+    public void setDate(List<MyProjectItem> lists) {
+        this.lists = lists;
+        notifyDataSetChanged();
     }
+
 
     @Override
     public int getCount() {
-        return getDate().size();
+        return lists.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return lists.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     public final class ViewHolder {
@@ -63,7 +60,6 @@ public class MyProjectAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        Log.v("MyListViewBase", "getView " + position + " " + convertView);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_myproject, null);//根据布局产生一个view
             holder = new ViewHolder();
@@ -75,12 +71,21 @@ public class MyProjectAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();//取出ViewHolder对象
         }
-//        holder.name.setText("项目测试测试");
-//        holder.STATE.setText("已结束");
-//        holder.TIME.setText("2");
+        holder.name.setText(lists.get(position).getNeme());
+        holder.STATE.setText(lists.get(position).getState());
+        holder.TIME.setText(lists.get(position).getTime());
+
+        if (TextUtils.isEmpty(lists.get(position).getPic())) {
+            holder.PIC.setImageResource(R.drawable.img_unload);
+        } else {
+            Picasso.with(mContext).load(Util.getRealUrl(lists.get(position).getPic()))
+                    .fit().tag("Ptr")
+                    .placeholder(R.drawable.img_unload)
+                    .error(R.drawable.img_unload)
+                    .into(holder.PIC);
+        }
 
         return convertView;
     }
-
 
 }

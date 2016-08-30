@@ -2,18 +2,16 @@ package com.example.renhao.wevolunteer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.core.AppAction;
 import com.example.core.AppActionImpl;
 import com.example.model.ActionCallbackListener;
 import com.example.model.volunteer.VolunteerViewDto;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +19,9 @@ import java.util.List;
 /**
  * 现工作单位界面
  */
-public class CompanyActivity extends AppCompatActivity {
+public class CompanyActivity extends BaseActivity {
     private static final String TAG = "ResidenceActivity";
 
-    private AppAction mAction;
     private VolunteerViewDto personal_data;
     private String nowcompany;
 
@@ -36,8 +33,6 @@ public class CompanyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
-
-        mAction = new AppActionImpl(this);
 
         Intent intent = getIntent();
         personal_data = (VolunteerViewDto) intent.getSerializableExtra("personal_data");
@@ -55,7 +50,7 @@ public class CompanyActivity extends AppCompatActivity {
                 List<VolunteerViewDto> vl_updates = new ArrayList<>();
                 personal_data.setWorkunit(nowcompany);
                 vl_updates.add(personal_data);
-                mAction.volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
+                AppActionImpl.getInstance(getApplicationContext()).volunteerUpdate(vl_updates, new ActionCallbackListener<String>() {
                     @Override
                     public void onSuccess(String data) {
                         Intent result = new Intent();
@@ -84,8 +79,5 @@ public class CompanyActivity extends AppCompatActivity {
 
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 
 }

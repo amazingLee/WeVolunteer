@@ -1,50 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.renhao.wevolunteer.activity.AreaSelectionActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.example.renhao.wevolunteer.activity.AreaSelectionActivity">
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_homepage_height"
-        android:background="@color/colorCyan"
-        android:id="@+id/relativeLayout">
+        android:background="@color/colorCyan">
+
         <ImageView
+            android:id="@+id/imageView_areaselect_back"
             android:layout_width="@dimen/imageview_homepage_magnifierSize"
             android:layout_height="@dimen/imageview_homepage_magnifierSize"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/actionbar_homepage_margin"
             android:layout_marginStart="@dimen/actionbar_homepage_margin"
-            android:src="@drawable/icon_indicator"
-            android:id="@+id/imageView" />
+            android:src="@drawable/icon_indicator"/>
+
         <TextView
+            android:id="@+id/textView_areaselect_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center_vertical"
             android:text="@string/title_area_selection"
-            android:textSize="22sp"
             android:textColor="@color/colorWhite"
-            android:layout_centerInParent="true"
-            android:id="@+id/textView" />
+            android:textSize="22sp"/>
+
         <TextView
+            android:id="@+id/tv_areaselect_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_submit"
-            android:textSize="@dimen/textview_right_titlesize"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorWhite"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/textview_homepage_titlesize"
-            android:layout_marginEnd="@dimen/textview_homepage_titlesize"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/textview_homepage_titlesize"
+            android:layout_marginRight="@dimen/textview_homepage_titlesize"
+            android:gravity="center_vertical"
+            android:text="@string/tv_submit"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/textview_right_titlesize"/>
     </RelativeLayout>
 
-    <ListView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_area"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView_area_selection"
-        android:background="@color/colorWhite"
         android:layout_below="@+id/relativeLayout"
-        android:layout_centerHorizontal="true" />
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_area_chose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/listView_area_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_area"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorWhite"/>
 </RelativeLayout>

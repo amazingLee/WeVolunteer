@@ -1,7 +1,6 @@
 package com.example.renhao.wevolunteer.fragment;
 
 
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +22,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.core.AppActionImpl;
+import com.example.core.local.LocalDate;
 import com.example.model.ActionCallbackListener;
 import com.example.model.PagedListEntityDto;
 import com.example.model.activity.ActivityListDto;
@@ -34,9 +35,13 @@ import com.example.renhao.wevolunteer.OrganizationActivity;
 import com.example.renhao.wevolunteer.ProjectActivity;
 import com.example.renhao.wevolunteer.ProjectDetailActivity;
 import com.example.renhao.wevolunteer.R;
+import com.example.renhao.wevolunteer.activity.RegisterActivity;
+import com.example.renhao.wevolunteer.activity.RegisterProBonoActivity;
 import com.example.renhao.wevolunteer.adapter.HomePageAdapter;
 import com.example.renhao.wevolunteer.adapter.HomePageNoScrollGridAdapter;
+import com.example.renhao.wevolunteer.base.BaseFragment;
 import com.example.renhao.wevolunteer.event.FragmentResultEvent;
+import com.example.renhao.wevolunteer.utils.Util;
 import com.example.renhao.wevolunteer.view.NoScrollGridView;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -61,7 +66,7 @@ import java.util.List;
  * 创建时间：2016/8/5 16:38
  * 修改备注：
  */
-public class HomePageFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+public class HomePageFragment extends BaseFragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
     private static final String TAG = "HomePageFragment";
 
     public static final int PROJECT = 0;
@@ -179,11 +184,50 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final boolean isLogin = LocalDate.getInstance(getActivity()).getLocalDate("isLogin", false);
+                String volunteerId = LocalDate.getInstance(getActivity()).getLocalDate("volunteerId", "");
                 switch (position) {
                     case 0:
-                        initDialog();
+                        if (isLogin || !TextUtils.isEmpty(volunteerId)) {
+                            showToast("您已注册");
+                            return;
+                        }
+                        intent.setClass(getActivity(), RegisterActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
+
+                        intent.setClass(getActivity(), RegisterProBonoActivity.class);
+                        startActivity(intent);
+//                        if (!isLogin || TextUtils.isEmpty(volunteerId)) {
+//                            showToast("请先登录");
+//                            return;
+//                        }
+//
+//                        //查询出用户的信息
+//                        AppActionImpl.getInstance(getActivity()).get_volunteerDetail(volunteerId,
+//                                new ActionCallbackListener<VolunteerViewDto>() {
+//                                    @Override
+//                                    public void onSuccess(VolunteerViewDto data) {
+//                                        if (data == null) {
+//                                            showToast("登录错误，请重新登录");
+//                                            return;
+//                                        }
+//                                        boolean isSpecial = data.getSpeciality();
+//                                        if (isSpecial) {
+//                                            showToast("您已成为专业志愿者");
+//                                            return;
+//                                        }
+//                                        intent.putExtra("personal_data", data);
+//                                        intent.setClass(getActivity(), ApplyProBonoActivity.class);
+//                                        startActivity(intent);
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(String errorEvent, String message) {
+//                                        showToast("服务器连接异常，请稍后再试");
+//                                    }
+//                                });
                         break;
                     case 2:
                         intent.setClass(getActivity(), OrganizationActivity.class);
@@ -255,14 +299,16 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
     private void initImageSliderView() {
         this.imageSliderView = LayoutInflater.from(getActivity()).inflate(R.layout.view_imageslider, null);
         mSliderHomepageImgslider = (SliderLayout) imageSliderView.findViewById(R.id.slider_homepage_imgslider);
-
         getSliderDate();
     }
 
+    /**
+     * 获取首页新闻作为滚动栏
+     */
     private void getSliderDate() {
         ContentQueryOptionDto queryOptionDto = new ContentQueryOptionDto();
-        queryOptionDto.setPic(true);
-        queryOptionDto.setTop(true);
+        queryOptionDto.setPermission(true);
+        queryOptionDto.setCategoryId("434d9fae-f27d-4739-b99a-ceb21f79171a");
         queryOptionDto.setPageSize(4);
         AppActionImpl.getInstance(getActivity()).contentQuery(queryOptionDto,
                 new ActionCallbackListener<PagedListEntityDto<ContentListDto>>() {
@@ -278,7 +324,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
                             // initialize a SliderLayout
                             textSliderView
                                     .description(data.getRows().get(i).getContentName())
-                                    .image(data.getRows().get(i).getOutsideUrl())
+                                    .image(Util.getRealUrl(data.getRows().get(i).getSmallImgViewPc()))
                                     .setScaleType(BaseSliderView.ScaleType.Fit);
                             //.setOnSliderClickListener(this);
 
@@ -293,7 +339,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
 
                     @Override
                     public void onFailure(String errorEvent, String message) {
-
+                        showToast("服务器错误  " + message);
                     }
                 });
     }
@@ -322,6 +368,7 @@ public class HomePageFragment extends Fragment implements BaseSliderView.OnSlide
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.v(TAG, "qrcode result in findpageFragment  ");
         //使用EventBus向IndexActivity传值
         EventBus.getDefault().post(new FragmentResultEvent(requestCode, resultCode, data));
     }
